@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        NetworkManager manager = new NetworkManager("dataset/sgb128", "routes_1.txt");
+        NetworkManager manager = new NetworkManager("dataset/sgb32", "routes_1.txt");
 
         SmartGraphPanel<Hub, Route> graphView = new SmartGraphPanel<>(manager.getGraph());
         Scene scene = new Scene(new SmartGraphDemoContainer(graphView), 1200, 768);
@@ -31,6 +31,5 @@ public class Main extends Application {
         manager.setCoordinates(graphView);
 
     }
-
 
 }

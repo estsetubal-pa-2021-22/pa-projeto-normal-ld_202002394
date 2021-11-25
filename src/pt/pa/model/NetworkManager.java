@@ -1,10 +1,7 @@
 package pt.pa.model;
 
 import com.brunomnsilva.smartgraph.graphview.SmartGraphPanel;
-import pt.pa.graph.Edge;
-import pt.pa.graph.Graph;
-import pt.pa.graph.GraphEdgeList;
-import pt.pa.graph.Vertex;
+import pt.pa.graph.*;
 
 import java.util.*;
 
