@@ -31,6 +31,24 @@ public class NetworkManager {
             graphView.setVertexPosition(vertex, vertex.element().getX(), vertex.element().getY());
     }
 
+    // RAFA
+    // Gets all the Hubs from the Graph
+    public List<Hub> getHubs(){
+        List<Hub> hubs = new ArrayList<>();
+        for(Vertex<Hub> vertex : graph.vertices())
+           hubs.add(vertex.element());
+        return hubs;
+    }
+
+    // RAFA
+    // Gets all the Routes from the Graph
+    public List<Route> getRoutes(){
+        List<Route> routes = new ArrayList<>();
+        for(Edge<Route,Hub> edges : graph.edges())
+            routes.add(edges.element());
+        return routes;
+    }
+
     // ALEX
     // Add a given list of Hubs to the graph
     private void addVertices(List<Hub> hubs) {
@@ -102,13 +120,29 @@ public class NetworkManager {
     // RAFA
     // Given a name, returns the corresponding Hub. Null if it doesn't find
     public Hub getHub(String name) {
+        for (Vertex<Hub> vertex : graph.vertices()) {
+            if (vertex.element().toString().equals(name)) {
+                return vertex.element();
+            }
+        }
         return null;
     }
 
     // RAFA
     // Given a Hub, returns the corresponding Vertex. Null if it doesn't find
     public Vertex<Hub> getVertex(Hub hub) {
+        for (Vertex<Hub> vertex : graph.vertices()) {
+            if (vertex.element().equals(hub)) {
+                return vertex;
+            }
+        }
         return null;
+    }
+
+    //RAFA
+    //Given a City name, returns the corresponding Vertex. Null if it doesn't find
+    public Vertex<Hub> getVertex(String name) {
+        return getVertex(getHub(name));
     }
 
     // DANIEL
@@ -138,7 +172,11 @@ public class NetworkManager {
     // RAFA
     // Returns a map of all the Hubs (Key) and the number of neighbors (Value)
     public Map<Hub,Integer> getCentrality() {
-        return null;
+        Map<Hub, Integer> map = new HashMap<>();
+
+        for (Vertex<Hub> vertexHub : graph.vertices())
+            map.put(vertexHub.element(), countNeighbors(vertexHub.element()));
+        return map;
     }
 
     // RAFA
@@ -147,10 +185,10 @@ public class NetworkManager {
         return null;
     }
 
-    // HENRIQUE
+    // RAFA
     // Returns a boolean value, if 2 given Hubs are neighbors
     public boolean areNeighbors(Hub origin, Hub destination) {
-        return false;
+        return getRoute(origin,destination) != null;
     }
 
     // HENRIQUE
