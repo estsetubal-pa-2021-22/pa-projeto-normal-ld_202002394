@@ -137,7 +137,7 @@ public class NetworkManager {
     }
 
     //RAFA
-    //Given a City name, returns the corresponding Vertex. Null if it doesn't find
+    //Given a city name, returns the corresponding Vertex. Null if it doesn't find
     public Vertex<Hub> getVertex(String name) {
         return getVertex(getHub(name));
     }
@@ -209,7 +209,6 @@ public class NetworkManager {
         List<Hub> hubs = new ArrayList<>();
         List<Map.Entry<Hub, Integer>> list = new ArrayList<>(getCentrality().entrySet());
         list.sort(Map.Entry.comparingByValue());
-        System.out.println(list);
         for (int i = list.size() - 1; i > list.size() - 6; i--)
             hubs.add(list.get(i).getKey());
         return hubs;
