@@ -7,6 +7,7 @@ import pt.pa.graph.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,16 +70,6 @@ class NetworkManagerTest {
      1 - Check what are the 5 top Hubs with most neighbors
     */
     @Test
-    void checkTop5HubsCentrality() {
-
-    }
-
-    /*
-     1 - Choose any 2 Hubs (that are connected)
-     2 - Check if shortest path is right
-     3 - Check if shortest path distance is right
-    */
-    @Test
     void checkShortestPathAndDistance() {
 
     }
@@ -90,6 +81,16 @@ class NetworkManagerTest {
     @Test
     void checkSearchAlgorithms() {
 
+    }
+
+    @Test
+    @DisplayName("Checks if the Hub with most neighbors is the expected Hub")
+    void checkTop5HubsCentrality() {
+        Hub mostNeighbors = manager.top5Centrality().get(0);
+        Map<Hub, Integer> centralityMap = manager.getCentrality();
+
+        for(Hub hub : centralityMap.keySet())
+            assertTrue(manager.countNeighbors(mostNeighbors) >= centralityMap.get(hub));
     }
 
     @Test
