@@ -148,25 +148,52 @@ public class NetworkManager {
     // DANIEL
     // Given 2 Hubs, returns the corresponding Route. Null if it doesn't find
     public Route getRoute(Hub origin, Hub destination) {
+        for(Edge<Route, Hub> edge:graph.edges()){
+            if (edge.element().containsHub(origin) && edge.element().containsHub(destination)){
+                return edge.element();
+            }
+        }
         return null;
+    }
+
+    // DANIEL
+    // Given 2 hub names, returns the corresponding Route. Null if it doesn't find
+    public Route getRoute(String origin, String destination) {
+
+        return getRoute(getHub(origin),getHub(destination));
     }
 
     // DANIEL
     // Given a Route, returns the corresponding Edge. Null if it doesn't find
     public Edge<Route,Hub> getEdge(Route route) {
+        for(Edge<Route, Hub> edge:graph.edges()){
+            if(edge.element().equals(route)){
+                return edge;
+            }
+        }
         return null;
     }
 
     // DANIEL
     // Given a Hub, returns a list of all the neighboring Hubs (utilizar método graph.incidentEdges())
     public List<Hub> getNeighbors(Hub hub) {
-        return null;
+        List<Hub> hubs = new ArrayList<>();
+        for (Edge<Route,Hub> edge: graph.incidentEdges(getVertex(hub))) {
+            hubs.add(graph.opposite(getVertex(hub),edge).element());
+        }
+        return hubs;
     }
 
     // DANIEL
     // Given a Hub, returns the number of neighbors
     public int countNeighbors(Hub hub) {
-        return 0;
+        return getNeighbors(hub).size();
+    }
+
+    // DANIEL
+    // Given a Hub name, returns the number of neighbors
+    public int countNeighbors(String name) {
+        return getNeighbors(getHub(name)).size();
     }
 
     // RAFA
