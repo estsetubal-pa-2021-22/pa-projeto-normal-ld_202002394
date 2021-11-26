@@ -1,7 +1,12 @@
 package pt.pa.model;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pt.pa.graph.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,5 +91,45 @@ class NetworkManagerTest {
     void checkSearchAlgorithms() {
 
     }
+
+    @Test
+    @DisplayName("Verify if routes exist for Waco, TX")
+    void checkGetRoute(){
+
+        assertNotEquals(null,manager.getRoute("Waco, TX","Wichita Falls, TX"));
+        assertEquals(null, manager.getRoute("Waco, TX","Vincennes, IN"));
+
+    }
+
+    @Test
+    @DisplayName("Verify all neighbors for Waco, TX")
+    void checkGetNeighbors(){
+
+       List<Hub> neighbors = manager.getNeighbors(manager.getHub("Waco, TX"));
+
+       assertTrue(neighbors.contains(manager.getHub("Victoria, TX")));
+       assertTrue(neighbors.contains(manager.getHub("Wichita Falls, TX")));
+       assertFalse(neighbors.contains(manager.getHub("Waco, TX")));
+
+    }
+
+    @Test
+    @DisplayName("Verify if numbers of neighbors is correct for Waco, TX ")
+    void checkCountNeighbors(){
+       assertEquals(2, manager.countNeighbors("Waco, TX"));
+
+       manager.createEdge(new Route(manager.getHub("Waco, TX"),manager.getHub("Vincennes, IN"),10));
+
+       assertEquals(3, manager.countNeighbors("Waco, TX"));
+
+       manager.removeEdge(manager.getRoute("Waco, TX", "Vincennes, IN"));
+       manager.removeEdge(manager.getRoute("Waco, TX","Wichita Falls, TX"));
+
+       assertEquals(1, manager.countNeighbors("Waco, TX"));
+    }
+
+
+
+
 
 }
