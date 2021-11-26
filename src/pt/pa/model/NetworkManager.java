@@ -8,14 +8,12 @@ import java.util.*;
 public class NetworkManager {
 
     private Graph<Hub,Route> graph;
-    private List<Vertex<Hub>> vertices;
 
     public NetworkManager(String folder, String routesFile) {
         FileReader fileReader = new FileReader(folder, routesFile);
-        this.vertices = new ArrayList<>();
         this.graph = new GraphEdgeList<>();
-        addVertices(fileReader.readHubs());
-        addEdges(fileReader.readRoutes(this.vertices));
+        fileReader.createVertices(this.graph);
+        fileReader.createEdges(this.graph);
     }
 
     // ALEX
@@ -27,7 +25,7 @@ public class NetworkManager {
     // ALEX
     // Sets the vertices position
     public void setCoordinates(SmartGraphPanel<Hub, Route> graphView) {
-        for (Vertex<Hub> vertex : graph.vertices())
+        for (Vertex<Hub> vertex : this.graph.vertices())
             graphView.setVertexPosition(vertex, vertex.element().getX(), vertex.element().getY());
     }
 
@@ -51,22 +49,22 @@ public class NetworkManager {
 
     // ALEX
     // Add a given list of Hubs to the graph
-    private void addVertices(List<Hub> hubs) {
-        for (Hub hub : hubs) createVertex(hub);
+    private void createVertices(List<Hub> hubs) {
+        for (Hub hub : hubs)
+            createVertex(hub);
     }
 
     // ALEX
     // Add a given list of Routes to the graph
-    private void addEdges(List<Route> routes) {
-        for (Route route : routes) createEdge(route);
+    private void createEdges(List<Route> routes) {
+        for (Route route : routes)
+            createEdge(route);
     }
 
     // ALEX
     // Given a Hub, adds a new Vertex to the graph
     public Vertex<Hub> createVertex(Hub hub) {
-        Vertex<Hub> vertex = this.graph.insertVertex(hub);
-        this.vertices.add(vertex);
-        return vertex;
+        return this.graph.insertVertex(hub);
     }
 
     // ALEX
@@ -80,7 +78,6 @@ public class NetworkManager {
     public Vertex<Hub> removeVertex(Hub hub) {
         Vertex<Hub> vertex = getVertex(hub);
         this.graph.removeVertex(vertex);
-        this.vertices.remove(vertex);
         return vertex;
     }
 

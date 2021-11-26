@@ -1,5 +1,6 @@
 package pt.pa.model;
 
+import pt.pa.graph.Graph;
 import pt.pa.graph.Vertex;
 
 import java.io.File;
@@ -13,14 +14,28 @@ public class FileReader {
 
     private String folder;
     private String routesFile;
+    private List<Vertex<Hub>> vertices;
 
     public FileReader(String folder, String routesFile) {
         this.folder = folder;
         this.routesFile = routesFile;
+        this.vertices = new ArrayList<>();
+    }
+
+    // Create all initial vertices
+    public void createVertices(Graph<Hub,Route> graph) {
+        for (Hub hub : readHubs())
+            this.vertices.add(graph.insertVertex(hub));
+    }
+
+    // Create all initial edges
+    public void createEdges(Graph<Hub,Route> graph) {
+        for (Route route : readRoutes())
+            graph.insertEdge(route.origin(), route.destination(), route);
     }
 
     // Returns a list of Hubs with all the information
-    public List<Hub> readHubs() {
+    private List<Hub> readHubs() {
         List<Hub> hubs = new ArrayList<>();
         hubs = readName(hubs);
         hubs = readWeight(hubs);
@@ -75,7 +90,7 @@ public class FileReader {
     }
 
     // Reads routes_*.txt file, creates new Routes, returns new list of Routes
-    public List<Route> readRoutes(List<Vertex<Hub>> vertices) {
+    private List<Route> readRoutes() {
         List<Route> routes = new ArrayList<>();
         int row_index = 0;
         int column_index = 0;
@@ -83,7 +98,7 @@ public class FileReader {
             column_index = 0;
             for (String value : row.split(" ")) {
                 if (row_index < column_index && Integer.valueOf(value) != 0)
-                    routes.add(new Route(vertices.get(row_index).element(), vertices.get(column_index).element(), Integer.valueOf(value)));
+                    routes.add(new Route(this.vertices.get(row_index).element(), this.vertices.get(column_index).element(), Integer.valueOf(value)));
                 column_index++;
             }
             row_index++;
