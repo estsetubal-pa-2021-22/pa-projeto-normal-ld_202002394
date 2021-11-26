@@ -209,7 +209,13 @@ public class NetworkManager {
     // RAFA
     // Returns the top 5 Hubs with most neighbors (from method getCentrality()), on descending order
     public List<Hub> top5Centrality() {
-        return null;
+        List<Hub> hubs = new ArrayList<>();
+        List<Map.Entry<Hub, Integer>> list = new ArrayList<>(getCentrality().entrySet());
+        list.sort(Map.Entry.comparingByValue());
+        System.out.println(list);
+        for (int i = list.size() - 1; i > list.size() - 6; i--)
+            hubs.add(list.get(i).getKey());
+        return hubs;
     }
 
     // RAFA
