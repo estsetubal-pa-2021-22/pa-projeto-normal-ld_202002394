@@ -240,10 +240,17 @@ public class NetworkManager {
         return null;
     }
 
-    // HENRIQUE
+    // ALEX
     // Returns the number of the graph components
     public int components() {
-        return 0;
+        int components = 0;
+        List<Hub> visitedHubs = new ArrayList<>();
+        for (Vertex<Hub> vertex : graph.vertices())
+            if (!visitedHubs.contains(vertex.element())) {
+                components++;
+                visitedHubs.addAll(breadthFirstSearch(vertex.element()));
+            }
+        return components;
     }
 
     // HENRIQUE
