@@ -66,19 +66,33 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     // RAFA
     @Override
     public Vertex<V> insertVertex(V vElement) throws InvalidVertexException {
-        return null;
+        MyVertex newVertex = new MyVertex(vElement);
+
+        vertices.put(vElement, newVertex);
+        return newVertex;
     }
 
     // RAFA
     @Override
     public Edge<E, V> insertEdge(Vertex<V> u, Vertex<V> v, E edgeElement) throws InvalidVertexException, InvalidEdgeException {
-        return null;
+        for(Vertex<V> vertex : vertices.values())
+        if (existsEdgeOnVertex((MyVertex) vertex, edgeElement)) {
+            throw new InvalidEdgeException("There's already an edge with this element.");
+        }
+
+        MyVertex outVertex = checkVertex(u);
+        MyVertex inVertex = checkVertex(v);
+        MyEdge newEdge = new MyEdge(edgeElement);
+
+        outVertex.incidentEdges.add(newEdge);
+        inVertex.incidentEdges.add(newEdge);
+        return newEdge;
     }
 
     // RAFA
     @Override
     public Edge<E, V> insertEdge(V vElement1, V vElement2, E edgeElement) throws InvalidVertexException, InvalidEdgeException {
-        return null;
+        return insertEdge(vertexOf(vElement1), vertexOf(vElement2), edgeElement);
     }
 
     // DANIEL

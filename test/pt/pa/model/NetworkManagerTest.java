@@ -93,6 +93,20 @@ class NetworkManagerTest {
     }
 
     @Test
+    @DisplayName("Checks if getHub returns the correct value")
+    void checkGetHub() {
+        assertNull(manager.getHub("Lisboa, PT"));
+        assertNotNull(manager.getHub("Weed, CA"));
+    }
+
+    @Test
+    @DisplayName("Checks if getVertex returns the correct value")
+    void checkGetVertex() {
+        assertNotNull(manager.getVertex("Waco, TX"));
+        assertNull(manager.getVertex("Seixal, PT"));
+    }
+
+    @Test
     @DisplayName("Verify if routes exist for Waco, TX")
     void checkGetRoute(){
 
