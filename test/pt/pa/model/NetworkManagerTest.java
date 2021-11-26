@@ -128,8 +128,44 @@ class NetworkManagerTest {
        assertEquals(1, manager.countNeighbors("Waco, TX"));
     }
 
+    @Test
+    void checkCreateVertex() {
+        Hub hub = new Hub("Almada, PT");
+        manager.createVertex(hub);
+        assertThrows(InvalidVertexException.class, () -> {
+            manager.createVertex(hub);
+        });
+    }
 
+    @Test
+    void checkCreateEdge() {
+        Route route = new Route(manager.getHub("Weed, CA"),manager.getHub("Walla Walla, WA"), 600);
+        manager.createEdge(route);
+        assertThrows(InvalidEdgeException.class, () -> {
+            manager.createEdge(route);
+        });
+    }
 
+    @Test
+    void checkRemoveVertex() {
+        Hub hub = manager.getHub("Weed, CA");
+        manager.removeVertex(hub);
+        assertThrows(InvalidVertexException.class, () -> {
+            manager.removeVertex(hub);
+        });
+    }
 
+    @Test
+    void checkRemoveEdge() {
+        Route route = manager.getRoute("Weed, CA", "Yakima, WA");
+        manager.removeEdge(route);
+        assertThrows(InvalidEdgeException.class, () -> {
+            manager.removeEdge(route);
+        });
+    }
 
+    @Test
+    void checkIsIsolated() {
+
+    }
 }

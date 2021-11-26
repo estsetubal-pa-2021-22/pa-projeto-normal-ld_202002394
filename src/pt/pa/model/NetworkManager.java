@@ -63,28 +63,30 @@ public class NetworkManager {
 
     // ALEX
     // Given a Hub, adds a new Vertex to the graph
-    public Vertex<Hub> createVertex(Hub hub) {
+    public Vertex<Hub> createVertex(Hub hub) throws InvalidVertexException {
         return this.graph.insertVertex(hub);
     }
 
     // ALEX
     // Given a Route, adds a new Edge to the graph
-    public Edge<Route,Hub> createEdge(Route route) {
+    public Edge<Route,Hub> createEdge(Route route) throws InvalidEdgeException {
         return this.graph.insertEdge(route.origin(), route.destination(), route);
     }
 
     // ALEX
     // Given a Hub, removes the corresponding Vertex from the graph and returns it
-    public Vertex<Hub> removeVertex(Hub hub) {
+    public Vertex<Hub> removeVertex(Hub hub) throws InvalidVertexException {
         Vertex<Hub> vertex = getVertex(hub);
+        if (vertex == null) throw new InvalidVertexException();
         this.graph.removeVertex(vertex);
         return vertex;
     }
 
     // ALEX
     // Given a Route, removes the corresponding Edge from the graph and returns it
-    public Edge<Route,Hub> removeEdge(Route route) {
+    public Edge<Route,Hub> removeEdge(Route route) throws InvalidEdgeException {
         Edge<Route,Hub> edge = getEdge(route);
+        if (edge == null) throw new InvalidEdgeException();
         this.graph.removeEdge(edge);
         return edge;
     }
