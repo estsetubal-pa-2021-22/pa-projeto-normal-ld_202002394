@@ -60,7 +60,19 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     // DANIEL
     @Override
     public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {
-        return null;
+
+        MyEdge edge = checkEdge(e);
+        checkVertex(v);
+
+        if (!edges().contains(v)) {
+            return null;
+        }
+
+        if (edge.vertices()[0] == v) {
+            return edge.vertices()[1];
+        } else {
+            return edge.vertices()[0];
+        }
     }
 
     // RAFA
@@ -98,13 +110,20 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     // DANIEL
     @Override
     public V removeVertex(Vertex<V> v) throws InvalidVertexException {
+        vertices.remove(v);
         return null;
     }
 
     // DANIEL
     @Override
     public E removeEdge(Edge<E, V> e) throws InvalidEdgeException {
-        return null;
+
+        checkEdge(e);
+
+        E element = e.element();
+        edges().remove(e.element());
+
+        return element;
     }
 
     // HENRIQUE
