@@ -23,16 +23,19 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
         return !intersection.isEmpty();
     }
 
+    // ALEX
     @Override
     public int numVertices() {
         return vertices.size();
     }
 
+    // ALEX
     @Override
     public int numEdges() {
         return edges().size();
     }
 
+    // ALEX
     @Override
     public Collection<Vertex<V>> vertices() {
         List<Vertex<V>> list = new ArrayList<>();
@@ -41,6 +44,7 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
         return list;
     }
 
+    // ALEX
     @Override
     public Collection<Edge<E, V>> edges() {
         List<Edge<E, V>> list = new ArrayList<>();
@@ -51,6 +55,7 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
         return list;
     }
 
+    // ALEX
     @Override
     public Collection<Edge<E, V>> incidentEdges(Vertex<V> v) throws InvalidVertexException {
         MyVertex vertex = checkVertex(v);
