@@ -261,13 +261,23 @@ class NetworkManagerTest {
     }
 
     @Test
-    @DisplayName("Validate BreathFirstSearch")
+    @DisplayName("Validate replace vertex before and after the vertex has been removed")
     void checkReplaceVertex() {
 
-        System.out.println(manager.getRoute("Weed, CA","Yakima, WA"));
-        manager.getGraph().replace(manager.getVertex("Weed, CA"),new Hub("Testing"));
-        System.out.println(manager.getRoute("Testing","Yakima, WA"));
-        System.out.println(manager.getRoute("Weed, CA","Yakima, WA"));
+        assertNotNull(manager.getVertex("Weed, CA"));
+        manager.getGraph().replace(manager.getVertex("Weed, CA"),new Hub("Testing, TS"));
+        assertNull(manager.getVertex("Weed, CA"));
+        assertNotNull(manager.getVertex("Testing, TS"));
+
+    }
+
+    @Test
+    @DisplayName("Validate replace edge before and after the vertex has been removed")
+    void checkReplaceEdge() {
+
+        assertEquals(595,manager.getEdge(manager.getRoute("Weed, CA","Yakima, WA")).element().getDistance());
+        manager.getGraph().replace(manager.getEdge(manager.getRoute("Weed, CA","Yakima, WA")),new Route(150));
+        assertEquals(150,manager.getEdge(manager.getRoute("Weed, CA","Yakima, WA")).element().getDistance());
 
     }
 
