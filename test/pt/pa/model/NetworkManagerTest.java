@@ -214,4 +214,60 @@ class NetworkManagerTest {
         manager.createVertex(new Hub("Almada, PT"));
         assertEquals(3,manager.components());
     }
+
+    @Test
+    @DisplayName("Check if the shortest path it being properly calculated, before and after the removal of a hub in the shortest path")
+    void checkShortestPathTotalDistance() {
+        assertEquals(2356,manager.shortestPathTotalDistance(manager.getHub("Victoria, TX"),manager.getHub("Wausau, WI")));
+        manager.removeVertex(manager.getHub("Waterloo, IA"));
+        assertEquals(2407,manager.shortestPathTotalDistance(manager.getHub("Victoria, TX"),manager.getHub("Wausau, WI")));
+
+    }
+
+    @Test
+    @DisplayName("Check if the AreHubsInSameComponent is working as expected by preventing the Dijkstra from being calculated")
+    void verifyAreHubsInSameComponent() {
+        manager.removeVertex(manager.getHub("Watertown, SD"));
+        assertThrows(IncompatibleHubsException.class, () -> {
+            manager.shortestPathTotalDistance(manager.getHub("Victoria, TX"),manager.getHub("Winnipeg, MB"));
+        });
+    }
+
+    @Test
+    @DisplayName("Check if the shortest path it being calculated correctly")
+    void checkShortestPath() {
+
+        assertEquals("[Victoria, TX, Wichita Falls, TX, Wichita, KS, Yankton, SD, Waterloo, IA, Wausau, WI]",
+                     manager.shortestPath(manager.getHub("Victoria, TX"),manager.getHub("Wausau, WI")).toString());
+    }
+
+    @Test
+    @DisplayName("Validate DepthFirstSearch")
+    void checkDepthFirstSearch() {
+
+        assertEquals("[Weed, CA, Yakima, WA, Walla Walla, WA, Wenatchee, WA]",
+                     manager.depthFirstSearch(manager.getHub("Weed, CA")).toString());
+
+    }
+
+    @Test
+    @DisplayName("Validate BreathFirstSearch")
+    void checkBreathFirstSearch() {
+
+        assertEquals("[Weed, CA, Yakima, WA, Wenatchee, WA, Walla Walla, WA]",
+                manager.breadthFirstSearch(manager.getHub("Weed, CA")).toString());
+
+    }
+
+    @Test
+    @DisplayName("Validate BreathFirstSearch")
+    void checkReplaceVertex() {
+
+        System.out.println(manager.getRoute("Weed, CA","Yakima, WA"));
+        manager.getGraph().replace(manager.getVertex("Weed, CA"),new Hub("Testing"));
+        System.out.println(manager.getRoute("Testing","Yakima, WA"));
+        System.out.println(manager.getRoute("Weed, CA","Yakima, WA"));
+
+    }
+
 }

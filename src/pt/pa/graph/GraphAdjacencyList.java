@@ -5,6 +5,7 @@ import java.util.*;
 public class GraphAdjacencyList<V,E> implements Graph<V, E> {
 
     private Map<V, Vertex<V>> vertices;
+    private Map<E, Edge<E, V>> edges;
 
     public GraphAdjacencyList() {
         this.vertices = new HashMap<>();
@@ -128,19 +129,42 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
         E element = e.element();
         edges().remove(e.element());
 
+
         return element;
     }
 
     // HENRIQUE
     @Override
     public V replace(Vertex<V> v, V newElement) throws InvalidVertexException {
-        return null;
+
+        if (existsVertexWith(newElement))
+            throw new InvalidVertexException("There's already a vertex with this element.");
+
+        MyVertex vertex = checkVertex(v);
+
+        V oldElement = vertex.element;
+        vertex.element = newElement;
+
+        return oldElement;
     }
 
     // HENRIQUE
     @Override
     public E replace(Edge<E, V> e, E newElement) throws InvalidEdgeException {
-        return null;
+
+        if (existsEdgeWith(newElement)) {
+            throw new InvalidEdgeException("There's already an edge with this element.");
+        }
+
+        MyEdge edge = checkEdge(e);
+        E oldElement = edge.element;
+        edge.element = newElement;
+
+        return oldElement;
+    }
+
+    private boolean existsEdgeWith(E edgeElement) {
+        return edges.containsKey(edgeElement);
     }
 
     private MyVertex vertexOf(V vElement) {

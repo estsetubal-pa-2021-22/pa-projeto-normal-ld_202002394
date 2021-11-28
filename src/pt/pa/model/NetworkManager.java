@@ -147,6 +147,8 @@ public class NetworkManager {
     // DANIEL
     // Given 2 Hubs, returns the corresponding Route. Null if it doesn't find
     public Route getRoute(Hub origin, Hub destination) {
+        System.out.println("Gete"+origin);
+        System.out.println("Gete"+destination);
         for(Edge<Route, Hub> edge:graph.edges()){
             if (edge.element().containsHub(origin) && edge.element().containsHub(destination)){
                 return edge.element();
@@ -223,21 +225,60 @@ public class NetworkManager {
     }
 
     // HENRIQUE
-    // Returns the shortest path between any 2 Hubs
-    public List<Hub> shortestPath(Hub origin, Hub destination) {
-        return null;
+    // Returns the shortest path between 2 Hubs
+    public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException{
+
+        if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
+
+        List<Vertex<Hub>> path = new ArrayList<>();
+        minimumCostPath(getVertex(origin),getVertex(destination),path);
+        List<Hub> correctPath = new ArrayList<>();
+
+        for(Vertex<Hub> elem: path)
+            correctPath.add(elem.element());
+
+        return correctPath;
+
     }
 
     // HENRIQUE
     // Returns a collection of all the visited Hubs, by breadth first order, starting at a root Hub
     public List<Hub> breadthFirstSearch(Hub root) {
-        return null;
+        Set<Hub> visited = new HashSet<>();
+        Queue<Hub> queue = new LinkedList<>();
+        List<Hub> list = new ArrayList<>();
+        visited.add(root);
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            Hub v = queue.remove();
+            list.add(v);
+            for (Hub elem : getNeighbors(v))
+                if (!visited.contains(elem)) {
+                    queue.add(elem);
+                    visited.add(elem);
+                }
+        }
+        return list;
     }
 
     // HENRIQUE
     // Returns a collection of all the visited Hubs, by depth first order, starting at a root Hub
     public List<Hub> depthFirstSearch(Hub root) {
-        return null;
+        Set<Hub> visited = new HashSet<>();
+        Stack<Hub> stack = new Stack<>();
+        List<Hub> list = new ArrayList<>();
+        visited.add(root);
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            Hub v = stack.pop();
+            list.add(v);
+            for (Hub elem : getNeighbors(v))
+                if (!visited.contains(elem)) {
+                    stack.add(elem);
+                    visited.add(elem);
+                }
+        }
+        return list;
     }
 
     // ALEX
@@ -253,28 +294,81 @@ public class NetworkManager {
         return components;
     }
 
+    //HENRIQUE
+    //Verifies if the given Hubs are in the same component
+    private boolean areHubsInSameComponent(Hub origin, Hub destination){
+
+        List<Hub> componentList = new ArrayList<>();
+        componentList = depthFirstSearch(origin);
+
+        for(Hub elem : componentList)
+            if(elem.equals(destination))
+                return true;
+        return false;
+    }
+
     // HENRIQUE
     // Returns the Vertex with minimum path cost
     private Vertex<Hub> findMinVertex(Set<Vertex<Hub>> unvisited, Map<Vertex<Hub>,Double> costs) {
-        return null;
+        Vertex<Hub> vMin = null;
+        double minCost = Double.MAX_VALUE;
+        for (Vertex<Hub> v : unvisited)
+            if (costs.get(v) < minCost){
+                vMin = v;
+                minCost = costs.get(v);
+            }
+        return vMin;
     }
 
     // HENRIQUE
     // Returns the minimum cost of a path, given Hubs of origin and destination
     public double minimumCostPath(Vertex<Hub> origin, Vertex<Hub> destination, List<Vertex<Hub>> localsPath) {
-        return 0;
+        Map<Vertex<Hub>, Double> costs = new HashMap<>();
+        Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
+        dijkstra(origin, costs, predecessors);
+        Vertex<Hub> v = destination;
+        while (v != origin) {
+            localsPath.add(0, v);
+            v = predecessors.get(v);
+        }
+        localsPath.add(0, v);
+        return costs.get(destination);
     }
 
     // HENRIQUE
     // Fill dijsktra table (maps costs and predecessors)
     private void dijkstra(Vertex<Hub> orig, Map<Vertex<Hub>, Double> costs, Map<Vertex<Hub>, Vertex<Hub>> predecessors) {
 
+        List<Hub> hubs = depthFirstSearch(orig.element());
+        Set<Vertex<Hub>> unvisited = new HashSet<>();
+        for (Hub hub : hubs)
+            unvisited.add(getVertex(hub.toString()));
+        for(Vertex<Hub> v : unvisited)
+            costs.put(v,Double.MAX_VALUE);
+        costs.put(orig,0.0);
+        Vertex<Hub> u;
+        while(!unvisited.isEmpty()){
+            u = findMinVertex(unvisited,costs);
+            if(costs.get(u)==Double.MAX_VALUE) return; //case there is no path
+            unvisited.remove(u); //mark as visited
+            for(Edge<Route,Hub> e :graph.incidentEdges(u)){
+                Vertex v = graph.opposite(u,e); //adjacent vertex to u
+                double costV = e.element().getDistance() + costs.get(u);
+                if(costV < costs.get(v)){ //I found a cheaper path, so I'm going to replace the value
+                    costs.put(v,costV);
+                    predecessors.put(v,u);
+                }
+            }
+        }
     }
 
     // HENRIQUE
     // Returns the total distance of the shortest path between any 2 Hubs
-    public int shortestPathTotalDistance(Hub origin, Hub destination) {
-        return 0;
+    public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException{
+
+        if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
+        return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
+
     }
 
     // DO NOT IMPLEMENT

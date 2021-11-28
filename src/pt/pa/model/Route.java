@@ -3,27 +3,28 @@ package pt.pa.model;
 public class Route {
 
     private int distance;
-    private Hub origin;
-    private Hub destination;
+    //private Hub origin;
+    //private Hub destination;
 
     public Route(Hub origin, Hub destination, int distance) {
         this.distance = distance;
-        this.origin = origin;
-        this.destination = destination;
+        //this.origin = origin;
+        //this.destination = destination;
     }
 
-    public Hub origin() {
-        return this.origin;
-    }
+    //public Hub origin() {
+    //    return this.origin;
+    //}
 
-    public Hub destination() {
-        return this.destination;
-    }
+    //public Hub destination() {
+    //    return this.destination;
+    //}
 
     public int getDistance() {
         return this.distance;
     }
 
+    /*
     // Returns a boolean value, if a given Hub is part of this Route
     public boolean containsHub(Hub hub) {
         return this.origin.equals(hub) || this.destination.equals(hub);
@@ -33,6 +34,7 @@ public class Route {
     public boolean equals(Route route) {
         return this.containsHub(route.origin()) && this.containsHub(route.destination());
     }
+    */
 
     @Override
     public String toString() {
