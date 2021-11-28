@@ -147,3 +147,12 @@ Daniel:
 Henrique:
 - public V **replace**(Vertex<V> v, V newElement) throws InvalidVertexException
 - public E **replace**(Edge<E, V> e, E newElement) throws InvalidEdgeException
+
+## Mockup
+
+Em último lugar, realizámos um mockup de média fidelidade, relativamente à aplicação que idealizámos:
+![](mockup_PA.png)
+
+Como é possível observar na imagem acima, as métricas do grafo são constantemente exibidas na parte inferior do ecrã, enquanto que outro tipo de ações estão na parte superior.
+
+Ao clicarmos num vértice ou numa aresta, no lado direito do ecrã são apresentados todos os detalhes relativamente ao elemento.
