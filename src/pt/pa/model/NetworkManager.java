@@ -13,7 +13,7 @@ public class NetworkManager {
         FileReader fileReader = new FileReader(folder, routesFile);
         this.graph = new GraphEdgeList<>();
         fileReader.createVertices(this.graph);
-        fileReader.createEdges(this.graph);
+        fileReader.readRoutes(this.graph);
     }
 
     // ALEX
@@ -48,20 +48,6 @@ public class NetworkManager {
     }
 
     // ALEX
-    // Add a given list of Hubs to the graph
-    private void createVertices(List<Hub> hubs) {
-        for (Hub hub : hubs)
-            createVertex(hub);
-    }
-
-    // ALEX
-    // Add a given list of Routes to the graph
-    private void createEdges(List<Route> routes) {
-        for (Route route : routes)
-            createEdge(route);
-    }
-
-    // ALEX
     // Given a Hub, adds a new Vertex to the graph
     public Vertex<Hub> createVertex(Hub hub) throws InvalidVertexException {
         return this.graph.insertVertex(hub);
@@ -69,8 +55,8 @@ public class NetworkManager {
 
     // ALEX
     // Given a Route, adds a new Edge to the graph
-    public Edge<Route,Hub> createEdge(Route route) throws InvalidEdgeException {
-        return this.graph.insertEdge(route.origin(), route.destination(), route);
+    public Edge<Route,Hub> createEdge(Hub origin, Hub destination, Route route) throws InvalidEdgeException {
+        return this.graph.insertEdge(getVertex(origin), getVertex(destination), route);
     }
 
     // ALEX
@@ -94,8 +80,9 @@ public class NetworkManager {
     // ALEX
     // Returns a boolean value, if Hub doesn't have neighbors
     public boolean isIsolated(Hub hub) {
+        Vertex<Hub> vertex = getVertex(hub);
         for (Edge<Route, Hub> edge : this.graph.edges())
-            if (edge.element().containsHub(hub))
+            if (edge.vertices()[0].equals(vertex) || edge.vertices()[1].equals(vertex))
                 return false;
         return true;
     }
@@ -147,20 +134,18 @@ public class NetworkManager {
     // DANIEL
     // Given 2 Hubs, returns the corresponding Route. Null if it doesn't find
     public Route getRoute(Hub origin, Hub destination) {
-        System.out.println("Gete"+origin);
-        System.out.println("Gete"+destination);
-        for(Edge<Route, Hub> edge:graph.edges()){
-            if (edge.element().containsHub(origin) && edge.element().containsHub(destination)){
-                return edge.element();
-            }
-        }
+        Vertex<Hub> originVertex = getVertex(origin);
+        Vertex<Hub> destinationVertex = getVertex(destination);
+        for(Edge<Route, Hub> edge:graph.edges())
+            if (edge.vertices()[0].equals(originVertex) || edge.vertices()[1].equals(originVertex))
+                if (edge.vertices()[0].equals(destinationVertex) || edge.vertices()[1].equals(destinationVertex))
+                    return edge.element();
         return null;
     }
 
     // DANIEL
     // Given 2 hub names, returns the corresponding Route. Null if it doesn't find
     public Route getRoute(String origin, String destination) {
-
         return getRoute(getHub(origin),getHub(destination));
     }
 

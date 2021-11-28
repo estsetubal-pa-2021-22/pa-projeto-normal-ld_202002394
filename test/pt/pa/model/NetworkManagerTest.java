@@ -132,7 +132,7 @@ class NetworkManagerTest {
     void checkCountNeighbors(){
        assertEquals(2, manager.countNeighbors("Waco, TX"));
 
-       manager.createEdge(new Route(manager.getHub("Waco, TX"),manager.getHub("Vincennes, IN"),10));
+       manager.createEdge(manager.getHub("Waco, TX"),manager.getHub("Vincennes, IN"),new Route(10));
 
        assertEquals(3, manager.countNeighbors("Waco, TX"));
 
@@ -155,10 +155,11 @@ class NetworkManagerTest {
     @Test
     @DisplayName("Checks if a route can be added as an edge 2 times in a row")
     void checkCreateEdge() {
-        Route route = new Route(manager.getHub("Weed, CA"),manager.getHub("Walla Walla, WA"), 600);
-        manager.createEdge(route);
+        Route route = new Route(600);
+
+        manager.createEdge(manager.getHub("Weed, CA"),manager.getHub("Walla Walla, WA"), route);
         assertThrows(InvalidEdgeException.class, () -> {
-            manager.createEdge(route);
+            manager.createEdge(manager.getHub("Weed, CA"),manager.getHub("Walla Walla, WA"), route);
         });
     }
 
@@ -187,7 +188,7 @@ class NetworkManagerTest {
     void checkIsIsolated() {
         manager.createVertex(new Hub("Almada, PT"));
         assertTrue(manager.isIsolated(manager.getHub("Almada, PT")));
-        manager.createEdge(new Route(manager.getHub("Weed, CA"),manager.getHub("Almada, PT"), 250));
+        manager.createEdge(manager.getHub("Weed, CA"),manager.getHub("Almada, PT"), new Route(250));
         assertFalse(manager.isIsolated(manager.getHub("Almada, PT")));
     }
 

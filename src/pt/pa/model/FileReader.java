@@ -28,12 +28,6 @@ public class FileReader {
             this.vertices.add(graph.insertVertex(hub));
     }
 
-    // Create all initial edges
-    public void createEdges(Graph<Hub,Route> graph) {
-        for (Route route : readRoutes())
-            graph.insertEdge(route.origin(), route.destination(), route);
-    }
-
     // Returns a list of Hubs with all the information
     private List<Hub> readHubs() {
         List<Hub> hubs = new ArrayList<>();
@@ -89,8 +83,8 @@ public class FileReader {
         return hubs;
     }
 
-    // Reads routes_*.txt file, creates new Routes, returns new list of Routes
-    private List<Route> readRoutes() {
+    // Reads routes_*.txt file, creates new Routes, adds them to the graph
+    public List<Route> readRoutes(Graph<Hub,Route> graph) {
         List<Route> routes = new ArrayList<>();
         int row_index = 0;
         int column_index = 0;
@@ -98,7 +92,7 @@ public class FileReader {
             column_index = 0;
             for (String value : row.split(" ")) {
                 if (row_index < column_index && Integer.valueOf(value) != 0)
-                    routes.add(new Route(this.vertices.get(row_index).element(), this.vertices.get(column_index).element(), Integer.valueOf(value)));
+                    graph.insertEdge(this.vertices.get(row_index),this.vertices.get(column_index),new Route(Integer.valueOf(value)));
                 column_index++;
             }
             row_index++;
