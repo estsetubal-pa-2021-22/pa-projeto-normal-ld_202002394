@@ -11,7 +11,7 @@ public class NetworkManager {
 
     public NetworkManager(String folder, String routesFile) {
         FileReader fileReader = new FileReader(folder, routesFile);
-        this.graph = new GraphEdgeList<>();
+        this.graph = new GraphAdjacencyList<>();
         fileReader.createVertices(this.graph);
         fileReader.readRoutes(this.graph);
     }

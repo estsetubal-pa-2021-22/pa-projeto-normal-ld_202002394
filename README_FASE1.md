@@ -119,6 +119,12 @@ Daniel:
 - checkCountNeighbors()
 
 Henrique:
+- checkShortestPathTotalDistance()
+- verifyAreHubsInSameComponent()
+- checkShortestPath()
+- checkDepthFirstSearchAndBreadthFirstSearch()
+- checkReplaceVertex()
+- checkReplaceEdge()
 
 
 ## Classe `GraphAdjacencyList`

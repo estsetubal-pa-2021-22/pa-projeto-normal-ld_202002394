@@ -5,7 +5,6 @@ import java.util.*;
 public class GraphAdjacencyList<V,E> implements Graph<V, E> {
 
     private Map<V, Vertex<V>> vertices;
-    private Map<E, Edge<E, V>> edges;
 
     public GraphAdjacencyList() {
         this.vertices = new HashMap<>();
@@ -66,26 +65,17 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     // DANIEL
     @Override
     public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {
-
-        MyEdge edge = checkEdge(e);
-        checkVertex(v);
-
-        if (!edges().contains(v)) {
-            return null;
-        }
-
-        if (edge.vertices()[0] == v) {
-            return edge.vertices()[1];
-        } else {
-            return edge.vertices()[0];
-        }
+        MyVertex vertex = checkVertex(v);
+        Edge<E, V> edge = checkEdge(e);
+        return edge.vertices()[0] == vertex ? edge.vertices()[1] : edge.vertices()[0];
     }
 
     // RAFA
     @Override
     public Vertex<V> insertVertex(V vElement) throws InvalidVertexException {
+        if (existsVertexWith(vElement))
+            throw new InvalidVertexException("There's already a vertex with this element.");
         MyVertex newVertex = new MyVertex(vElement);
-
         vertices.put(vElement, newVertex);
         return newVertex;
     }
@@ -116,21 +106,26 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     // DANIEL
     @Override
     public V removeVertex(Vertex<V> v) throws InvalidVertexException {
-        vertices.remove(v);
-        return null;
+        MyVertex vertex = checkVertex(v);
+        MyVertex oppositeVertex;
+        for (Edge<E, V> edge : vertex.incidentEdges) {
+            oppositeVertex = (MyVertex) opposite(vertex, edge);
+            oppositeVertex.incidentEdges.remove(edge);
+        }
+        //vertex.incidentEdges.clear();
+        this.vertices.remove(vertex.element());
+        return vertex.element();
     }
 
     // DANIEL
     @Override
     public E removeEdge(Edge<E, V> e) throws InvalidEdgeException {
-
-        checkEdge(e);
-
-        E element = e.element();
-        edges().remove(e.element());
-
-
-        return element;
+        Edge<E, V> edge = checkEdge(e);
+        List<MyVertex> vertices = new ArrayList(this.vertices.values());
+        for (MyVertex vertex : vertices)
+            if (vertex.incidentEdges.contains(edge))
+                vertex.incidentEdges.remove(edge);
+        return edge.element();
     }
 
     // HENRIQUE
@@ -164,7 +159,10 @@ public class GraphAdjacencyList<V,E> implements Graph<V, E> {
     }
 
     private boolean existsEdgeWith(E edgeElement) {
-        return edges.containsKey(edgeElement);
+        for (Edge<E, V> edge : edges())
+            if (edge.element().equals(edgeElement))
+                return true;
+        return false;
     }
 
     private MyVertex vertexOf(V vElement) {
