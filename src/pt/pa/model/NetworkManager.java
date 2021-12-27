@@ -8,12 +8,12 @@ import java.util.*;
 public class NetworkManager {
 
     private Graph<Hub,Route> graph;
+    private List<Hub> hubs;
 
     public NetworkManager(String folder, String routesFile) {
-        FileReader fileReader = new FileReader(folder, routesFile);
-        this.graph = new GraphAdjacencyList<>();
-        fileReader.createVertices(this.graph);
-        fileReader.readRoutes(this.graph);
+        graph = new GraphAdjacencyList<>();
+        hubs = new ArrayList<>();
+        createGraphElements(new DatasetReader(folder, routesFile));
     }
 
     // ALEX
@@ -23,18 +23,37 @@ public class NetworkManager {
     }
 
     // ALEX
+    // Creates all the vertices and edges of the graph, given a dataset
+    public Graph<Hub,Route> createGraphElements(DatasetReader datasetReader) {
+        List<Hub> newHubs = new ArrayList<>(datasetReader.getHubs());
+        for (Vertex vertex : graph.vertices())
+            graph.removeVertex(vertex);
+        hubs.clear();
+        int[][] routes = datasetReader.getRoutes();
+        for (int row = 0; row < newHubs.size(); row++) {
+            createVertex(newHubs.get(row));
+            for (int column = 0; column < row; column++)
+                if (routes[row][column] != 0)
+                    createEdge(newHubs.get(row), newHubs.get(column), new Route(routes[row][column]));
+        }
+        return graph;
+    }
+
+    // ALEX
     // Sets the vertices position
     public void setCoordinates(SmartGraphPanel<Hub, Route> graphView) {
-        for (Vertex<Hub> vertex : this.graph.vertices())
-            graphView.setVertexPosition(vertex, vertex.element().getX(), vertex.element().getY());
+        for (Vertex<Hub> vertex : graph.vertices())
+            graphView.setVertexPosition(vertex, vertex.element().getCoordinates().getX(), vertex.element().getCoordinates().getY() - 25);
     }
 
     // RAFA
     // Gets all the Hubs from the Graph
     public List<Hub> getHubs(){
+        /*
         List<Hub> hubs = new ArrayList<>();
         for(Vertex<Hub> vertex : graph.vertices())
            hubs.add(vertex.element());
+         */
         return hubs;
     }
 
@@ -47,10 +66,26 @@ public class NetworkManager {
         return routes;
     }
 
+    public int countHubs() {
+        return getHubs().size();
+    }
+
+    public int countRoutes() {
+        return getRoutes().size();
+    }
+
     // ALEX
     // Given a Hub, adds a new Vertex to the graph
     public Vertex<Hub> createVertex(Hub hub) throws InvalidVertexException {
-        return this.graph.insertVertex(hub);
+        Vertex<Hub> vertex = graph.insertVertex(hub);
+        hubs.add(hub);
+        return vertex;
+    }
+
+    public Vertex<Hub> createVertex(Hub hub, List<Hub> hubs) throws InvalidVertexException {
+        Vertex<Hub> vertex = graph.insertVertex(hub);
+        this.hubs = hubs;
+        return vertex;
     }
 
     // ALEX
@@ -63,8 +98,8 @@ public class NetworkManager {
     // Given a Hub, removes the corresponding Vertex from the graph and returns it
     public Vertex<Hub> removeVertex(Hub hub) throws InvalidVertexException {
         Vertex<Hub> vertex = getVertex(hub);
-        if (vertex == null) throw new InvalidVertexException();
-        this.graph.removeVertex(vertex);
+        graph.removeVertex(vertex);
+        hubs.remove(hub);
         return vertex;
     }
 
@@ -72,7 +107,8 @@ public class NetworkManager {
     // Given a Route, removes the corresponding Edge from the graph and returns it
     public Edge<Route,Hub> removeEdge(Route route) throws InvalidEdgeException {
         Edge<Route,Hub> edge = getEdge(route);
-        if (edge == null) throw new InvalidEdgeException();
+        if (edge == null)
+            throw new InvalidEdgeException();
         this.graph.removeEdge(edge);
         return edge;
     }
@@ -106,22 +142,18 @@ public class NetworkManager {
     // RAFA
     // Given a name, returns the corresponding Hub. Null if it doesn't find
     public Hub getHub(String name) {
-        for (Vertex<Hub> vertex : graph.vertices()) {
-            if (vertex.element().toString().equals(name)) {
+        for (Vertex<Hub> vertex : graph.vertices())
+            if (vertex.element().toString().equals(name))
                 return vertex.element();
-            }
-        }
         return null;
     }
 
     // RAFA
     // Given a Hub, returns the corresponding Vertex. Null if it doesn't find
     public Vertex<Hub> getVertex(Hub hub) {
-        for (Vertex<Hub> vertex : graph.vertices()) {
-            if (vertex.element().equals(hub)) {
+        for (Vertex<Hub> vertex : graph.vertices())
+            if (vertex.element().equals(hub))
                 return vertex;
-            }
-        }
         return null;
     }
 
@@ -152,11 +184,9 @@ public class NetworkManager {
     // DANIEL
     // Given a Route, returns the corresponding Edge. Null if it doesn't find
     public Edge<Route,Hub> getEdge(Route route) {
-        for(Edge<Route, Hub> edge:graph.edges()){
-            if(edge.element().equals(route)){
+        for(Edge<Route, Hub> edge:graph.edges())
+            if(edge.element().equals(route))
                 return edge;
-            }
-        }
         return null;
     }
 
@@ -164,9 +194,8 @@ public class NetworkManager {
     // Given a Hub, returns a list of all the neighboring Hubs (utilizar método graph.incidentEdges())
     public List<Hub> getNeighbors(Hub hub) {
         List<Hub> hubs = new ArrayList<>();
-        for (Edge<Route,Hub> edge: graph.incidentEdges(getVertex(hub))) {
+        for (Edge<Route,Hub> edge: graph.incidentEdges(getVertex(hub)))
             hubs.add(graph.opposite(getVertex(hub),edge).element());
-        }
         return hubs;
     }
 
@@ -186,7 +215,6 @@ public class NetworkManager {
     // Returns a map of all the Hubs (Key) and the number of neighbors (Value)
     public Map<Hub,Integer> getCentrality() {
         Map<Hub, Integer> map = new HashMap<>();
-
         for (Vertex<Hub> vertexHub : graph.vertices())
             map.put(vertexHub.element(), countNeighbors(vertexHub.element()));
         return map;
@@ -212,18 +240,13 @@ public class NetworkManager {
     // HENRIQUE
     // Returns the shortest path between 2 Hubs
     public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException{
-
         if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
-
         List<Vertex<Hub>> path = new ArrayList<>();
         minimumCostPath(getVertex(origin),getVertex(destination),path);
         List<Hub> correctPath = new ArrayList<>();
-
         for(Vertex<Hub> elem: path)
             correctPath.add(elem.element());
-
         return correctPath;
-
     }
 
     // HENRIQUE
@@ -268,7 +291,7 @@ public class NetworkManager {
 
     // ALEX
     // Returns the number of the graph components
-    public int components() {
+    public int countComponents() {
         int components = 0;
         List<Hub> visitedHubs = new ArrayList<>();
         for (Vertex<Hub> vertex : graph.vertices())
@@ -282,10 +305,7 @@ public class NetworkManager {
     //HENRIQUE
     //Verifies if the given Hubs are in the same component
     private boolean areHubsInSameComponent(Hub origin, Hub destination){
-
-        List<Hub> componentList = new ArrayList<>();
-        componentList = depthFirstSearch(origin);
-
+        List<Hub> componentList = depthFirstSearch(origin);
         for(Hub elem : componentList)
             if(elem.equals(destination))
                 return true;
@@ -323,7 +343,6 @@ public class NetworkManager {
     // HENRIQUE
     // Fill dijsktra table (maps costs and predecessors)
     private void dijkstra(Vertex<Hub> orig, Map<Vertex<Hub>, Double> costs, Map<Vertex<Hub>, Vertex<Hub>> predecessors) {
-
         List<Hub> hubs = depthFirstSearch(orig.element());
         Set<Vertex<Hub>> unvisited = new HashSet<>();
         for (Hub hub : hubs)
@@ -334,7 +353,8 @@ public class NetworkManager {
         Vertex<Hub> u;
         while(!unvisited.isEmpty()){
             u = findMinVertex(unvisited,costs);
-            if(costs.get(u)==Double.MAX_VALUE) return; //case there is no path
+            if(costs.get(u)==Double.MAX_VALUE)
+                return; //case there is no path
             unvisited.remove(u); //mark as visited
             for(Edge<Route,Hub> e :graph.incidentEdges(u)){
                 Vertex v = graph.opposite(u,e); //adjacent vertex to u
@@ -350,22 +370,44 @@ public class NetworkManager {
     // HENRIQUE
     // Returns the total distance of the shortest path between any 2 Hubs
     public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException{
-
-        if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
+        if(!areHubsInSameComponent(origin,destination))
+            throw new IncompatibleHubsException();
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
-
     }
 
-    // DO NOT IMPLEMENT
+    // TO DO
     // Returns a list of the farthest 2 Hubs
     public List<Hub> farthestHubs() {
         return null;
     }
 
-    // DO NOT IMPLEMENT
+    // TO DO
     // Returns a list of Hubs which their path goes through less or equal to a threshold value from a certain Hub
     public List<Hub> closeHubs(Hub hub, int threshold) {
         return null;
+    }
+
+    // Returns a matrix with all current available routes
+    private int[][] getRoutesMatrix(List<Vertex<Hub>> vertices) {
+        int size = vertices.size();
+        int[][] matrix = new int[size][size];
+        for (int row = 0; row < size; row++)
+            for (int column = 0; column < size; column++)
+                if (areNeighbors(vertices.get(row).element(), vertices.get(column).element()))
+                    matrix[row][column] = getRoute(vertices.get(row).element(), vertices.get(column).element()).getDistance();
+                else
+                    matrix[row][column] = 0;
+        return matrix;
+    }
+
+    // Saves a file in a specified folder with all the current routes, returns the generated file name
+    public String saveRoutes(String folderName) {
+        List<Vertex<Hub>> vertices = new ArrayList<>();
+        for (Hub hub : hubs)
+            vertices.add(getVertex(hub));
+        FileWriter fileWriter = new FileWriter();
+        fileWriter.matrixToList(getRoutesMatrix(vertices));
+        return fileWriter.saveFile(folderName);
     }
 
 }
