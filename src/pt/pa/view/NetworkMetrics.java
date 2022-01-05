@@ -4,24 +4,32 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import pt.pa.model.NetworkManager;
+import pt.pa.model.Observer;
 
-public class NetworkMetrics extends HBox {
+public class NetworkMetrics implements Observer {
 
-    NetworkManager manager;
+    private HBox hbox;
 
     public NetworkMetrics(NetworkManager manager) {
-        this.manager = manager;
-        this.setSpacing(200);
-        this.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: #FFFFFF;");
-        this.setMinHeight(40);
-        this.setAlignment(Pos.CENTER);
-        update();
+        this.hbox = new HBox();
+        hbox.setSpacing(200);
+        hbox.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: #FFFFFF;");
+        hbox.setMinHeight(40);
+        hbox.setAlignment(Pos.CENTER);
+        update(manager);
     }
 
-    public void update() {
-        // TO DO: apagar elementos existentes na HBox (esta classe é uma HBox)
-        // criar novos elementos com a informação atualizada (utilizando o NetworkManager)
-        // adicionar estes novos elementos à HBox
+    public HBox getHBox() {
+        return hbox;
+    }
+
+    @Override
+    public void update(Object obj) {
+        NetworkManager manager = (NetworkManager)obj;
+        hbox.getChildren().clear();
+        // Criar elementos javafx com informação das 4 métricas e adicionar ao atributo hbox
+        // Métricas: No. Hubs, No. Routes, Isolated Hubs, No. Components
+
     }
 
 }

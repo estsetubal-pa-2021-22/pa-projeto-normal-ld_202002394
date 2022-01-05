@@ -5,7 +5,7 @@ import pt.pa.graph.*;
 
 import java.util.*;
 
-public class NetworkManager {
+public class NetworkManager extends Subject {
 
     private Graph<Hub,Route> graph;
     private List<Hub> hubs;
@@ -79,19 +79,23 @@ public class NetworkManager {
     public Vertex<Hub> createVertex(Hub hub) throws InvalidVertexException {
         Vertex<Hub> vertex = graph.insertVertex(hub);
         hubs.add(hub);
+        notifyObservers(this);
         return vertex;
     }
 
     public Vertex<Hub> createVertex(Hub hub, List<Hub> hubs) throws InvalidVertexException {
         Vertex<Hub> vertex = graph.insertVertex(hub);
         this.hubs = hubs;
+        notifyObservers(this);
         return vertex;
     }
 
     // ALEX
     // Given a Route, adds a new Edge to the graph
     public Edge<Route,Hub> createEdge(Hub origin, Hub destination, Route route) throws InvalidEdgeException {
-        return this.graph.insertEdge(getVertex(origin), getVertex(destination), route);
+        Edge<Route,Hub> edge = graph.insertEdge(getVertex(origin), getVertex(destination), route);
+        notifyObservers(this);
+        return edge;
     }
 
     // ALEX
@@ -100,6 +104,7 @@ public class NetworkManager {
         Vertex<Hub> vertex = getVertex(hub);
         graph.removeVertex(vertex);
         hubs.remove(hub);
+        notifyObservers(this);
         return vertex;
     }
 
@@ -110,6 +115,7 @@ public class NetworkManager {
         if (edge == null)
             throw new InvalidEdgeException();
         this.graph.removeEdge(edge);
+        notifyObservers(this);
         return edge;
     }
 

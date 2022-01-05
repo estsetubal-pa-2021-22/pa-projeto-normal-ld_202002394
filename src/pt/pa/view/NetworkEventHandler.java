@@ -2,35 +2,43 @@ package pt.pa.view;
 
 import com.brunomnsilva.smartgraph.graphview.SmartGraphVertex;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.TextField;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import pt.pa.graph.Edge;
 import pt.pa.model.*;
 import pt.pa.model.exceptions.ExistingHubException;
 import pt.pa.model.exceptions.ExistingRouteException;
 import pt.pa.graph.Vertex;
+import pt.pa.view.strategy.ElementInfoHubStrategy;
+import pt.pa.view.strategy.ElementInfoNoneStrategy;
+import pt.pa.view.strategy.ElementInfoRouteStrategy;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NetworkEventHandler {
 
     private NetworkController controller;
-    private NetworkUI paneBuilder;
+    private NetworkUI ui;
 
-    public NetworkEventHandler(NetworkUI paneBuilder) {
-        this.paneBuilder = paneBuilder;
-        this.controller = this.paneBuilder.getController();
+    public NetworkEventHandler(NetworkUI ui) {
+        this.ui = ui;
+        this.controller = this.ui.getController();
     }
 
     public void removeHandler(MenuItem menuItem) {
@@ -49,12 +57,15 @@ public class NetworkEventHandler {
 
     public void createElementsInfoEvent() {
         controller.getGraphView().setOnMousePressed(event ->  {
-            paneBuilder.setElementInfoBar(new NetworkElementInfo());
+            ui.getElementInfoBar().setElementInfoStrategy(new ElementInfoNoneStrategy());
+            ui.getElementInfoBar().setElement(null, controller.getManager());
             controller.getGraphView().setEdgeDoubleClickAction(graphEdge -> {
-                paneBuilder.setElementInfoBar(new NetworkElementInfo(controller.getManager(), graphEdge.getUnderlyingEdge().element()));
+                ui.getElementInfoBar().setElementInfoStrategy(new ElementInfoRouteStrategy());
+                ui.getElementInfoBar().setElement(graphEdge.getUnderlyingEdge().element(),controller.getManager());
             });
             controller.getGraphView().setVertexDoubleClickAction((SmartGraphVertex<Hub> graphVertex) -> {
-                paneBuilder.setElementInfoBar(new NetworkElementInfo(controller.getManager(), graphVertex.getUnderlyingVertex().element()));
+                ui.getElementInfoBar().setElementInfoStrategy(new ElementInfoHubStrategy());
+                ui.getElementInfoBar().setElement(graphVertex.getUnderlyingVertex().element(),controller.getManager());
             });
         });
     }
@@ -66,8 +77,8 @@ public class NetworkEventHandler {
     // Evento - Criar Hub
     public void createHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.getMenuBar().setDisable(true);
-            paneBuilder.updateGraphStyle();
+            ui.getMenuBar().setDisable(true);
+            ui.updateGraphStyle();
             Circle puppet = new Circle(5);
             puppet.getStyleClass().add("vertex");
             controller.getGraphView().getChildren().add(puppet);
@@ -82,7 +93,7 @@ public class NetworkEventHandler {
 
             });
             controller.getGraphView().setOnMouseClicked(mouseClickedEvent -> {
-                paneBuilder.getMenuBar().setDisable(false);
+                ui.getMenuBar().setDisable(false);
                 Point coordinates = new Point((int) puppet.getCenterX(), (int) puppet.getCenterY());
                 controller.getGraphView().setOnMouseMoved(null);
                 controller.getGraphView().setOnMouseClicked(null);
@@ -90,6 +101,7 @@ public class NetworkEventHandler {
                 createElementsInfoEvent();
 
                 final Stage dialog = new Stage();
+                dialog.setResizable(false);
                 dialog.setTitle("New Hub");
                 dialog.initModality(Modality.APPLICATION_MODAL);
                 dialog.initOwner(controller.getStage());
@@ -124,14 +136,13 @@ public class NetworkEventHandler {
 
                             // Save action
                             Action action = new Action(Operation.INSERT_HUB,hub);
-                            paneBuilder.getMenuBar().saveAction(action);
+                            ui.getMenuBar().saveAction(action);
 
                             Vertex<Hub> vertex1 = controller.getManager().createVertex(hub);
                             controller.getGraphView().getChildren().remove(puppet);
                             controller.getGraphView().updateAndWait();
                             controller.getGraphView().setVertexPosition(vertex1,coordinates.getX(),coordinates.getY());
                             dialog.close();
-                            paneBuilder.updateMetrics();
                             System.out.println("Hub created!");
                         }
                     } catch (ExistingHubException exception) {
@@ -147,8 +158,9 @@ public class NetworkEventHandler {
     // Evento - Criar Route
     public void createRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             final Stage dialog = new Stage();
+            dialog.setResizable(false);
             dialog.setTitle("New Route");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
@@ -188,11 +200,10 @@ public class NetworkEventHandler {
 
                         // Save action
                         Action action = new Action(Operation.INSERT_ROUTE,controller.getManager().getEdge(route));
-                        paneBuilder.getMenuBar().saveAction(action);
+                        ui.getMenuBar().saveAction(action);
 
                         controller.getGraphView().updateAndWait();
                         dialog.close();
-                        paneBuilder.updateMetrics();
                         System.out.println("Route created!");
                     }
                 } catch (ExistingRouteException exception) {
@@ -207,8 +218,9 @@ public class NetworkEventHandler {
     // Evento - Remover Hub
     public void removeHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             final Stage dialog = new Stage();
+            dialog.setResizable(false);
             dialog.setTitle("Remove Hub");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
@@ -236,12 +248,11 @@ public class NetworkEventHandler {
                         for (Edge edge : controller.getManager().getGraph().incidentEdges(controller.getManager().getVertex(hub)))
                             adjacentRoutes.put((Route)edge.element(),(Hub)controller.getManager().getGraph().opposite(vertex,edge).element());
                         Action action = new Action(Operation.REMOVE_HUB,hub,adjacentRoutes,new ArrayList<>(controller.getManager().getHubs()));
-                        paneBuilder.getMenuBar().saveAction(action);
+                        ui.getMenuBar().saveAction(action);
 
                         controller.getManager().removeVertex(hub);
                         controller.getGraphView().updateAndWait();
                         dialog.close();
-                        paneBuilder.updateMetrics();
 
                         System.out.println("Hub removed!");
                     }
@@ -255,8 +266,9 @@ public class NetworkEventHandler {
     // Evento - Remover Route
     public void removeRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             final Stage dialog = new Stage();
+            dialog.setResizable(false);
             dialog.setTitle("Remove Route");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
@@ -288,16 +300,12 @@ public class NetworkEventHandler {
                         Route route = controller.getManager().getRoute(origin,destination);
 
                         // Save action
-                        List<Hub> hubs = new ArrayList<>();
-                        hubs.add(origin);
-                        hubs.add(destination);
                         Action action = new Action(Operation.REMOVE_ROUTE,origin,destination,route);
-                        paneBuilder.getMenuBar().saveAction(action);
+                        ui.getMenuBar().saveAction(action);
 
                         controller.getManager().removeEdge(route);
                         controller.getGraphView().updateAndWait();
                         dialog.close();
-                        paneBuilder.updateMetrics();
                         System.out.println("Route removed!");
                     }
                 } catch (RuntimeException exception) {
@@ -310,8 +318,9 @@ public class NetworkEventHandler {
     // Evento - Importar Routes
     public void importRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             final Stage dialog = new Stage();
+            dialog.setResizable(false);
             dialog.setTitle("Import Routes");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
@@ -334,7 +343,7 @@ public class NetworkEventHandler {
                         controller.getGraphView().updateAndWait();
                         controller.setCoordinates();
                         dialog.close();
-                        paneBuilder.updateMetrics();
+                        ui.updateMetrics();
                         System.out.println("Routes imported!");
                     }
                 } catch (RuntimeException exception) {
@@ -347,7 +356,7 @@ public class NetworkEventHandler {
     // Evento - Exportar Routes
     public void exportRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             try {
                 System.out.println("Routes file saved in: " + controller.getManager().saveRoutes("saved_routes"));
             } catch (RuntimeException exception) {
@@ -359,8 +368,9 @@ public class NetworkEventHandler {
     // Evento - Calcular Shortest Path
     public void calculateShortestPathEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             final Stage dialog = new Stage();
+            dialog.setResizable(false);
             dialog.setTitle("New Route");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
@@ -423,9 +433,39 @@ public class NetworkEventHandler {
     // Evento - Mostrar hubs mais distantes
     public void showFarthestHubsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             try {
                 System.out.println("Farthest Hubs: " + controller.getManager().farthestHubs());
+            } catch (RuntimeException exception) {
+                System.out.println(exception.getMessage());
+            }
+        });
+    }
+
+    // Evento - Mostrar centralidade (todos os hubs)
+    public void showCentrality(MenuItem menuItem) {
+        menuItem.setOnAction(actionEvent1 -> {
+            ui.updateGraphStyle();
+            try {
+                System.out.println("Hub Centrality: " + controller.getManager().getCentrality());
+                final Stage dialog = new Stage();
+                dialog.setResizable(false);
+                dialog.setTitle("Hub Centrality");
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.initOwner(controller.getStage());
+                VBox dialogVBox = new VBox(20);
+
+                ListView<String> centralityList = new ListView<>();
+                centralityList.setMaxHeight(300);
+                centralityList.setMinWidth(200);
+                Map<Hub,Integer> centralityMap = controller.getManager().getCentrality();
+                for (Hub hub : centralityMap.keySet())
+                    centralityList.getItems().add(hub.toString() + " (" + centralityMap.get(hub) + ")");
+                dialogVBox.getChildren().add(centralityList);
+                Scene dialogScene = new Scene(dialogVBox, 300, 200);
+                dialog.setScene(dialogScene);
+                dialog.show();
+
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -435,9 +475,35 @@ public class NetworkEventHandler {
     // Evento - Mostrar top 5 hubs com mais vizinhos
     public void showHubsWithMostNeighborsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             try {
                 System.out.println("Hubs with most neighbors: " + controller.getManager().top5Centrality());
+                final Stage dialog = new Stage();
+                dialog.setResizable(false);
+                dialog.setTitle("Hubs with most neighbors");
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.initOwner(controller.getStage());
+
+                // Bar Chart
+                StackPane pane = new StackPane();
+                CategoryAxis xAxis = new CategoryAxis();
+                NumberAxis yAxis = new NumberAxis();
+                BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+                barChart.setTitle("Top 5");
+                xAxis.setLabel("Hubs");
+                yAxis.setLabel("Value");
+                XYChart.Series<String, Number> data = new XYChart.Series<>();
+                data.setName("Number of neighbors");
+
+                for (Hub hub : controller.getManager().top5Centrality())
+                    data.getData().add(new XYChart.Data<>(hub.toString(), controller.getManager().countNeighbors(hub)));
+
+                barChart.getData().add(data);
+                pane.getChildren().add(barChart);
+
+                Scene dialogScene = new Scene(pane, 800, 500);
+                dialog.setScene(dialogScene);
+                dialog.show();
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -447,9 +513,9 @@ public class NetworkEventHandler {
     // Evento - Fazer undo da última ação
     public void undoEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            paneBuilder.updateGraphStyle();
+            ui.updateGraphStyle();
             try {
-                Action action = paneBuilder.getMenuBar().undoAction();
+                Action action = ui.getMenuBar().undoAction();
                 if (action == null)
                     System.out.println("There is no action to undo!");
                 else {
@@ -482,7 +548,6 @@ public class NetworkEventHandler {
                             controller.getGraphView().updateAndWait();
                             break;
                     }
-                    paneBuilder.updateMetrics();
                     System.out.println("Undo successful!");
                 }
             } catch (RuntimeException exception) {

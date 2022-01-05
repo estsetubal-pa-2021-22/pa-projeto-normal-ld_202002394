@@ -50,6 +50,7 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().calculateShortestPathEvent(menuCalculate.getShortestPathItem());
         //networkUI.getEventHandler().calculateDistancePathEvent(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().showFarthestHubsEvent(menuShow.getFarthestHubsItem());
+        networkUI.getEventHandler().showCentrality(menuShow.getCentralityItem());
         networkUI.getEventHandler().showHubsWithMostNeighborsEvent(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().undoEvent(menuUndo.getUndoActionItem());
     }
@@ -64,6 +65,7 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().removeHandler(menuCalculate.getShortestPathItem());
         //networkUI.getEventHandler().removeHandler(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().removeHandler(menuShow.getFarthestHubsItem());
+        networkUI.getEventHandler().removeHandler(menuShow.getCentralityItem());
         networkUI.getEventHandler().removeHandler(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().removeHandler(menuUndo.getUndoActionItem());
     }
