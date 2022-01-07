@@ -2,13 +2,9 @@ package pt.pa.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
-import pt.pa.model.Hub;
 import pt.pa.model.NetworkManager;
 import pt.pa.model.Observer;
-import pt.pa.model.Route;
-import pt.pa.view.strategy.ElementInfoHubStrategy;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
-import pt.pa.view.strategy.ElementInfoRouteStrategy;
 import pt.pa.view.strategy.ElementInfoStrategy;
 
 public class NetworkElementInfo<E> implements Observer {
@@ -24,8 +20,9 @@ public class NetworkElementInfo<E> implements Observer {
         vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(20);
-        vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: #FFFFFF;");
         vbox.setMinWidth(300);
+        vbox.getStylesheets().add("element_info.css");
+        vbox.getStyleClass().add("vbox");
         element = null;
         setElementInfoStrategy(new ElementInfoNoneStrategy());
         setElement(element,manager);

@@ -2,6 +2,7 @@ package pt.pa.view.strategy;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import pt.pa.model.NetworkManager;
 
 public class ElementInfoNoneStrategy<E> implements ElementInfoStrategy<E> {
@@ -9,8 +10,10 @@ public class ElementInfoNoneStrategy<E> implements ElementInfoStrategy<E> {
     @Override
     public void update(NetworkManager manager, VBox vbox, E element) {
         vbox.getChildren().clear();
-        // TO DO: criar elementos javafx com informação de nenhum elemento selecionado, e no final adicionar à "vbox" (recebido como parâmetro)
 
+        Label info = new Label("Select an element to see details.");
+
+        vbox.getChildren().add(info);
     }
 
 }

@@ -3,7 +3,6 @@ package pt.pa.view;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import pt.pa.model.NetworkManager;
 import pt.pa.model.Observer;
 
@@ -40,8 +39,8 @@ public class NetworkMetrics implements Observer {
 
         nHubs.setText("Hubs: " + manager.countHubs());
         nRoutes.setText("Routes: " + manager.countRoutes());
-        isolatedHubs.setText("Hubs Isolados: " + manager.countIsolatedHubs());
-        nComponents.setText("Componentes: " + manager.countComponents());
+        isolatedHubs.setText("Isolated Hubs: " + manager.countIsolatedHubs());
+        nComponents.setText("Components: " + manager.countComponents());
 
         hbox.getChildren().addAll(nHubs, nComponents, isolatedHubs, nRoutes);
     }

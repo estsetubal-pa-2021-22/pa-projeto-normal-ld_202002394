@@ -22,6 +22,7 @@ import pt.pa.model.*;
 import pt.pa.model.exceptions.ExistingHubException;
 import pt.pa.model.exceptions.ExistingRouteException;
 import pt.pa.graph.Vertex;
+import pt.pa.model.exceptions.IncorrectFieldException;
 import pt.pa.view.strategy.ElementInfoHubStrategy;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
 import pt.pa.view.strategy.ElementInfoRouteStrategy;
@@ -29,7 +30,6 @@ import pt.pa.view.strategy.ElementInfoRouteStrategy;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NetworkEventHandler {
 
@@ -123,14 +123,11 @@ public class NetworkEventHandler {
                 createHubButton.setOnAction(actionEvent2 -> {
                     // Validations
                     try {
-                        if (hubCityNameTextField.getText().trim().isEmpty())
-                            System.out.println("\"City Name\" field is empty!");
-                        else if (hubPopulationTextField.getText().trim().isEmpty())
-                            System.out.println("\"Population\" field is empty!");
+                        if (hubCityNameTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"City Name\" field is empty!");
+                        else if (hubPopulationTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Population\" field is empty!");
                         else if (controller.getManager().getHub(hubCityNameTextField.getText().trim()) != null)
                             throw new ExistingHubException(); //System.out.println("This Hub already exists!");
-                        else if (Integer.valueOf(hubPopulationTextField.getText().trim()) <= 0)
-                            System.out.println("\"Population\" should be greater than 0!");
+                        else if (Integer.valueOf(hubPopulationTextField.getText().trim()) <= 0) throw new IncorrectFieldException("\"Population\" should be greater than 0!");
                         else {
                             Hub hub = new Hub(hubCityNameTextField.getText().trim(),Integer.valueOf(hubPopulationTextField.getText().trim()),coordinates);
 
@@ -147,6 +144,8 @@ public class NetworkEventHandler {
                         }
                     } catch (ExistingHubException exception) {
                         System.out.println(exception.getMessage());
+                    } catch (IncorrectFieldException incorrectFieldException){
+
                     } catch (RuntimeException runtimeException) {
                         System.out.println(runtimeException.getMessage());
                     }
@@ -179,16 +178,11 @@ public class NetworkEventHandler {
             createRouteButton.setOnAction(actionEvent2 -> {
                 // Validations
                 try {
-                    if (originHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
-                        System.out.println("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
-                        System.out.println("\"Destination Hub\" doesn't exist!");
-                    else if (Integer.valueOf(distanceTextField.getText().trim()) <= 0)
-                        System.out.println("\"Distance\" should be greater than 0!");
+                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
+                    else if (Integer.valueOf(distanceTextField.getText().trim()) <= 0) throw new IncorrectFieldException("\"Distance\" should be greater than 0!");
                     else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) != null)
                         throw new ExistingRouteException();
                     else {
@@ -208,6 +202,8 @@ public class NetworkEventHandler {
                     }
                 } catch (ExistingRouteException exception) {
                     System.out.println(exception.getMessage());
+                } catch (IncorrectFieldException incorrectFieldException){
+
                 } catch (RuntimeException runtimeException) {
                     System.out.println(runtimeException.getMessage());
                 }
@@ -236,18 +232,18 @@ public class NetworkEventHandler {
             removeHubButton.setOnAction(actionEvent2 -> {
                 try {
                     if (hubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Hub\" field is empty!");
+                        throw new IncorrectFieldException("\"Hub\" field is empty!");
                     else if (controller.getManager().getHub(hubTextField.getText().trim()) == null)
-                        System.out.println("\"Hub\" doesn't exist!");
+                        throw new IncorrectFieldException("\"Hub\" doesn't exist!");
                     else {
                         Hub hub = controller.getManager().getHub(hubTextField.getText().trim());
 
                         // Save action
-                        Map<Route,Hub> adjacentRoutes = new HashMap<>();
+                        Map<Route, Hub> adjacentRoutes = new HashMap<>();
                         Vertex<Hub> vertex = controller.getManager().getVertex(hub);
                         for (Edge edge : controller.getManager().getGraph().incidentEdges(controller.getManager().getVertex(hub)))
-                            adjacentRoutes.put((Route)edge.element(),(Hub)controller.getManager().getGraph().opposite(vertex,edge).element());
-                        Action action = new Action(Operation.REMOVE_HUB,hub,adjacentRoutes,new ArrayList<>(controller.getManager().getHubs()));
+                            adjacentRoutes.put((Route) edge.element(), (Hub) controller.getManager().getGraph().opposite(vertex, edge).element());
+                        Action action = new Action(Operation.REMOVE_HUB, hub, adjacentRoutes, new ArrayList<>(controller.getManager().getHubs()));
                         ui.getMenuBar().saveAction(action);
 
                         controller.getManager().removeVertex(hub);
@@ -256,8 +252,10 @@ public class NetworkEventHandler {
 
                         System.out.println("Hub removed!");
                     }
+                } catch (IncorrectFieldException incorrectFieldException){
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
+
                 }
             });
         });
@@ -284,16 +282,11 @@ public class NetworkEventHandler {
             dialog.show();
             removeRouteButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (originHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
-                        System.out.println("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
-                        System.out.println("\"Destination Hub\" doesn't exist!");
-                    else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) == null)
-                        System.out.println("This route doesn't exist!");
+                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
+                    else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("This route doesn't exist!");
                     else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
@@ -308,6 +301,7 @@ public class NetworkEventHandler {
                         dialog.close();
                         System.out.println("Route removed!");
                     }
+                } catch (IncorrectFieldException incorrectFieldException){
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -335,17 +329,16 @@ public class NetworkEventHandler {
             dialog.show();
             importRoutesButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (importRoutesField.getText().trim().isEmpty())
-                        System.out.println("\"Routes file path\" field is empty!");
+                    if (importRoutesField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Routes file path\" field is empty!");
                     else {
                         DatasetReader datasetReader = new DatasetReader(importRoutesField.getText().trim(),controller.getManager().getHubs());
                         controller.getManager().createGraphElements(datasetReader);
                         controller.getGraphView().updateAndWait();
                         controller.setCoordinates();
                         dialog.close();
-                        ui.updateMetrics();
                         System.out.println("Routes imported!");
                     }
+                } catch (IncorrectFieldException incorrectFieldException){
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -386,14 +379,10 @@ public class NetworkEventHandler {
             dialog.show();
             calculateButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (originHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty())
-                        System.out.println("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
-                        System.out.println("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
-                        System.out.println("\"Destination Hub\" doesn't exist!");
+                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
                     else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
@@ -416,6 +405,7 @@ public class NetworkEventHandler {
                         popup.setScene(popupScene);
                         popup.show();
                     }
+                } catch (IncorrectFieldException incorrectFieldException){
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
