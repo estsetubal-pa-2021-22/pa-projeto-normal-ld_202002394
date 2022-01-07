@@ -15,7 +15,7 @@ public class ElementInfoRouteStrategy<E> implements ElementInfoStrategy<E> {
         Route route = (Route)element;
         vbox.getChildren().clear();
         if (manager.getEdge(route) == null) {
-            javafx.scene.control.Label puppetLabel = new Label("Nothing selected");
+            javafx.scene.control.Label puppetLabel = new Label("Select an element to see details.");
             vbox.getChildren().addAll(puppetLabel);
             return;
         }
@@ -28,9 +28,9 @@ public class ElementInfoRouteStrategy<E> implements ElementInfoStrategy<E> {
         Circle circle_destination = new Circle(15);
         circle_destination.getStyleClass().add("vertex");
 
-        Line line_origin = new Line(1,1,1,30);
+        Line line_origin = new Line(1,1,1,50);
         line_origin.getStyleClass().add("edge");
-        Line line_destination = new Line(1,1,1,30);
+        Line line_destination = new Line(1,1,1,50);
         line_destination.getStyleClass().add("edge");
 
         Hub hub_origin = manager.getEdge(route).vertices()[0].element();

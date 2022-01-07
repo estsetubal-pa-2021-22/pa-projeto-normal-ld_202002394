@@ -14,6 +14,7 @@ public class NetworkUI extends BorderPane {
     private NetworkElementInfo elementInfoBar;
 
     public NetworkUI (NetworkController controller) {
+
         this.controller = controller;
 
         eventHandler = new NetworkEventHandler(this);
@@ -22,7 +23,7 @@ public class NetworkUI extends BorderPane {
         metrics = new NetworkMetrics(controller.getManager());
         elementInfoBar = new NetworkElementInfo(controller.getManager());
 
-        this.setLeft(controller.getGraphView());
+        this.setCenter(controller.getGraphView());
         this.setTop(menuBar);
         this.setBottom(metrics.getHBox());
         this.setRight(elementInfoBar.getVBox());
@@ -63,7 +64,7 @@ public class NetworkUI extends BorderPane {
 
     public void updateGraphStyle() {
         for (Edge edge : controller.getManager().getGraph().edges())
-            controller.getGraphView().getStylableEdge(edge).setStyle("-fx-stroke: #FF6D66; -fx-stroke-width: 1;");
+            controller.getGraphView().getStylableEdge(edge).setStyleClass("edge");
     }
 
 }

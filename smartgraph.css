@@ -18,6 +18,24 @@ STYLESHEET FOR JAVAFXGRAPH VISUALIZATION
 }
 
 .edge {
+    -fx-stroke-width: 2;
+    -fx-stroke: #FFD900;
+    -fx-stroke-dash-array: 2 5 2 5; /* remove for clean edges */
+    -fx-fill: transparent; /*important for curved edges */
+    -fx-stroke-line-cap: round;
+    -fx-opacity: 0.5;
+}
+
+.edge-path {
+    -fx-stroke-width: 2;
+    -fx-stroke: #FF0000;
+    -fx-stroke-dash-array: 2 5 2 5; /* remove for clean edges */
+    -fx-fill: transparent; /*important for curved edges */
+    -fx-stroke-line-cap: round;
+    -fx-opacity: 0.5;
+}
+
+.edge-old {
     -fx-stroke-width: 1;
     -fx-stroke: #FF6D66;  
     -fx-stroke-dash-array: 2 5 2 5; /* remove for clean edges */  
@@ -27,6 +45,11 @@ STYLESHEET FOR JAVAFXGRAPH VISUALIZATION
 }
 
 .edge-label {
+    -fx-font: normal 5pt "sans-serif";
+    /*-fx-fill: #FFD900;*/
+}
+
+.edge-label-old {
     -fx-font: normal 5pt "sans-serif";
 }
 
@@ -43,4 +66,11 @@ STYLESHEET FOR JAVAFXGRAPH VISUALIZATION
     -fx-stroke: green;
     -fx-stroke-type: inside; /* you should keep this if using arrows */
     -fx-fill: yellowgreen;
+}
+
+#pane{
+    -fx-background-image: url("src/pt/pa/images/background-map.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1140 1200;
+    -fx-background-position: right;
 }

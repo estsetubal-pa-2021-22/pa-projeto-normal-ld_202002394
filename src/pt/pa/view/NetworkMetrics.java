@@ -42,7 +42,7 @@ public class NetworkMetrics implements Observer {
         isolatedHubs.setText("Isolated Hubs: " + manager.countIsolatedHubs());
         nComponents.setText("Components: " + manager.countComponents());
 
-        hbox.getChildren().addAll(nHubs, nComponents, isolatedHubs, nRoutes);
+        hbox.getChildren().addAll(nHubs, nRoutes, isolatedHubs, nComponents);
     }
 
 }

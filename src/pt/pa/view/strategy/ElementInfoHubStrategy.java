@@ -15,7 +15,7 @@ public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
 
         vbox.getChildren().clear();
         if (manager.getVertex(hub) == null) {
-            javafx.scene.control.Label puppetLabel = new Label("Nothing selected");
+            javafx.scene.control.Label puppetLabel = new Label("Select an element to see details.");
             vbox.getChildren().addAll(puppetLabel);
             return;
         }
@@ -25,7 +25,7 @@ public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
 
         Label hub_info = new Label(hub.toString());
 
-        Label neighbors = new Label("Neighbors");
+        Label neighbors = new Label("Neighbors (" + manager.countNeighbors(hub) + ")");
         ListView neighbors_info = new ListView();
         neighbors_info.setMaxWidth(150);
         neighbors_info.setMaxHeight(120);
@@ -38,7 +38,7 @@ public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
 
         String x = String.valueOf((int)hub.getCoordinates().getX());
         String y = String.valueOf((int)hub.getCoordinates().getY());
-        Label location_info = new Label("(" + x + "," + y + ")");
+        Label location_info = new Label("(" + x + ", " + y + ")");
 
         vbox.getChildren().addAll(circle, hub_info, neighbors, neighbors_info, population, population_info, location, location_info);
 

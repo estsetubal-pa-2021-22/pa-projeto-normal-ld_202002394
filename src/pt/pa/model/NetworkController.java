@@ -19,11 +19,12 @@ public class NetworkController {
         manager = new NetworkManager(folder, routesFile);
         stage = new Stage(StageStyle.DECORATED);
         stage.setTitle("Projeto PA - Logistics Network");
-        stage.setMinHeight(768);
-        stage.setMinWidth(1200);
+        stage.setMinWidth(1400);
+        stage.setMinHeight(800);
         stage.setResizable(false);
         graphView = new SmartGraphPanel<>(manager.getGraph());
         networkUI = new NetworkUI(this);
+        graphView.setId("pane");
     }
 
     public Stage start() {

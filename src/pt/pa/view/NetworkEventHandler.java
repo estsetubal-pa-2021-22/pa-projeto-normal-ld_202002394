@@ -202,7 +202,7 @@ public class NetworkEventHandler {
                     }
                 } catch (ExistingRouteException exception) {
                     System.out.println(exception.getMessage());
-                } catch (IncorrectFieldException incorrectFieldException){
+                } catch (IncorrectFieldException incorrectFieldException) {
 
                 } catch (RuntimeException runtimeException) {
                     System.out.println(runtimeException.getMessage());
@@ -391,12 +391,13 @@ public class NetworkEventHandler {
                             if (i < path.size() - 1) {
                                 Route route = controller.getManager().getRoute(path.get(i), path.get(i + 1));
                                 Edge edge = controller.getManager().getEdge(route);
-                                controller.getGraphView().getStylableEdge(edge).setStyle("-fx-stroke: black; -fx-stroke-width: 2;");
+                                controller.getGraphView().getStylableEdge(edge).setStyleClass("edge-path");
                             }
                         controller.getGraphView().updateAndWait();
                         dialog.close();
                         System.out.println("Path calculated!");
                         final Stage popup = new Stage();
+                        popup.setResizable(false);
                         popup.setTitle("Shortest Path Distance");
                         popup.initModality(Modality.APPLICATION_MODAL);
                         popup.initOwner(controller.getStage());
@@ -406,6 +407,7 @@ public class NetworkEventHandler {
                         popup.show();
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
+
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
