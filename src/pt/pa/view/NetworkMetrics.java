@@ -22,15 +22,9 @@ public class NetworkMetrics implements Observer {
         nComponents = new Label();
         nRoutes = new Label();
 
-        hbox.setSpacing(200);
-        hbox.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-background-color: #337DFF;");
-        hbox.setMinHeight(40);
         hbox.setAlignment(Pos.CENTER);
-
-        nHubs.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;");
-        nRoutes.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;");
-        isolatedHubs.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;");
-        nComponents.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: white;");
+        hbox.getStylesheets().add("metrics.css");
+        hbox.getStyleClass().add("hbox");
 
         update(manager);
     }
