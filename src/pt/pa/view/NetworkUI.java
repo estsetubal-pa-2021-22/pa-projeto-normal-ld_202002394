@@ -55,16 +55,4 @@ public class NetworkUI extends BorderPane {
         return this.elementInfoBar;
     }
 
-    /*
-    public void setElementInfoBar(NetworkElementInfo elementInfo) {
-        this.elementInfoBar = elementInfo;
-        this.setRight(elementInfoBar);
-    }
-    */
-
-    public void updateGraphStyle() {
-        for (Edge edge : controller.getManager().getGraph().edges())
-            controller.getGraphView().getStylableEdge(edge).setStyleClass("edge");
-    }
-
 }

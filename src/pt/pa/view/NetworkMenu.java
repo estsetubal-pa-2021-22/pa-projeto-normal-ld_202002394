@@ -40,7 +40,7 @@ public class NetworkMenu extends MenuBar {
         return menuUndo.undoAction();
     }
 
-    public void createHandlers() {
+    private void createHandlers() {
         networkUI.getEventHandler().createHubEvent(menuCreate.getCreateHubItem());
         networkUI.getEventHandler().createRouteEvent(menuCreate.getCreateRouteItem());
         networkUI.getEventHandler().removeHubEvent(menuRemove.getRemoveHubItem());
@@ -48,14 +48,15 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().importRoutesEvent(menuRoutes.getImportRoutesItem());
         networkUI.getEventHandler().exportRoutesEvent(menuRoutes.getExportRoutesItem());
         networkUI.getEventHandler().calculateShortestPathEvent(menuCalculate.getShortestPathItem());
+        networkUI.getEventHandler().showFarthestHubsEvent(menuCalculate.getFarthestHubItem());
+        networkUI.getEventHandler().showCloseHubsEvent(menuCalculate.getCloseHubsItem());
         //networkUI.getEventHandler().calculateDistancePathEvent(menuCalculate.getDistancePathItem());
-        networkUI.getEventHandler().showFarthestHubsEvent(menuShow.getFarthestHubsItem());
         networkUI.getEventHandler().showCentrality(menuShow.getCentralityItem());
         networkUI.getEventHandler().showHubsWithMostNeighborsEvent(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().undoEvent(menuUndo.getUndoActionItem());
     }
 
-    public void removeHandlers() {
+    private void removeHandlers() {
         networkUI.getEventHandler().removeHandler(menuCreate.getCreateHubItem());
         networkUI.getEventHandler().removeHandler(menuCreate.getCreateRouteItem());
         networkUI.getEventHandler().removeHandler(menuRemove.getRemoveHubItem());
@@ -63,8 +64,9 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().removeHandler(menuRoutes.getImportRoutesItem());
         networkUI.getEventHandler().removeHandler(menuRoutes.getExportRoutesItem());
         networkUI.getEventHandler().removeHandler(menuCalculate.getShortestPathItem());
+        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubItem());
+        networkUI.getEventHandler().removeHandler(menuCalculate.getCloseHubsItem());
         //networkUI.getEventHandler().removeHandler(menuCalculate.getDistancePathItem());
-        networkUI.getEventHandler().removeHandler(menuShow.getFarthestHubsItem());
         networkUI.getEventHandler().removeHandler(menuShow.getCentralityItem());
         networkUI.getEventHandler().removeHandler(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().removeHandler(menuUndo.getUndoActionItem());

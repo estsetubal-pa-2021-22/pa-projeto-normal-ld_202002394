@@ -26,6 +26,13 @@ STYLESHEET FOR JAVAFXGRAPH VISUALIZATION
     -fx-opacity: 0.5;
 }
 
+.vertex-path {
+    -fx-stroke-width: 1;
+    -fx-stroke: #FF0000;
+    -fx-stroke-type: inside; /* you should keep this if using arrows */
+    -fx-fill: #950000;
+}
+
 .edge-path {
     -fx-stroke-width: 2;
     -fx-stroke: #FF0000;

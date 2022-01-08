@@ -381,15 +381,14 @@ public class NetworkManager extends Subject {
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
     }
 
-    // TO DO
-    // Returns a list of the farthest 2 Hubs
-    public List<Hub> farthestHubs() {
+    // Returns the shortest path (list of hubs) to the farthest hub from a given origin
+    public List<Hub> farthestHub(Hub origin) {
         return null;
     }
 
     // TO DO
-    // Returns a list of Hubs which their path goes through less or equal to a threshold value from a certain Hub
-    public List<Hub> closeHubs(Hub hub, int threshold) {
+    // Returns a list of Hubs which their path goes through less or equal to a threshold value of routes from a certain Hub
+    public List<Hub> closeHubs(Hub origin, int threshold) {
         return null;
     }
 

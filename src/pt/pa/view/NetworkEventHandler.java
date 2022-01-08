@@ -78,7 +78,7 @@ public class NetworkEventHandler {
     public void createHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             ui.getMenuBar().setDisable(true);
-            ui.updateGraphStyle();
+            defaultStyling();
             Circle puppet = new Circle(5);
             puppet.getStyleClass().add("vertex");
             controller.getGraphView().getChildren().add(puppet);
@@ -123,11 +123,14 @@ public class NetworkEventHandler {
                 createHubButton.setOnAction(actionEvent2 -> {
                     // Validations
                     try {
-                        if (hubCityNameTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"City Name\" field is empty!");
-                        else if (hubPopulationTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Population\" field is empty!");
+                        if (hubCityNameTextField.getText().trim().isEmpty())
+                            throw new IncorrectFieldException("\"City Name\" field is empty!");
+                        else if (hubPopulationTextField.getText().trim().isEmpty())
+                            throw new IncorrectFieldException("\"Population\" field is empty!");
                         else if (controller.getManager().getHub(hubCityNameTextField.getText().trim()) != null)
                             throw new ExistingHubException(); //System.out.println("This Hub already exists!");
-                        else if (Integer.valueOf(hubPopulationTextField.getText().trim()) <= 0) throw new IncorrectFieldException("\"Population\" should be greater than 0!");
+                        else if (Integer.valueOf(hubPopulationTextField.getText().trim()) <= 0)
+                            throw new IncorrectFieldException("\"Population\" should be greater than 0!");
                         else {
                             Hub hub = new Hub(hubCityNameTextField.getText().trim(),Integer.valueOf(hubPopulationTextField.getText().trim()),coordinates);
 
@@ -157,7 +160,7 @@ public class NetworkEventHandler {
     // Evento - Criar Route
     public void createRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             final Stage dialog = new Stage();
             dialog.setResizable(false);
             dialog.setTitle("New Route");
@@ -178,11 +181,16 @@ public class NetworkEventHandler {
             createRouteButton.setOnAction(actionEvent2 -> {
                 // Validations
                 try {
-                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
-                    else if (Integer.valueOf(distanceTextField.getText().trim()) <= 0) throw new IncorrectFieldException("\"Distance\" should be greater than 0!");
+                    if (originHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
+                    else if (Integer.valueOf(distanceTextField.getText().trim()) <= 0)
+                        throw new IncorrectFieldException("\"Distance\" should be greater than 0!");
                     else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) != null)
                         throw new ExistingRouteException();
                     else {
@@ -214,7 +222,7 @@ public class NetworkEventHandler {
     // Evento - Remover Hub
     public void removeHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             final Stage dialog = new Stage();
             dialog.setResizable(false);
             dialog.setTitle("Remove Hub");
@@ -264,7 +272,7 @@ public class NetworkEventHandler {
     // Evento - Remover Route
     public void removeRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             final Stage dialog = new Stage();
             dialog.setResizable(false);
             dialog.setTitle("Remove Route");
@@ -282,11 +290,16 @@ public class NetworkEventHandler {
             dialog.show();
             removeRouteButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
-                    else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("This route doesn't exist!");
+                    if (originHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
+                    else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("This route doesn't exist!");
                     else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
@@ -312,7 +325,7 @@ public class NetworkEventHandler {
     // Evento - Importar Routes
     public void importRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             final Stage dialog = new Stage();
             dialog.setResizable(false);
             dialog.setTitle("Import Routes");
@@ -329,7 +342,8 @@ public class NetworkEventHandler {
             dialog.show();
             importRoutesButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (importRoutesField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Routes file path\" field is empty!");
+                    if (importRoutesField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Routes file path\" field is empty!");
                     else {
                         DatasetReader datasetReader = new DatasetReader(importRoutesField.getText().trim(),controller.getManager().getHubs());
                         controller.getManager().createGraphElements(datasetReader);
@@ -349,7 +363,7 @@ public class NetworkEventHandler {
     // Evento - Exportar Routes
     public void exportRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             try {
                 System.out.println("Routes file saved in: " + controller.getManager().saveRoutes("saved_routes"));
             } catch (RuntimeException exception) {
@@ -361,10 +375,10 @@ public class NetworkEventHandler {
     // Evento - Calcular Shortest Path
     public void calculateShortestPathEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             final Stage dialog = new Stage();
             dialog.setResizable(false);
-            dialog.setTitle("New Route");
+            dialog.setTitle("Shortest Path");
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(controller.getStage());
             VBox dialogVBox = new VBox(20);
@@ -379,20 +393,19 @@ public class NetworkEventHandler {
             dialog.show();
             calculateButton.setOnAction(actionEvent2 -> {
                 try {
-                    if (originHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
-                    else if (destinationHubTextField.getText().trim().isEmpty()) throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
-                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
-                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
+                    if (originHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (destinationHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Destination Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
                     else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
                         List<Hub> path = controller.getManager().shortestPath(origin,destination);
-                        for (int i = 0; i < path.size(); i++)
-                            if (i < path.size() - 1) {
-                                Route route = controller.getManager().getRoute(path.get(i), path.get(i + 1));
-                                Edge edge = controller.getManager().getEdge(route);
-                                controller.getGraphView().getStylableEdge(edge).setStyleClass("edge-path");
-                            }
+                        pathStyling(path);
                         controller.getGraphView().updateAndWait();
                         dialog.close();
                         System.out.println("Path calculated!");
@@ -415,29 +428,52 @@ public class NetworkEventHandler {
         });
     }
 
-    /*
-    // Evento - Calcular Distance Path
-    public void calculateDistancePathEvent(MenuItem menuItem) {
-        System.out.println("Evento calcular distância");
-    }
-    */
-
-    // Evento - Mostrar hubs mais distantes
+    // Evento - Hub mais distante
     public void showFarthestHubsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
-            try {
-                System.out.println("Farthest Hubs: " + controller.getManager().farthestHubs());
-            } catch (RuntimeException exception) {
-                System.out.println(exception.getMessage());
-            }
+            defaultStyling();
+            final Stage dialog = new Stage();
+            dialog.setResizable(false);
+            dialog.setTitle("Farthest Hub");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(controller.getStage());
+            VBox dialogVBox = new VBox(20);
+            TextField originHubTextField = createField(dialogVBox, "Origin Hub:");
+            HBox buttonsHBox = new HBox(30);
+            Button calculateButton = new Button("Calculate");
+            buttonsHBox.getChildren().addAll(calculateButton);
+            dialogVBox.getChildren().add(buttonsHBox);
+            Scene dialogScene = new Scene(dialogVBox, 300, 200);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            calculateButton.setOnAction(actionEvent2 -> {
+                try {
+                    if (originHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else {
+                        System.out.println("Close Hubs: " + controller.getManager().closeHubs(controller.getManager().getHub("Waterloo, IA"), 2));
+                        Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
+                        List<Hub> path = controller.getManager().farthestHub(origin);
+                        pathStyling(path);
+                        controller.getGraphView().updateAndWait();
+                        dialog.close();
+                        System.out.println("Path calculated!");
+                    }
+                } catch (IncorrectFieldException incorrectFieldException) {
+                    System.out.println(incorrectFieldException.getMessage());
+                } catch (RuntimeException exception) {
+                    System.out.println(exception.getMessage());
+                }
+            });
         });
     }
 
     // Evento - Mostrar centralidade (todos os hubs)
     public void showCentrality(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             try {
                 System.out.println("Hub Centrality: " + controller.getManager().getCentrality());
                 final Stage dialog = new Stage();
@@ -464,10 +500,57 @@ public class NetworkEventHandler {
         });
     }
 
+    // Evento - Close Hubs
+    public void showCloseHubsEvent(MenuItem menuItem) {
+        menuItem.setOnAction(actionEvent1 -> {
+            defaultStyling();
+            final Stage dialog = new Stage();
+            dialog.setResizable(false);
+            dialog.setTitle("Close Hubs");
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(controller.getStage());
+            VBox dialogVBox = new VBox(20);
+            TextField originHubTextField = createField(dialogVBox, "Origin Hub:");
+            TextField thresholdTextField = createField(dialogVBox, "Threshold:");
+            HBox buttonsHBox = new HBox(30);
+            Button calculateButton = new Button("Calculate");
+            buttonsHBox.getChildren().addAll(calculateButton);
+            dialogVBox.getChildren().add(buttonsHBox);
+            Scene dialogScene = new Scene(dialogVBox, 300, 200);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            calculateButton.setOnAction(actionEvent2 -> {
+                try {
+                    if (originHubTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Origin Hub\" field is empty!");
+                    else if (thresholdTextField.getText().trim().isEmpty())
+                        throw new IncorrectFieldException("\"Threshold\" field is empty!");
+                    else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
+                        throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
+                    else if (Integer.valueOf(thresholdTextField.getText().trim()) <= 0)
+                        throw new IncorrectFieldException("\"Threshold\" should be greater than 0!");
+                    else {
+                        Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
+                        int threshold = Integer.valueOf(thresholdTextField.getText().trim());
+                        List<Hub> hubs = controller.getManager().closeHubs(origin,threshold);
+                        vertexStyling(hubs);
+                        controller.getGraphView().updateAndWait();
+                        dialog.close();
+                        System.out.println("Close Hubs calculated!");
+                    }
+                } catch (IncorrectFieldException incorrectFieldException) {
+                    System.out.println(incorrectFieldException.getMessage());
+                } catch (Exception exception) {
+                    System.out.println(exception.getMessage());
+                }
+            });
+        });
+    }
+
     // Evento - Mostrar top 5 hubs com mais vizinhos
     public void showHubsWithMostNeighborsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             try {
                 System.out.println("Hubs with most neighbors: " + controller.getManager().top5Centrality());
                 final Stage dialog = new Stage();
@@ -481,7 +564,7 @@ public class NetworkEventHandler {
                 CategoryAxis xAxis = new CategoryAxis();
                 NumberAxis yAxis = new NumberAxis();
                 BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-                barChart.setTitle("Top 5");
+                barChart.setTitle("Top 5 Centrality");
                 xAxis.setLabel("Hubs");
                 yAxis.setLabel("Value");
                 XYChart.Series<String, Number> data = new XYChart.Series<>();
@@ -505,7 +588,7 @@ public class NetworkEventHandler {
     // Evento - Fazer undo da última ação
     public void undoEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
-            ui.updateGraphStyle();
+            defaultStyling();
             try {
                 Action action = ui.getMenuBar().undoAction();
                 if (action == null)
@@ -546,5 +629,30 @@ public class NetworkEventHandler {
                 System.out.println(exception.getMessage());
             }
         });
+    }
+
+    // Alterar estilo do grafo para o default
+    private void defaultStyling() {
+        for (Vertex vertex : controller.getManager().getGraph().vertices())
+            controller.getGraphView().getStylableVertex(vertex).setStyleClass("vertex");
+        for (Edge edge : controller.getManager().getGraph().edges())
+            controller.getGraphView().getStylableEdge(edge).setStyleClass("edge");
+    }
+
+    // Alterar estilo do caminho dado como argumento
+    private void pathStyling(List<Hub> path) {
+        vertexStyling(path);
+        for (int i = 0; i < path.size(); i++)
+            if (i < path.size() - 1) {
+                Route route = controller.getManager().getRoute(path.get(i), path.get(i + 1));
+                Edge edge = controller.getManager().getEdge(route);
+                controller.getGraphView().getStylableEdge(edge).setStyleClass("edge-path");
+            }
+    }
+
+    // Alterar estilo dos hubs dados como argumento
+    private void vertexStyling(List<Hub> hubs) {
+        for (Hub hub : hubs)
+            controller.getGraphView().getStylableVertex(controller.getManager().getVertex(hub)).setStyleClass("vertex-path");
     }
 }

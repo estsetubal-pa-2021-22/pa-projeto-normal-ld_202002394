@@ -32,7 +32,7 @@ public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
         neighbors_info.getItems().addAll(manager.getNeighbors(hub));
 
         Label population = new Label("Population");
-        Label population_info = new Label (String.valueOf(hub.getPopulation()));
+        Label population_info = new Label (hub.getPopulation() + " people");
 
         Label location = new Label("Location");
 
