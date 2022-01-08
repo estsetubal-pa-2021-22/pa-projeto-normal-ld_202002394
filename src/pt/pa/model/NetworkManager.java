@@ -382,22 +382,139 @@ public class NetworkManager extends Subject {
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
     }
 
-    // TO DO
-    // Returns the 2 farthest away hubs in the entire graph
-    public List<Hub> farthestHubs() {
-        return null;
+    /*void topologicalSortUtil(int v, boolean visited[],Stack<Integer> stack)
+    {
+        // Mark the current node as visited
+        visited[v] = true;
+        // Recur for all the vertices adjacent to this vertex
+            for (Edge<Route,Hub> e : graph.incidentEdges(getVertex(hubs.get(v)))){
+
+                Hub node = graph.opposite(getVertex(hubs.get(v)),e).element();
+                if (!visited[hubs.indexOf(node)])
+                    topologicalSortUtil(hubs.indexOf(node), visited, stack);
+
+            }
+        stack.push(v);
+    }
+    // Push current vertex to stack which stores topological
+
+
+
+    public void longestPath(int s)
+    {
+        Stack<Integer> stack = new Stack<>();
+        int V = graph.numVertices();
+        int dist[] = new int[V];
+
+        // Mark all the vertices as not visited
+        boolean visited[] = new boolean[V];
+        for (int i = 0; i < V; i++)
+            visited[i] = false;
+
+        // Call the recursive helper function to store Topological
+        // Sort starting from all vertices one by one
+        for (int i = 0; i < V; i++)
+            if (visited[i] == false)
+                topologicalSortUtil(i, visited, stack);
+
+        // Initialize distances to all vertices as infinite and
+        // distance to source as 0
+        for (int i = 0; i < V; i++)
+            dist[i] = Integer.MIN_VALUE;
+
+        dist[s] = 0;
+
+        // Process vertices in topological order
+        while (stack.isEmpty() == false)
+        {
+
+            // Get the next vertex from topological order
+            int u = stack.peek();
+            stack.pop();
+
+            // Update distances of all adjacent vertices ;
+            if (dist[u] != Integer.MIN_VALUE)
+            {
+
+                for (Edge<Route,Hub> e : graph.incidentEdges(getVertex(hubs.get(u)))){
+
+                    Hub node = graph.opposite(getVertex(hubs.get(u)),e).element();
+                    if (dist[hubs.indexOf(node)] < dist[u] + getRoute(e.vertices()[0].element(),e.vertices()[1].element()).getDistance())
+                        dist[hubs.indexOf(node)] = dist[u] + getRoute(e.vertices()[0].element(),e.vertices()[1].element()).getDistance();
+                }
+            }
+        }
+
+        // Print the calculated longest distances
+        for (int i = 0; i < V; i++)
+            if(dist[i] == Integer.MIN_VALUE)
+                System.out.print("INF ");
+            else
+                System.out.print(dist[i] + " ");
+    }*/
+
+    //
+    private List<Hub> getDijkstraPath(Map<Vertex<Hub>, Vertex<Hub>> predecessors, Vertex<Hub> destination) {
+        List<Hub> path = new ArrayList<>();
+        while (destination != null) {
+            path.add(destination.element());
+            destination = predecessors.get(destination);
+        }
+        Collections.reverse(path);
+        return path;
     }
 
-    // TO DO
-    // Returns the shortest path (list of hubs) to the farthest hub from a given origin
+    // Returns the path of the 2 farthest away hubs in the entire graph
+    public List<Hub> farthestHubs(){
+        List<Hub> shortestPath = new ArrayList<>();
+        double maxDistance = 0;
+            for (Hub hub1 : getHubs()) {
+                List<Hub> path = farthestHub(hub1);
+                int pathCost = getPathCost(path);
+                if(maxDistance < pathCost){
+                    maxDistance = pathCost;
+                    shortestPath = path;
+                }
+            }
+        return shortestPath;
+    }
+
+    // Returns the cost of a given path (list of hubs)
+    private int getPathCost(List<Hub> path) {
+        int cost = 0;
+        for (int i = 0; i < path.size(); i++)
+            if (i < path.size() - 1)
+                cost += getRoute(path.get(i),path.get(i+1)).getDistance();
+        return cost;
+    }
+
+    // Returns the shortest path (list of hubs) of the farthest hub from a given origin
     public List<Hub> farthestHub(Hub origin) {
-        return null;
+        List<Hub> shortestPath = new ArrayList<>();
+        double maxDistance = 0;
+        Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
+        Map<Vertex<Hub>, Double> costs = new HashMap<>();
+        dijkstra(getVertex(origin), costs, predecessors);
+        for(Vertex<Hub> v : costs.keySet())
+            if(maxDistance < costs.get(v)){
+                maxDistance = costs.get(v);
+                shortestPath = getDijkstraPath(predecessors,v);
+            }
+        return shortestPath;
     }
 
-    // TO DO
     // Returns a list of Hubs which their path goes through less or equal to a threshold value of routes from a certain Hub
     public List<Hub> closeHubs(Hub origin, int threshold) {
-        return null;
+        List<Hub> hubs = new ArrayList();
+        Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
+        Map<Vertex<Hub>, Double> costs = new HashMap<>();
+        dijkstra(getVertex(origin), costs, predecessors);
+        for(Vertex<Hub> v : predecessors.keySet()){
+            List<Hub> path = getDijkstraPath(predecessors,v);
+            if(path.size()-1 <= threshold)
+                hubs.add(v.element());
+        }
+        return hubs;
     }
 
     // Returns a matrix with all current available routes
