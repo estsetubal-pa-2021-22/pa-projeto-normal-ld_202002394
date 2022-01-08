@@ -11,17 +11,21 @@ public class NetworkMenuUndo extends Menu {
     private Stack<Action> actions;
 
     private MenuItem undoAction;
+    private MenuItem defaultStyling;
 
     public NetworkMenuUndo() {
         actions = new Stack<>();
-        this.setText("Undo");
+        this.setText("More");
         this.undoAction = new MenuItem("Undo last action");
-        this.getItems().addAll(undoAction);
+        this.defaultStyling = new MenuItem("Default Styling");
+        this.getItems().addAll(defaultStyling,undoAction);
     }
 
     public MenuItem getUndoActionItem() {
         return this.undoAction;
     }
+
+    public MenuItem getDefaultStylingItem() { return this.defaultStyling; }
 
     public void saveAction(Action action) {
         actions.add(action);

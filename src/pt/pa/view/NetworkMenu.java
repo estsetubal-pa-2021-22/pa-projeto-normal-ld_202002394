@@ -48,12 +48,14 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().importRoutesEvent(menuRoutes.getImportRoutesItem());
         networkUI.getEventHandler().exportRoutesEvent(menuRoutes.getExportRoutesItem());
         networkUI.getEventHandler().calculateShortestPathEvent(menuCalculate.getShortestPathItem());
-        networkUI.getEventHandler().showFarthestHubsEvent(menuCalculate.getFarthestHubItem());
+        networkUI.getEventHandler().showFarthestHubEvent(menuCalculate.getFarthestHubItem());
+        networkUI.getEventHandler().showFarthestHubsEvent(menuCalculate.getFarthestHubsItem());
         networkUI.getEventHandler().showCloseHubsEvent(menuCalculate.getCloseHubsItem());
         //networkUI.getEventHandler().calculateDistancePathEvent(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().showCentrality(menuShow.getCentralityItem());
         networkUI.getEventHandler().showHubsWithMostNeighborsEvent(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().undoEvent(menuUndo.getUndoActionItem());
+        networkUI.getEventHandler().defaultStylingEvent(menuUndo.getDefaultStylingItem());
     }
 
     private void removeHandlers() {
@@ -65,11 +67,13 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().removeHandler(menuRoutes.getExportRoutesItem());
         networkUI.getEventHandler().removeHandler(menuCalculate.getShortestPathItem());
         networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubItem());
+        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubsItem());
         networkUI.getEventHandler().removeHandler(menuCalculate.getCloseHubsItem());
         //networkUI.getEventHandler().removeHandler(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().removeHandler(menuShow.getCentralityItem());
         networkUI.getEventHandler().removeHandler(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().removeHandler(menuUndo.getUndoActionItem());
+        networkUI.getEventHandler().removeHandler(menuUndo.getDefaultStylingItem());
     }
 
 }

@@ -148,7 +148,7 @@ public class NetworkEventHandler {
                     } catch (ExistingHubException exception) {
                         System.out.println(exception.getMessage());
                     } catch (IncorrectFieldException incorrectFieldException){
-
+                        System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                     } catch (RuntimeException runtimeException) {
                         System.out.println(runtimeException.getMessage());
                     }
@@ -211,7 +211,7 @@ public class NetworkEventHandler {
                 } catch (ExistingRouteException exception) {
                     System.out.println(exception.getMessage());
                 } catch (IncorrectFieldException incorrectFieldException) {
-
+                    System.out.println("Invalid field: " + incorrectFieldException);
                 } catch (RuntimeException runtimeException) {
                     System.out.println(runtimeException.getMessage());
                 }
@@ -261,6 +261,7 @@ public class NetworkEventHandler {
                         System.out.println("Hub removed!");
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
 
@@ -315,6 +316,7 @@ public class NetworkEventHandler {
                         System.out.println("Route removed!");
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -353,6 +355,7 @@ public class NetworkEventHandler {
                         System.out.println("Routes imported!");
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -408,7 +411,7 @@ public class NetworkEventHandler {
                         pathStyling(path);
                         controller.getGraphView().updateAndWait();
                         dialog.close();
-                        System.out.println("Path calculated!");
+                        System.out.println("Shortest Path calculated!");
                         final Stage popup = new Stage();
                         popup.setResizable(false);
                         popup.setTitle("Shortest Path Distance");
@@ -420,7 +423,7 @@ public class NetworkEventHandler {
                         popup.show();
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
-
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -428,8 +431,8 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Hub mais distante
-    public void showFarthestHubsEvent(MenuItem menuItem) {
+    // Evento - Hub mais distante de uma origem
+    public void showFarthestHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
             final Stage dialog = new Stage();
@@ -453,20 +456,36 @@ public class NetworkEventHandler {
                     else if (controller.getManager().getHub(originHubTextField.getText().trim()) == null)
                         throw new IncorrectFieldException("\"Origin Hub\" doesn't exist!");
                     else {
-                        System.out.println("Close Hubs: " + controller.getManager().closeHubs(controller.getManager().getHub("Waterloo, IA"), 2));
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         List<Hub> path = controller.getManager().farthestHub(origin);
                         pathStyling(path);
                         controller.getGraphView().updateAndWait();
                         dialog.close();
-                        System.out.println("Path calculated!");
+                        System.out.println("Farthest Hub calculated!");
                     }
                 } catch (IncorrectFieldException incorrectFieldException) {
-                    System.out.println(incorrectFieldException.getMessage());
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (RuntimeException exception) {
                     System.out.println(exception.getMessage());
                 }
             });
+        });
+    }
+
+    // Evento - Hubs mais distantes do grafo
+    public void showFarthestHubsEvent(MenuItem menuItem) {
+        menuItem.setOnAction(actionEvent1 -> {
+            defaultStyling();
+            try {
+                List<Hub> path = controller.getManager().farthestHubs();
+                pathStyling(path);
+                controller.getGraphView().updateAndWait();
+                System.out.println("Farthest Hubs calculated!");
+            } catch (IncorrectFieldException incorrectFieldException) {
+                System.out.println("Invalid field: " + incorrectFieldException.getMessage());
+            } catch (RuntimeException exception) {
+                System.out.println(exception.getMessage());
+            }
         });
     }
 
@@ -475,7 +494,6 @@ public class NetworkEventHandler {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
             try {
-                System.out.println("Hub Centrality: " + controller.getManager().getCentrality());
                 final Stage dialog = new Stage();
                 dialog.setResizable(false);
                 dialog.setTitle("Hub Centrality");
@@ -493,7 +511,7 @@ public class NetworkEventHandler {
                 Scene dialogScene = new Scene(dialogVBox, 300, 200);
                 dialog.setScene(dialogScene);
                 dialog.show();
-
+                System.out.println("Hubs Centrality calculated!");
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -539,7 +557,7 @@ public class NetworkEventHandler {
                         System.out.println("Close Hubs calculated!");
                     }
                 } catch (IncorrectFieldException incorrectFieldException) {
-                    System.out.println(incorrectFieldException.getMessage());
+                    System.out.println("Invalid field: " + incorrectFieldException.getMessage());
                 } catch (Exception exception) {
                     System.out.println(exception.getMessage());
                 }
@@ -552,7 +570,6 @@ public class NetworkEventHandler {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
             try {
-                System.out.println("Hubs with most neighbors: " + controller.getManager().top5Centrality());
                 final Stage dialog = new Stage();
                 dialog.setResizable(false);
                 dialog.setTitle("Hubs with most neighbors");
@@ -579,6 +596,7 @@ public class NetworkEventHandler {
                 Scene dialogScene = new Scene(pane, 800, 500);
                 dialog.setScene(dialogScene);
                 dialog.show();
+                System.out.println("Top 5 centrality calculated!");
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -628,6 +646,18 @@ public class NetworkEventHandler {
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
+        });
+    }
+
+    // Evento - Reset do estilo do grafo
+    public void defaultStylingEvent(MenuItem menuItem) {
+        menuItem.setOnAction(actionEvent1 -> {
+           try {
+               defaultStyling();
+               System.out.println("Default Styling applied!");
+           } catch (RuntimeException exception) {
+               System.out.println(exception.getMessage());
+           }
         });
     }
 

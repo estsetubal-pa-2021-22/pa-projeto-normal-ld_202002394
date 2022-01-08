@@ -11,9 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         NetworkController controller = new NetworkController("dataset/sgb32", "routes_1.txt");
-        controller.start().show();
-        controller.init();
-        controller.setCoordinates();
+        controller.start();
     }
 
 }

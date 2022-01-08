@@ -2,6 +2,7 @@ package pt.pa.model;
 
 import com.brunomnsilva.smartgraph.graphview.SmartGraphPanel;
 import pt.pa.graph.*;
+import pt.pa.model.exceptions.IncompatibleHubsException;
 
 import java.util.*;
 
@@ -245,7 +246,7 @@ public class NetworkManager extends Subject {
 
     // HENRIQUE
     // Returns the shortest path between 2 Hubs
-    public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException{
+    public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException {
         if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
         List<Vertex<Hub>> path = new ArrayList<>();
         minimumCostPath(getVertex(origin),getVertex(destination),path);
@@ -381,6 +382,13 @@ public class NetworkManager extends Subject {
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
     }
 
+    // TO DO
+    // Returns the 2 farthest away hubs in the entire graph
+    public List<Hub> farthestHubs() {
+        return null;
+    }
+
+    // TO DO
     // Returns the shortest path (list of hubs) to the farthest hub from a given origin
     public List<Hub> farthestHub(Hub origin) {
         return null;

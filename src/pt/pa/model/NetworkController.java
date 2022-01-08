@@ -27,11 +27,13 @@ public class NetworkController {
         graphView.setId("pane");
     }
 
-    public Stage start() {
+    public void start() {
         scene = new Scene(networkUI, 1400, 800);
         stage.setScene(scene);
         networkUI.getEventHandler().createElementsInfoEvent();
-        return stage;
+        stage.show();
+        graphView.init();
+        setCoordinates();
     }
 
     public void init() {
