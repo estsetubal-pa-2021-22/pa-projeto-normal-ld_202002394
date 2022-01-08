@@ -193,6 +193,8 @@ public class NetworkEventHandler {
                         throw new IncorrectFieldException("\"Distance\" should be greater than 0!");
                     else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) != null)
                         throw new ExistingRouteException();
+                    else if (originHubTextField.getText().trim().equals(destinationHubTextField.getText().trim()))
+                        throw new IncorrectFieldException("\"Origin Hub\" and \"Destination Hub\" can't be the same!");
                     else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
