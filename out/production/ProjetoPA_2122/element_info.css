@@ -1,0 +1,28 @@
+.label {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.vbox{
+    -fx-border-width: 1;
+    -fx-background-color: #6699CC, 	#6699CC;
+    -fx-spacing: 5;
+
+}
+
+.vertex {
+    -fx-stroke-width: 1;
+    -fx-stroke: #61B5F1;
+    -fx-stroke-type: inside; /* you should keep this if using arrows */
+    -fx-fill: #B1DFF7;
+}
+
+.edge {
+    -fx-stroke-width: 5;
+    -fx-stroke: white;
+    -fx-stroke-dash-array: 2 10 2 10; /* remove for clean edges */
+    -fx-fill: transparent; /*important for curved edges */
+    -fx-stroke-line-cap: round;
+    -fx-opacity: 0.5;
+}

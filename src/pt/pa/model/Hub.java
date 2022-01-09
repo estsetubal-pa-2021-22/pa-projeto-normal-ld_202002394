@@ -1,38 +1,45 @@
 package pt.pa.model;
 
+import java.awt.*;
+
 public class Hub {
 
     private String name;
     private int population;
-    private double x;
-    private double y;
+    private Point coordinates;
+
+    public Hub(String name, int population, Point coordinates) {
+        this.name = name;
+        this.population = population;
+        this.coordinates = coordinates;
+    }
 
     public Hub(String name) {
         this.name = name;
         this.population = -1;
-        this.x = -1;
-        this.y = -1;
+        this.coordinates = new Point();
+    }
+
+    public Hub() {
+        this.name = "";
+        this.population = -1;
+        this.coordinates = new Point();
     }
 
     public void setPopulation(int population) {
         this.population = population;
     }
 
-    public void setCoordinates(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public void setCoordinates(int x, int y) {
+        this.coordinates.setLocation(x,y);
     }
 
     public int getPopulation() {
         return this.population;
     }
 
-    public double getX() {
-        return this.x;
-    }
-
-    public double getY() {
-        return this.y;
+    public Point getCoordinates() {
+        return this.coordinates;
     }
 
     @Override

@@ -1,0 +1,4 @@
+.incorrect-text-field {
+    -fx-text-box-border: #B22222;
+    -fx-focus-color: #B22222;
+}

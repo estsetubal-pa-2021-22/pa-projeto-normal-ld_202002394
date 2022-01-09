@@ -1,0 +1,10 @@
+#
+# Isto é um comentário
+#
+Lisboa
+Porto
+Coimbra
+Aveiro
+#
+# Isto é outro comentário
+#

@@ -3,10 +3,9 @@ package pt.pa.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperties;
 import pt.pa.graph.*;
+import pt.pa.model.exceptions.IncompatibleHubsException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ class NetworkManagerTest {
     @Test
     @DisplayName("Checks if the Hub with most neighbors is the expected Hub")
     void checkTop5HubsCentrality() {
-        Hub mostNeighbors = manager.top5Centrality().get(0);
+        Hub mostNeighbors = manager.topCentrality().get(0);
         Map<Hub, Integer> centralityMap = manager.getCentrality();
 
         for(Hub hub : centralityMap.keySet())
@@ -56,27 +55,27 @@ class NetworkManagerTest {
     @DisplayName("Verify all neighbors for Waco, TX")
     void checkGetNeighbors(){
 
-       List<Hub> neighbors = manager.getNeighbors(manager.getHub("Waco, TX"));
+        List<Hub> neighbors = manager.getNeighbors(manager.getHub("Waco, TX"));
 
-       assertTrue(neighbors.contains(manager.getHub("Victoria, TX")));
-       assertTrue(neighbors.contains(manager.getHub("Wichita Falls, TX")));
-       assertFalse(neighbors.contains(manager.getHub("Waco, TX")));
+        assertTrue(neighbors.contains(manager.getHub("Victoria, TX")));
+        assertTrue(neighbors.contains(manager.getHub("Wichita Falls, TX")));
+        assertFalse(neighbors.contains(manager.getHub("Waco, TX")));
 
     }
 
     @Test
     @DisplayName("Verify if numbers of neighbors is correct for Waco, TX ")
     void checkCountNeighbors(){
-       assertEquals(2, manager.countNeighbors("Waco, TX"));
+        assertEquals(2, manager.countNeighbors("Waco, TX"));
 
-       manager.createEdge(manager.getHub("Waco, TX"),manager.getHub("Vincennes, IN"),new Route(10));
+        manager.createEdge(manager.getHub("Waco, TX"),manager.getHub("Vincennes, IN"),new Route(10));
 
-       assertEquals(3, manager.countNeighbors("Waco, TX"));
+        assertEquals(3, manager.countNeighbors("Waco, TX"));
 
-       manager.removeEdge(manager.getRoute("Waco, TX", "Vincennes, IN"));
-       manager.removeEdge(manager.getRoute("Waco, TX","Wichita Falls, TX"));
+        manager.removeEdge(manager.getRoute("Waco, TX", "Vincennes, IN"));
+        manager.removeEdge(manager.getRoute("Waco, TX","Wichita Falls, TX"));
 
-       assertEquals(1, manager.countNeighbors("Waco, TX"));
+        assertEquals(1, manager.countNeighbors("Waco, TX"));
     }
 
     @Test
@@ -148,9 +147,9 @@ class NetworkManagerTest {
     @Test
     @DisplayName("Check if initial graph has 2 components, then has 3 components after adding new isolated hub")
     void checkComponents() {
-        assertEquals(2,manager.components());
+        assertEquals(2,manager.countComponents());
         manager.createVertex(new Hub("Almada, PT"));
-        assertEquals(3,manager.components());
+        assertEquals(3,manager.countComponents());
     }
 
     @Test
@@ -176,7 +175,7 @@ class NetworkManagerTest {
     void checkShortestPath() {
 
         assertEquals("[Victoria, TX, Wichita Falls, TX, Wichita, KS, Yankton, SD, Waterloo, IA, Wausau, WI]",
-                     manager.shortestPath(manager.getHub("Victoria, TX"),manager.getHub("Wausau, WI")).toString());
+                manager.shortestPath(manager.getHub("Victoria, TX"),manager.getHub("Wausau, WI")).toString());
     }
 
     @Test
@@ -184,7 +183,7 @@ class NetworkManagerTest {
     void checkDepthFirstSearchAndBreadthFirstSearch() {
 
         assertEquals("[Weed, CA, Yakima, WA, Walla Walla, WA, Wenatchee, WA]",
-                     manager.depthFirstSearch(manager.getHub("Weed, CA")).toString());
+                manager.depthFirstSearch(manager.getHub("Weed, CA")).toString());
         assertEquals("[Weed, CA, Yakima, WA, Wenatchee, WA, Walla Walla, WA]",
                 manager.breadthFirstSearch(manager.getHub("Weed, CA")).toString());
 

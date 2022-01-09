@@ -1,7 +1,6 @@
 package pt.pa.model;
 
-import pt.pa.graph.Graph;
-import pt.pa.graph.Vertex;
+import pt.pa.model.exceptions.NonEqualHubsException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,30 +9,43 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-public class FileReader {
+public class DatasetReader {
 
     private String folder;
     private String routesFile;
-    private List<Vertex<Hub>> vertices;
+    private List<Hub> hubs;
+    private int[][] routes;
 
-    public FileReader(String folder, String routesFile) {
+    // First time constructor
+    public DatasetReader(String folder, String routesFile) {
         this.folder = folder;
         this.routesFile = routesFile;
-        this.vertices = new ArrayList<>();
+        this.hubs = readHubs();
+        this.routes = readRoutes();
     }
 
-    // Create all initial vertices
-    public void createVertices(Graph<Hub,Route> graph) {
-        for (Hub hub : readHubs())
-            this.vertices.add(graph.insertVertex(hub));
+    // Import Routes constructor
+    public DatasetReader(String path, List<Hub> hubs) {
+        this.folder = path.substring(0,path.lastIndexOf("/"));
+        this.routesFile = path.substring(path.lastIndexOf("/") + 1);
+        this.hubs = hubs;
+        this.routes = readRoutes();
+    }
+
+    public List<Hub> getHubs() {
+        return this.hubs;
+    }
+
+    public int[][] getRoutes() {
+        return this.routes;
     }
 
     // Returns a list of Hubs with all the information
     private List<Hub> readHubs() {
         List<Hub> hubs = new ArrayList<>();
-        hubs = readName(hubs);
-        hubs = readWeight(hubs);
-        hubs = readXY(hubs);
+        readName(hubs);
+        readWeight(hubs);
+        readXY(hubs);
         return hubs;
     }
 
@@ -55,49 +67,49 @@ public class FileReader {
     }
 
     // Reads name.txt file, adds attribute "code" and "name" to Hub, returns new modified list of Hubs
-    private List<Hub> readName(List<Hub> hubs) {
+    private void readName(List<Hub> hubs) {
         for (String line : readFile("/name.txt"))
             hubs.add(new Hub(line.trim()));
-        return hubs;
     }
 
     // Reads weight.txt file, adds attribute "weight" to Hub, returns new modified list of Hubs
-    private List<Hub> readWeight(List<Hub> hubs) {
+    private void readWeight(List<Hub> hubs) {
         int i = 0;
         for (String line : readFile("/weight.txt")) {
             hubs.get(i).setPopulation(Integer.valueOf(line.trim()));
             i++;
         }
-        return hubs;
     }
 
     // Reads xy.txt file, adds attribute "x" and "y" to Hub, returns new modified list of Hubs
-    private List<Hub> readXY(List<Hub> hubs) {
+    private void readXY(List<Hub> hubs) {
         int i = 0;
         for (String line : readFile("/xy.txt")) {
-            double x = Double.valueOf(line.split(" ")[0].trim());
-            double y = Double.valueOf(line.split(" ")[1].trim());
+            int x = Integer.valueOf(line.split(" ")[0].trim());
+            int y = Integer.valueOf(line.split(" ")[1].trim());
             hubs.get(i).setCoordinates(x,y);
             i++;
         }
-        return hubs;
     }
 
-    // Reads routes_*.txt file, creates new Routes, adds them to the graph
-    public List<Route> readRoutes(Graph<Hub,Route> graph) {
-        List<Route> routes = new ArrayList<>();
+    // Reads routes_*.txt file, returns a matrix
+    private int[][] readRoutes() throws NonEqualHubsException {
+        if (readFile(routesFile).size() != hubs.size()) throw new NonEqualHubsException();
+        int[][] matrix = new int[hubs.size()][hubs.size()];
         int row_index = 0;
         int column_index = 0;
-        for (String row : readFile(this.routesFile)) {
+        for (String row : readFile(routesFile)) {
             column_index = 0;
             for (String value : row.split(" ")) {
-                if (row_index < column_index && Integer.valueOf(value) != 0)
-                    graph.insertEdge(this.vertices.get(row_index),this.vertices.get(column_index),new Route(Integer.valueOf(value)));
+                if (column_index < row_index && Integer.valueOf(value) != 0)
+                    matrix[row_index][column_index] = Integer.valueOf(value);
+                else
+                    matrix[row_index][column_index] = 0;
                 column_index++;
             }
             row_index++;
         }
-        return routes;
+        return matrix;
     }
 
 }
