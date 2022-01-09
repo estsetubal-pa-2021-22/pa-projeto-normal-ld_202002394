@@ -450,7 +450,7 @@ public class NetworkEventHandler {
             VBox dialogVBox = new VBox(10);
             HBox buttonsHBox = new HBox(10);
             TextField txLink = new TextField();
-            Label lblQuestion = new Label("Are you sure you wanna export the routes?");
+            Label lblQuestion = new Label("Are you sure you want to export the routes?");
             dialogVBox.getChildren().add(lblQuestion);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             Button importRoutesButton = new Button("Export Routes");
@@ -467,7 +467,7 @@ public class NetworkEventHandler {
             dialog.show();
             importRoutesButton.setOnAction(actionEvent2 -> {
                 try {
-                    errorMsg.setText("Route Saved successfully in the path bellow");
+                    errorMsg.setText("Route Saved successfully in the path below");
                     txLink.setText(controller.getManager().saveRoutes("saved_routes"));
                 } catch (RuntimeException exception) {
                     errorMsg.setStyle("-fx-text-fill: green;");
