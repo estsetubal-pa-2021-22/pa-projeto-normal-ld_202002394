@@ -36,10 +36,6 @@ public class NetworkController {
         setCoordinates();
     }
 
-    public void init() {
-        graphView.init();
-    }
-
     public void setGraphView(SmartGraphPanel<Hub, Route> graphView) {
         this.graphView = graphView;
     }

@@ -50,11 +50,6 @@ public class NetworkManager extends Subject {
     // RAFA
     // Gets all the Hubs from the Graph
     public List<Hub> getHubs(){
-        /*
-        List<Hub> hubs = new ArrayList<>();
-        for(Vertex<Hub> vertex : graph.vertices())
-           hubs.add(vertex.element());
-         */
         return hubs;
     }
 
@@ -150,7 +145,7 @@ public class NetworkManager extends Subject {
     // Given a name, returns the corresponding Hub. Null if it doesn't find
     public Hub getHub(String name) {
         for (Vertex<Hub> vertex : graph.vertices())
-            if (vertex.element().toString().equals(name))
+            if (vertex.element().toString().equalsIgnoreCase(name))
                 return vertex.element();
         return null;
     }
@@ -228,11 +223,15 @@ public class NetworkManager extends Subject {
     }
 
     // RAFA
-    // Returns the top 5 Hubs with most neighbors (from method getCentrality()), on descending order
-    public List<Hub> top5Centrality() {
+    // Returns the top Hubs (max 5) with most neighbors (from method getCentrality()), on descending order
+    public List<Hub> topCentrality() {
         List<Hub> hubs = new ArrayList<>();
         List<Map.Entry<Hub, Integer>> list = new ArrayList<>(getCentrality().entrySet());
         list.sort(Map.Entry.comparingByValue());
+
+        if(list.size() <= 5)
+            for (int i = list.size() - 1; i >= 0; i--) hubs.add(list.get(i).getKey());
+        else
         for (int i = list.size() - 1; i > list.size() - 6; i--)
             hubs.add(list.get(i).getKey());
         return hubs;

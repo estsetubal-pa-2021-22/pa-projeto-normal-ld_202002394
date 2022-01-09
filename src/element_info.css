@@ -6,7 +6,7 @@
 
 .vbox{
     -fx-border-width: 1;
-    -fx-background-color: #337DFF;
+    -fx-background-color: #6699CC, 	#6699CC;
     -fx-spacing: 5;
 
 }

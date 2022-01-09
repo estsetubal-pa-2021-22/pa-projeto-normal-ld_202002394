@@ -6,7 +6,7 @@
 
 .hbox {
     -fx-border-width: 2;
-    -fx-background-color: #337DFF;
+    -fx-background-color: linear-gradient(to top, #337DFF, 	#6699CC);
     -fx-spacing: 200;
     -fx-min-height: 40;
 }

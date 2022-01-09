@@ -23,7 +23,7 @@ class NetworkManagerTest {
     @Test
     @DisplayName("Checks if the Hub with most neighbors is the expected Hub")
     void checkTop5HubsCentrality() {
-        Hub mostNeighbors = manager.top5Centrality().get(0);
+        Hub mostNeighbors = manager.topCentrality().get(0);
         Map<Hub, Integer> centralityMap = manager.getCentrality();
 
         for(Hub hub : centralityMap.keySet())
