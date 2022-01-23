@@ -5,8 +5,8 @@ import javafx.scene.control.MenuItem;
 
 public class NetworkMenuCreate extends Menu {
 
-    private MenuItem createHub;
-    private MenuItem createRoute;
+    private final MenuItem createHub;
+    private final MenuItem createRoute;
 
     public NetworkMenuCreate() {
         this.setText("Create");

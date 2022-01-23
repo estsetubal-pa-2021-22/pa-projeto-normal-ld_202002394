@@ -6,8 +6,4 @@ public class ExistingRouteException extends RuntimeException {
         super("This route already exists!");
     }
 
-    public ExistingRouteException(String string) {
-        super(string);
-    }
-
 }

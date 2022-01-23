@@ -6,8 +6,4 @@ public class IncompatibleHubsException extends RuntimeException {
         super("The hubs selected are not joint together, please select hubs in the same component.");
     }
 
-    public IncompatibleHubsException(String string) {
-        super(string);
-    }
-
 }

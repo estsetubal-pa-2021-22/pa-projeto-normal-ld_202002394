@@ -2,16 +2,16 @@ package pt.pa.view;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import pt.pa.model.Action;
+import pt.pa.model.actions.Action;
 
 import java.util.Stack;
 
 public class NetworkMenuUndo extends Menu {
 
-    private Stack<Action> actions;
+    private final Stack<Action> actions;
 
-    private MenuItem undoAction;
-    private MenuItem defaultStyling;
+    private final MenuItem undoAction;
+    private final MenuItem defaultStyling;
 
     public NetworkMenuUndo() {
         actions = new Stack<>();

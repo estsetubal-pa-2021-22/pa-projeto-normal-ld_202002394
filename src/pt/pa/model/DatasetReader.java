@@ -2,6 +2,7 @@ package pt.pa.model;
 
 import pt.pa.model.exceptions.NonEqualHubsException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,10 +12,10 @@ import java.util.Scanner;
 
 public class DatasetReader {
 
-    private String folder;
-    private String routesFile;
-    private List<Hub> hubs;
-    private int[][] routes;
+    private final String folder;
+    private final String routesFile;
+    private final List<Hub> hubs;
+    private final int[][] routes;
 
     // First time constructor
     public DatasetReader(String folder, String routesFile) {
@@ -59,7 +60,7 @@ public class DatasetReader {
                 String line = scanner.nextLine();
                 if (!line.trim().isEmpty() && !line.startsWith("#"))
                     collection.add(line);
-            };
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -76,7 +77,7 @@ public class DatasetReader {
     private void readWeight(List<Hub> hubs) {
         int i = 0;
         for (String line : readFile("/weight.txt")) {
-            hubs.get(i).setPopulation(Integer.valueOf(line.trim()));
+            hubs.get(i).setPopulation(Integer.parseInt(line.trim()));
             i++;
         }
     }
@@ -85,9 +86,9 @@ public class DatasetReader {
     private void readXY(List<Hub> hubs) {
         int i = 0;
         for (String line : readFile("/xy.txt")) {
-            int x = Integer.valueOf(line.split(" ")[0].trim());
-            int y = Integer.valueOf(line.split(" ")[1].trim());
-            hubs.get(i).setCoordinates(x,y);
+            int x = Integer.parseInt(line.split(" ")[0].trim());
+            int y = Integer.parseInt(line.split(" ")[1].trim());
+            hubs.get(i).setCoordinates(new Point(x,y));
             i++;
         }
     }
@@ -97,12 +98,11 @@ public class DatasetReader {
         if (readFile(routesFile).size() != hubs.size()) throw new NonEqualHubsException();
         int[][] matrix = new int[hubs.size()][hubs.size()];
         int row_index = 0;
-        int column_index = 0;
         for (String row : readFile(routesFile)) {
-            column_index = 0;
+            int column_index = 0;
             for (String value : row.split(" ")) {
-                if (column_index < row_index && Integer.valueOf(value) != 0)
-                    matrix[row_index][column_index] = Integer.valueOf(value);
+                if (column_index < row_index && Integer.parseInt(value) != 0)
+                    matrix[row_index][column_index] = Integer.parseInt(value);
                 else
                     matrix[row_index][column_index] = 0;
                 column_index++;

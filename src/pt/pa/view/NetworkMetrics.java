@@ -8,11 +8,11 @@ import pt.pa.model.Observer;
 
 public class NetworkMetrics implements Observer {
 
-    private HBox hbox;
-    private  Label nHubs;
-    private  Label isolatedHubs;
-    private  Label nComponents;
-    private  Label nRoutes;
+    private final HBox  hbox;
+    private final Label nHubs;
+    private final Label isolatedHubs;
+    private final Label nComponents;
+    private final Label nRoutes;
 
     public NetworkMetrics(NetworkManager manager) {
         this.hbox = new HBox();

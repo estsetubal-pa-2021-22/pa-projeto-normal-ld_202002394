@@ -5,8 +5,8 @@ import javafx.scene.control.MenuItem;
 
 public class NetworkMenuRoutes extends Menu {
 
-    private MenuItem importRoutes;
-    private MenuItem exportRoutes;
+    private final MenuItem importRoutes;
+    private final MenuItem exportRoutes;
 
     public NetworkMenuRoutes() {
         this.setText("Routes");

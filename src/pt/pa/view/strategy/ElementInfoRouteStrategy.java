@@ -8,10 +8,10 @@ import pt.pa.model.Hub;
 import pt.pa.model.NetworkManager;
 import pt.pa.model.Route;
 
-public class ElementInfoRouteStrategy<E> implements ElementInfoStrategy<E> {
+public class ElementInfoRouteStrategy implements ElementInfoStrategy {
 
     @Override
-    public void update(NetworkManager manager, VBox vbox, E element) {
+    public void update(NetworkManager manager, VBox vbox, Object element) {
         Route route = (Route)element;
         vbox.getChildren().clear();
         if (manager.getEdge(route) == null) {

@@ -5,8 +5,8 @@ import javafx.scene.control.MenuItem;
 
 public class NetworkMenuRemove extends Menu {
 
-    private MenuItem removeHub;
-    private MenuItem removeRoute;
+    private final MenuItem removeHub;
+    private final MenuItem removeRoute;
 
     public NetworkMenuRemove() {
         this.setText("Remove");

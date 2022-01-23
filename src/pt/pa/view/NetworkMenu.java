@@ -1,18 +1,18 @@
 package pt.pa.view;
 
 import javafx.scene.control.MenuBar;
-import pt.pa.model.Action;
+import pt.pa.model.actions.Action;
 
 public class NetworkMenu extends MenuBar {
 
-    private NetworkUI networkUI;
+    private final NetworkUI networkUI;
 
-    private NetworkMenuCreate menuCreate;
-    private NetworkMenuRemove menuRemove;
-    private NetworkMenuRoutes menuRoutes;
-    private NetworkMenuCalculate menuCalculate;
-    private NetworkMenuShow menuShow;
-    private NetworkMenuUndo menuUndo;
+    private final NetworkMenuCreate menuCreate;
+    private final NetworkMenuRemove menuRemove;
+    private final NetworkMenuRoutes menuRoutes;
+    private final NetworkMenuCalculate menuCalculate;
+    private final NetworkMenuShow menuShow;
+    private final NetworkMenuUndo menuUndo;
 
     public NetworkMenu(NetworkUI networkUI) {
 
@@ -26,10 +26,6 @@ public class NetworkMenu extends MenuBar {
         this.menuUndo = new NetworkMenuUndo();
         this.getMenus().addAll(menuCreate,menuRemove,menuRoutes,menuCalculate,menuShow,menuUndo);
         createHandlers();
-    }
-
-    public NetworkUI getPaneBuilder() {
-        return this.networkUI;
     }
 
     public void saveAction(Action action) {
@@ -51,29 +47,10 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().showFarthestHubEvent(menuCalculate.getFarthestHubItem());
         networkUI.getEventHandler().showFarthestHubsEvent(menuCalculate.getFarthestHubsItem());
         networkUI.getEventHandler().showCloseHubsEvent(menuCalculate.getCloseHubsItem());
-        //networkUI.getEventHandler().calculateDistancePathEvent(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().showCentrality(menuShow.getCentralityItem());
         networkUI.getEventHandler().showHubsWithMostNeighborsEvent(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().undoEvent(menuUndo.getUndoActionItem());
         networkUI.getEventHandler().defaultStylingEvent(menuUndo.getDefaultStylingItem());
-    }
-
-    private void removeHandlers() {
-        networkUI.getEventHandler().removeHandler(menuCreate.getCreateHubItem());
-        networkUI.getEventHandler().removeHandler(menuCreate.getCreateRouteItem());
-        networkUI.getEventHandler().removeHandler(menuRemove.getRemoveHubItem());
-        networkUI.getEventHandler().removeHandler(menuRemove.getRemoveRouteItem());
-        networkUI.getEventHandler().removeHandler(menuRoutes.getImportRoutesItem());
-        networkUI.getEventHandler().removeHandler(menuRoutes.getExportRoutesItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getShortestPathItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubsItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getCloseHubsItem());
-        //networkUI.getEventHandler().removeHandler(menuCalculate.getDistancePathItem());
-        networkUI.getEventHandler().removeHandler(menuShow.getCentralityItem());
-        networkUI.getEventHandler().removeHandler(menuShow.getHubsWithMostNeighborsItem());
-        networkUI.getEventHandler().removeHandler(menuUndo.getUndoActionItem());
-        networkUI.getEventHandler().removeHandler(menuUndo.getDefaultStylingItem());
     }
 
 }

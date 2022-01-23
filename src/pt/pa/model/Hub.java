@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Hub {
 
-    private String name;
+    private final String name;
     private int population;
     private Point coordinates;
 
@@ -30,8 +30,8 @@ public class Hub {
         this.population = population;
     }
 
-    public void setCoordinates(int x, int y) {
-        this.coordinates.setLocation(x,y);
+    public void setCoordinates(Point coordinates) {
+        this.coordinates = coordinates;
     }
 
     public int getPopulation() {

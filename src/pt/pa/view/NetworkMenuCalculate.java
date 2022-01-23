@@ -5,11 +5,10 @@ import javafx.scene.control.MenuItem;
 
 public class NetworkMenuCalculate extends Menu {
 
-    private MenuItem shortestPath;
-    private MenuItem farthestHub;
-    private MenuItem farthestHubs;
-    private MenuItem closeHubs;
-    private MenuItem distancePath;
+    private final MenuItem shortestPath;
+    private final MenuItem farthestHub;
+    private final MenuItem farthestHubs;
+    private final MenuItem closeHubs;
 
     public NetworkMenuCalculate() {
         this.setText("Calculate");
@@ -17,7 +16,6 @@ public class NetworkMenuCalculate extends Menu {
         this.farthestHub = new MenuItem("Farthest Hub");
         this.farthestHubs = new MenuItem("Farthest Hubs");
         this.closeHubs = new MenuItem("Close Hubs");
-        this.distancePath = new MenuItem("Distance between 2 paths");
         this.getItems().addAll(shortestPath,farthestHub,farthestHubs,closeHubs);
     }
 
@@ -34,9 +32,5 @@ public class NetworkMenuCalculate extends Menu {
     }
 
     public MenuItem getCloseHubsItem() { return this.closeHubs; }
-
-    public MenuItem getDistancePathItem() {
-        return this.distancePath;
-    }
 
 }

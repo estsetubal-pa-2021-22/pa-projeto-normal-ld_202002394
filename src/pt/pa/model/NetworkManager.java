@@ -8,7 +8,7 @@ import java.util.*;
 
 public class NetworkManager extends Subject {
 
-    private Graph<Hub,Route> graph;
+    private final Graph<Hub,Route> graph;
     private List<Hub> hubs;
 
     public NetworkManager(String folder, String routesFile) {
@@ -25,9 +25,9 @@ public class NetworkManager extends Subject {
 
     // ALEX
     // Creates all the vertices and edges of the graph, given a dataset
-    public Graph<Hub,Route> createGraphElements(DatasetReader datasetReader) {
+    public void createGraphElements(DatasetReader datasetReader) {
         List<Hub> newHubs = new ArrayList<>(datasetReader.getHubs());
-        for (Vertex vertex : graph.vertices())
+        for (Vertex<Hub> vertex : graph.vertices())
             graph.removeVertex(vertex);
         hubs.clear();
         int[][] routes = datasetReader.getRoutes();
@@ -37,7 +37,6 @@ public class NetworkManager extends Subject {
                 if (routes[row][column] != 0)
                     createEdge(newHubs.get(row), newHubs.get(column), new Route(routes[row][column]));
         }
-        return graph;
     }
 
     // ALEX
@@ -217,8 +216,8 @@ public class NetworkManager extends Subject {
     // Returns a map of all the Hubs (Key) and the number of neighbors (Value)
     public Map<Hub,Integer> getCentrality() {
         Map<Hub, Integer> map = new HashMap<>();
-        for (Vertex<Hub> vertexHub : graph.vertices())
-            map.put(vertexHub.element(), countNeighbors(vertexHub.element()));
+        for (Vertex<Hub> vertex : graph.vertices())
+            map.put(vertex.element(), countNeighbors(vertex.element()));
         return map;
     }
 
@@ -246,7 +245,7 @@ public class NetworkManager extends Subject {
     // HENRIQUE
     // Returns the shortest path between 2 Hubs
     public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException {
-        if(!areHubsInSameComponent(origin,destination)) throw new IncompatibleHubsException();
+        if(hubsNotInSameComponent(origin, destination)) throw new IncompatibleHubsException();
         List<Vertex<Hub>> path = new ArrayList<>();
         minimumCostPath(getVertex(origin),getVertex(destination),path);
         List<Hub> correctPath = new ArrayList<>();
@@ -310,12 +309,12 @@ public class NetworkManager extends Subject {
 
     //HENRIQUE
     //Verifies if the given Hubs are in the same component
-    private boolean areHubsInSameComponent(Hub origin, Hub destination){
+    private boolean hubsNotInSameComponent(Hub origin, Hub destination){
         List<Hub> componentList = depthFirstSearch(origin);
         for(Hub elem : componentList)
             if(elem.equals(destination))
-                return true;
-        return false;
+                return false;
+        return true;
     }
 
     // HENRIQUE
@@ -363,7 +362,7 @@ public class NetworkManager extends Subject {
                 return; //case there is no path
             unvisited.remove(u); //mark as visited
             for(Edge<Route,Hub> e :graph.incidentEdges(u)){
-                Vertex v = graph.opposite(u,e); //adjacent vertex to u
+                Vertex<Hub> v = graph.opposite(u,e); //adjacent vertex to u
                 double costV = e.element().getDistance() + costs.get(u);
                 if(costV < costs.get(v)){ //I found a cheaper path, so I'm going to replace the value
                     costs.put(v,costV);
@@ -376,81 +375,19 @@ public class NetworkManager extends Subject {
     // HENRIQUE
     // Returns the total distance of the shortest path between any 2 Hubs
     public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException{
-        if(!areHubsInSameComponent(origin,destination))
+        if(hubsNotInSameComponent(origin, destination))
             throw new IncompatibleHubsException();
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
     }
 
-    /*void topologicalSortUtil(int v, boolean visited[],Stack<Integer> stack)
-    {
-        // Mark the current node as visited
-        visited[v] = true;
-        // Recur for all the vertices adjacent to this vertex
-            for (Edge<Route,Hub> e : graph.incidentEdges(getVertex(hubs.get(v)))){
-
-                Hub node = graph.opposite(getVertex(hubs.get(v)),e).element();
-                if (!visited[hubs.indexOf(node)])
-                    topologicalSortUtil(hubs.indexOf(node), visited, stack);
-
-            }
-        stack.push(v);
+    // Returns the total distance of the shortest path between any 2 Hubs
+    public int pathDistance(List<Hub> path) throws IncompatibleHubsException {
+        int sum = 0;
+        for (int i = 0; i < path.size(); i++)
+            if (i < path.size() - 1)
+                sum += getRoute(path.get(i),path.get(i+1)).getDistance();
+        return sum;
     }
-    // Push current vertex to stack which stores topological
-
-
-
-    public void longestPath(int s)
-    {
-        Stack<Integer> stack = new Stack<>();
-        int V = graph.numVertices();
-        int dist[] = new int[V];
-
-        // Mark all the vertices as not visited
-        boolean visited[] = new boolean[V];
-        for (int i = 0; i < V; i++)
-            visited[i] = false;
-
-        // Call the recursive helper function to store Topological
-        // Sort starting from all vertices one by one
-        for (int i = 0; i < V; i++)
-            if (visited[i] == false)
-                topologicalSortUtil(i, visited, stack);
-
-        // Initialize distances to all vertices as infinite and
-        // distance to source as 0
-        for (int i = 0; i < V; i++)
-            dist[i] = Integer.MIN_VALUE;
-
-        dist[s] = 0;
-
-        // Process vertices in topological order
-        while (stack.isEmpty() == false)
-        {
-
-            // Get the next vertex from topological order
-            int u = stack.peek();
-            stack.pop();
-
-            // Update distances of all adjacent vertices ;
-            if (dist[u] != Integer.MIN_VALUE)
-            {
-
-                for (Edge<Route,Hub> e : graph.incidentEdges(getVertex(hubs.get(u)))){
-
-                    Hub node = graph.opposite(getVertex(hubs.get(u)),e).element();
-                    if (dist[hubs.indexOf(node)] < dist[u] + getRoute(e.vertices()[0].element(),e.vertices()[1].element()).getDistance())
-                        dist[hubs.indexOf(node)] = dist[u] + getRoute(e.vertices()[0].element(),e.vertices()[1].element()).getDistance();
-                }
-            }
-        }
-
-        // Print the calculated longest distances
-        for (int i = 0; i < V; i++)
-            if(dist[i] == Integer.MIN_VALUE)
-                System.out.print("INF ");
-            else
-                System.out.print(dist[i] + " ");
-    }*/
 
     //
     private List<Hub> getDijkstraPath(Map<Vertex<Hub>, Vertex<Hub>> predecessors, Vertex<Hub> destination) {

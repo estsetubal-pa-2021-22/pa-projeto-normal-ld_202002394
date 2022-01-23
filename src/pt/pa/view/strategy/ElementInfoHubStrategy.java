@@ -7,10 +7,10 @@ import javafx.scene.shape.Circle;
 import pt.pa.model.Hub;
 import pt.pa.model.NetworkManager;
 
-public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
+public class ElementInfoHubStrategy implements ElementInfoStrategy {
 
     @Override
-    public void update(NetworkManager manager, VBox vbox, E element) {
+    public void update(NetworkManager manager, VBox vbox, Object element) {
         Hub hub = (Hub)element;
 
         vbox.getChildren().clear();

@@ -8,10 +8,10 @@ import pt.pa.view.NetworkUI;
 
 public class NetworkController {
 
-    private NetworkManager manager;
-    private NetworkUI networkUI;
+    private final NetworkManager manager;
+    private final NetworkUI networkUI;
 
-    private Stage stage;
+    private final Stage stage;
     private Scene scene;
     private SmartGraphPanel<Hub, Route> graphView;
 

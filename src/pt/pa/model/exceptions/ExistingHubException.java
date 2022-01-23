@@ -6,8 +6,4 @@ public class ExistingHubException extends RuntimeException {
         super("This hub already exists!");
     }
 
-    public ExistingHubException(String string) {
-        super(string);
-    }
-
 }

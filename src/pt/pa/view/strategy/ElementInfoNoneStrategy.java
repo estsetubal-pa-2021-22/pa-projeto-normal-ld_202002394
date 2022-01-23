@@ -2,13 +2,12 @@ package pt.pa.view.strategy;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import pt.pa.model.NetworkManager;
 
-public class ElementInfoNoneStrategy<E> implements ElementInfoStrategy<E> {
+public class ElementInfoNoneStrategy implements ElementInfoStrategy {
 
     @Override
-    public void update(NetworkManager manager, VBox vbox, E element) {
+    public void update(NetworkManager manager, VBox vbox, Object element) {
         vbox.getChildren().clear();
 
         Label info = new Label("Select an element to see details.");

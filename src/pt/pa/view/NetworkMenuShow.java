@@ -5,8 +5,8 @@ import javafx.scene.control.MenuItem;
 
 public class NetworkMenuShow extends Menu {
 
-    private MenuItem centrality;
-    private MenuItem hubsWithMostNeighbors;
+    private final MenuItem centrality;
+    private final MenuItem hubsWithMostNeighbors;
 
     public NetworkMenuShow() {
         this.setText("Show");

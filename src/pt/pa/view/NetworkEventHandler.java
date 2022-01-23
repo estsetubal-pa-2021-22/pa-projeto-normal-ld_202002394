@@ -17,13 +17,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 import pt.pa.graph.Edge;
 import pt.pa.model.*;
 import pt.pa.model.exceptions.ExistingHubException;
 import pt.pa.model.exceptions.ExistingRouteException;
 import pt.pa.graph.Vertex;
 import pt.pa.model.exceptions.IncorrectFieldException;
+import pt.pa.model.actions.Action;
+import pt.pa.model.actions.ActionFactory;
 import pt.pa.view.strategy.ElementInfoHubStrategy;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
 import pt.pa.view.strategy.ElementInfoRouteStrategy;
@@ -35,27 +36,14 @@ import javafx.geometry.Insets;
 
 public class NetworkEventHandler {
 
-    private NetworkController controller;
-    private NetworkUI ui;
+    private final NetworkController controller;
+    private final NetworkUI ui;
+    private final ActionFactory factory;
 
     public NetworkEventHandler(NetworkUI ui) {
         this.ui = ui;
         this.controller = this.ui.getController();
-
-    }
-
-    public void removeHandler(MenuItem menuItem) {
-        menuItem.setOnAction(null);
-    }
-
-    private TextField createField(VBox vbox, String field) {
-        HBox hbox = new HBox();
-        Label label = new Label(field);
-        TextField textField = new TextField();
-        hbox.getChildren().addAll(label,textField);
-        hbox.setSpacing(10);
-        vbox.getChildren().add(hbox);
-        return textField;
+        this.factory = new ActionFactory();
     }
 
     public void createElementsInfoEvent() {
@@ -71,10 +59,6 @@ public class NetworkEventHandler {
                 ui.getElementInfoBar().setElement(graphVertex.getUnderlyingVertex().element(),controller.getManager());
             });
         });
-    }
-
-    public void disableElementsInfoEvent() {
-        controller.getGraphView().setOnMousePressed(null);
     }
 
     // Evento - Criar Hub
@@ -103,11 +87,7 @@ public class NetworkEventHandler {
                 controller.getGraphView().enableDoubleClickListener();
                 createElementsInfoEvent();
 
-                final Stage dialog = new Stage();
-                dialog.setResizable(false);
-                dialog.setTitle("New Hub");
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(controller.getStage());
+                final Stage dialog = createStage("New Hub");
                 VBox dialogVBox = new VBox(10);
                 dialogVBox.setPadding(new Insets(10, 10, 10, 10));
                 TextField hubCityNameTextField = createField(dialogVBox, "City Name:\t");
@@ -125,9 +105,7 @@ public class NetworkEventHandler {
                 dialog.setScene(dialogScene);
                 dialog.show();
 
-                dialog.setOnCloseRequest(e -> {
-                    controller.getGraphView().getChildren().remove(puppet);
-                });
+                dialog.setOnCloseRequest(e -> controller.getGraphView().getChildren().remove(puppet));
 
                 createHubButton.setOnAction(actionEvent2 -> {
                     // Validations
@@ -142,14 +120,14 @@ public class NetworkEventHandler {
                         }else if (controller.getManager().getHub(hubCityNameTextField.getText().trim()) != null) {
                             hubCityNameTextField.getStyleClass().add("incorrect-text-field");
                             throw new ExistingHubException(); //System.out.println("This Hub already exists!");
-                        }else if (Integer.valueOf(hubPopulationTextField.getText().trim()) <= 0) {
+                        }else if (Integer.parseInt(hubPopulationTextField.getText().trim()) <= 0) {
                             hubPopulationTextField.getStyleClass().add("incorrect-text-field");
                             throw new IncorrectFieldException("\"Population\" should be greater than 0!");
                         }else {
-                            Hub hub = new Hub(hubCityNameTextField.getText().trim(),Integer.valueOf(hubPopulationTextField.getText().trim()),coordinates);
+                            Hub hub = new Hub(hubCityNameTextField.getText().trim(),Integer.parseInt(hubPopulationTextField.getText().trim()),coordinates);
 
                             // Save action
-                            Action action = new Action(Operation.INSERT_HUB,hub);
+                            Action action = factory.create(Operation.INSERT_HUB,controller,hub);
                             ui.getMenuBar().saveAction(action);
 
                             Vertex<Hub> vertex1 = controller.getManager().createVertex(hub);
@@ -179,11 +157,7 @@ public class NetworkEventHandler {
     public void createRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("New Route");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("New Route");
             VBox dialogVBox = new VBox(20);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             TextField originHubTextField = createField(dialogVBox, "Origin Hub:\t\t");
@@ -218,7 +192,7 @@ public class NetworkEventHandler {
                     }else if (controller.getManager().getHub(destinationHubTextField.getText().trim()) == null) {
                         destinationHubTextField.getStyleClass().add("incorrect-text-field");
                         throw new IncorrectFieldException("\"Destination Hub\" doesn't exist!");
-                    }else if (Integer.valueOf(distanceTextField.getText().trim()) <= 0) {
+                    }else if (Integer.parseInt(distanceTextField.getText().trim()) <= 0) {
                         distanceTextField.getStyleClass().add("incorrect-text-field");
                         throw new IncorrectFieldException("\"Distance\" should be greater than 0!");
                     }else if (controller.getManager().getRoute(originHubTextField.getText().trim(),destinationHubTextField.getText().trim()) != null) {
@@ -232,12 +206,12 @@ public class NetworkEventHandler {
                     }else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
                         Hub destination = controller.getManager().getHub(destinationHubTextField.getText().trim());
-                        Route route = new Route(Integer.valueOf(distanceTextField.getText().trim()));
+                        Route route = new Route(Integer.parseInt(distanceTextField.getText().trim()));
 
                         controller.getManager().createEdge(origin,destination,route);
 
                         // Save action
-                        Action action = new Action(Operation.INSERT_ROUTE,controller.getManager().getEdge(route));
+                        Action action = factory.create(Operation.INSERT_ROUTE,controller,controller.getManager().getEdge(route));
                         ui.getMenuBar().saveAction(action);
 
                         controller.getGraphView().updateAndWait();
@@ -261,11 +235,7 @@ public class NetworkEventHandler {
     public void removeHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Remove Hub");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Remove Hub");
             VBox dialogVBox = new VBox(20);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             TextField hubTextField = createField(dialogVBox, "Hub:\t");
@@ -295,9 +265,9 @@ public class NetworkEventHandler {
                         // Save action
                         Map<Route, Hub> adjacentRoutes = new HashMap<>();
                         Vertex<Hub> vertex = controller.getManager().getVertex(hub);
-                        for (Edge edge : controller.getManager().getGraph().incidentEdges(controller.getManager().getVertex(hub)))
-                            adjacentRoutes.put((Route) edge.element(), (Hub) controller.getManager().getGraph().opposite(vertex, edge).element());
-                        Action action = new Action(Operation.REMOVE_HUB, hub, adjacentRoutes, new ArrayList<>(controller.getManager().getHubs()));
+                        for (Edge<Route,Hub> edge : controller.getManager().getGraph().incidentEdges(controller.getManager().getVertex(hub)))
+                            adjacentRoutes.put(edge.element(), controller.getManager().getGraph().opposite(vertex, edge).element());
+                        Action action = factory.create(Operation.REMOVE_HUB, controller, hub, adjacentRoutes, new ArrayList<>(controller.getManager().getHubs()));
                         ui.getMenuBar().saveAction(action);
 
                         controller.getManager().removeVertex(hub);
@@ -324,11 +294,7 @@ public class NetworkEventHandler {
     public void removeRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Remove Route");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Remove Route");
             VBox dialogVBox = new VBox(20);
             TextField originHubTextField = createField(dialogVBox, "Origin Hub:\t\t");
             TextField destinationHubTextField = createField(dialogVBox, "Destination Hub:\t");
@@ -369,7 +335,7 @@ public class NetworkEventHandler {
                         Route route = controller.getManager().getRoute(origin,destination);
 
                         // Save action
-                        Action action = new Action(Operation.REMOVE_ROUTE,origin,destination,route);
+                        Action action = factory.create(Operation.REMOVE_ROUTE,controller,origin,destination,route);
                         ui.getMenuBar().saveAction(action);
 
                         controller.getManager().removeEdge(route);
@@ -392,11 +358,7 @@ public class NetworkEventHandler {
     public void importRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Import Routes");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Import Routes");
             VBox dialogVBox = new VBox(20);
             TextField importRoutesField = createField(dialogVBox, "Routes file path:");
             HBox buttonsHBox = new HBox(30);
@@ -442,11 +404,7 @@ public class NetworkEventHandler {
     public void exportRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Export Routes");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Export Routes");
             VBox dialogVBox = new VBox(10);
             HBox buttonsHBox = new HBox(10);
             TextField txLink = new TextField();
@@ -482,11 +440,7 @@ public class NetworkEventHandler {
     public void calculateShortestPathEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Shortest Path");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Shortest Path");
             VBox dialogVBox = new VBox(20);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             TextField originHubTextField = createField(dialogVBox, "Origin Hub:\t\t");
@@ -527,27 +481,18 @@ public class NetworkEventHandler {
                         controller.getGraphView().updateAndWait();
                         dialog.close();
                         System.out.println("Shortest Path calculated!");
-                        final Stage popup = new Stage();
+                        final Stage popup = createStage("Shortest Path Distance");
 
                         VBox newBox = new VBox(10);
                         newBox.setPadding(new Insets(10, 10, 10, 10));
-
-                        popup.setResizable(false);
-                        popup.setTitle("Shortest Path Distance");
-                        popup.initModality(Modality.APPLICATION_MODAL);
-                        popup.initOwner(controller.getStage());
-                        Label infoLabel = new Label("Shortest path distance is " + controller.getManager().shortestPathTotalDistance(origin,destination));
+                        Label infoLabel = new Label("Shortest path distance is " + controller.getManager().pathDistance(path));
                         Button closeButton = new Button("Close");
                         buttonsHBox.getChildren().addAll(closeButton);
                         newBox.getChildren().addAll(infoLabel,closeButton);
                         Scene popupScene = new Scene(newBox, 200, 80);
                         popup.setScene(popupScene);
                         popup.show();
-                        closeButton.setOnAction(actionEvent3 -> {
-
-                            popup.close();
-
-                        });
+                        closeButton.setOnAction(actionEvent3 -> popup.close());
                     }
                 } catch (IncorrectFieldException incorrectFieldException){
                     errorMsg.setText(incorrectFieldException.getMessage());
@@ -564,11 +509,7 @@ public class NetworkEventHandler {
     public void showFarthestHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Farthest Hub");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Farthest Hub");
             VBox dialogVBox = new VBox(10);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             TextField originHubTextField = createField(dialogVBox, "Origin Hub:");
@@ -634,19 +575,17 @@ public class NetworkEventHandler {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
             try {
-                final Stage dialog = new Stage();
-                dialog.setResizable(false);
-                dialog.setTitle("Hub Centrality");
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(controller.getStage());
+                final Stage dialog = createStage("Hub Centrality");
                 VBox dialogVBox = new VBox(20);
 
                 ListView<String> centralityList = new ListView<>();
                 centralityList.setMaxHeight(300);
                 centralityList.setMinWidth(200);
                 Map<Hub,Integer> centralityMap = controller.getManager().getCentrality();
-                for (Hub hub : centralityMap.keySet())
-                    centralityList.getItems().add(hub.toString() + " (" + centralityMap.get(hub) + ")");
+                List<Map.Entry<Hub, Integer>> list = new ArrayList<>(centralityMap.entrySet());
+                list.sort(Map.Entry.comparingByValue());
+                for (int i = list.size() - 1; i >= 0; i--)
+                    centralityList.getItems().add(list.get(i).getKey().toString() + " (" + list.get(i).getValue() + ")");
                 dialogVBox.getChildren().add(centralityList);
                 Scene dialogScene = new Scene(dialogVBox, 300, 200);
                 dialog.setScene(dialogScene);
@@ -662,11 +601,7 @@ public class NetworkEventHandler {
     public void showCloseHubsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
-            final Stage dialog = new Stage();
-            dialog.setResizable(false);
-            dialog.setTitle("Close Hubs");
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(controller.getStage());
+            final Stage dialog = createStage("Close Hubs");
             VBox dialogVBox = new VBox(15);
             TextField originHubTextField = createField(dialogVBox, "Origin Hub:\t");
             TextField thresholdTextField = createField(dialogVBox, "Threshold:\t");
@@ -696,12 +631,12 @@ public class NetworkEventHandler {
                     }else if (thresholdTextField.getText().trim().isEmpty()) {
                         thresholdTextField.getStyleClass().add("incorrect-text-field");
                         throw new IncorrectFieldException("\"Threshold\" field is empty!");
-                    }else if (Integer.valueOf(thresholdTextField.getText().trim()) <= 0) {
+                    }else if (Integer.parseInt(thresholdTextField.getText().trim()) <= 0) {
                         thresholdTextField.getStyleClass().add("incorrect-text-field");
                         throw new IncorrectFieldException("\"Threshold\" should be greater than 0!");
                     }else {
                         Hub origin = controller.getManager().getHub(originHubTextField.getText().trim());
-                        int threshold = Integer.valueOf(thresholdTextField.getText().trim());
+                        int threshold = Integer.parseInt(thresholdTextField.getText().trim());
                         List<Hub> hubs = controller.getManager().closeHubs(origin,threshold);
                         vertexStyling(hubs);
                         controller.getGraphView().updateAndWait();
@@ -724,11 +659,7 @@ public class NetworkEventHandler {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
             try {
-                final Stage dialog = new Stage();
-                dialog.setResizable(false);
-                dialog.setTitle("Hubs with most neighbors");
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(controller.getStage());
+                final Stage dialog = createStage("Hubs with most neighbors");
                 // Bar Chart
                 StackPane pane = new StackPane();
                 CategoryAxis xAxis = new CategoryAxis();
@@ -760,39 +691,9 @@ public class NetworkEventHandler {
             try {
                 Action action = ui.getMenuBar().undoAction();
                 if (action == null)
-                    System.out.println("There is no action to undo!");
-                else {
-                    switch (action.getReverseOperation()) {
-                        case INSERT_HUB:
-                            Hub insertHub = (Hub)action.element()[0];
-                            Map<Route,Hub> adjacentRoutes = (Map<Route,Hub>)action.element()[1];
-                            List<Hub> hubs = (List<Hub>)action.element()[2];
-                            Vertex<Hub> vertex = controller.getManager().createVertex(insertHub,hubs);
-                            for (Route route : adjacentRoutes.keySet())
-                                controller.getManager().createEdge(insertHub,adjacentRoutes.get(route),route);
-                            controller.getGraphView().updateAndWait();
-                            controller.getGraphView().setVertexPosition(vertex,insertHub.getCoordinates().getX(),insertHub.getCoordinates().getY() - 25);
-                            break;
-                        case REMOVE_HUB:
-                            Hub removeHub = (Hub)action.element()[0];
-                            controller.getManager().removeVertex(removeHub);
-                            controller.getGraphView().updateAndWait();
-                            break;
-                        case INSERT_ROUTE:
-                            Hub origin = (Hub)action.element()[0];
-                            Hub destination = (Hub)action.element()[1];
-                            Route route = (Route)action.element()[2];
-                            controller.getManager().createEdge(origin,destination,route);
-                            controller.getGraphView().updateAndWait();
-                            break;
-                        case REMOVE_ROUTE:
-                            Edge<Route,Hub> removeEdge = (Edge)action.element()[0];
-                            controller.getManager().removeEdge(removeEdge.element());
-                            controller.getGraphView().updateAndWait();
-                            break;
-                    }
-                    System.out.println("Undo successful!");
-                }
+                    throw new RuntimeException("There is no action to undo!");
+                action.undo();
+                System.out.println("Undo successful!");
             } catch (RuntimeException exception) {
                 System.out.println(exception.getMessage());
             }
@@ -813,9 +714,9 @@ public class NetworkEventHandler {
 
     // Alterar estilo do grafo para o default
     private void defaultStyling() {
-        for (Vertex vertex : controller.getManager().getGraph().vertices())
+        for (Vertex<Hub> vertex : controller.getManager().getGraph().vertices())
             controller.getGraphView().getStylableVertex(vertex).setStyleClass("vertex");
-        for (Edge edge : controller.getManager().getGraph().edges())
+        for (Edge<Route,Hub> edge : controller.getManager().getGraph().edges())
             controller.getGraphView().getStylableEdge(edge).setStyleClass("edge");
     }
 
@@ -825,7 +726,7 @@ public class NetworkEventHandler {
         for (int i = 0; i < path.size(); i++)
             if (i < path.size() - 1) {
                 Route route = controller.getManager().getRoute(path.get(i), path.get(i + 1));
-                Edge edge = controller.getManager().getEdge(route);
+                Edge<Route,Hub> edge = controller.getManager().getEdge(route);
                 controller.getGraphView().getStylableEdge(edge).setStyleClass("edge-path");
             }
     }
@@ -836,10 +737,29 @@ public class NetworkEventHandler {
             controller.getGraphView().getStylableVertex(controller.getManager().getVertex(hub)).setStyleClass("vertex-path");
     }
 
-    public void defaultTextField(TextField... txField){
-        for(TextField e : txField) {
-            if(e.getStyleClass().size()>2)
+    public void defaultTextField(TextField... textField){
+        for(TextField e : textField) {
+            if(e.getStyleClass().size() > 2)
                 e.getStyleClass().remove(e.getStyleClass().get(2));
         }
+    }
+
+    private Stage createStage(String title) {
+        final Stage dialog = new Stage();
+        dialog.setResizable(false);
+        dialog.setTitle(title);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(controller.getStage());
+        return dialog;
+    }
+
+    private TextField createField(VBox vbox, String field) {
+        HBox hbox = new HBox();
+        Label label = new Label(field);
+        TextField textField = new TextField();
+        hbox.getChildren().addAll(label,textField);
+        hbox.setSpacing(10);
+        vbox.getChildren().add(hbox);
+        return textField;
     }
 }

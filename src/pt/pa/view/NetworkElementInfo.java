@@ -7,14 +7,14 @@ import pt.pa.model.Observer;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
 import pt.pa.view.strategy.ElementInfoStrategy;
 
-public class NetworkElementInfo<E> implements Observer {
+public class NetworkElementInfo implements Observer {
 
     // Strategy for the element details' creation (none, hub or route)
     ElementInfoStrategy elementInfoStrategy;
 
     VBox vbox;
     // Selected element (could be a hub, a route or nothing)
-    E element;
+    Object element;
 
     public NetworkElementInfo(NetworkManager manager) {
         vbox = new VBox();
@@ -33,12 +33,8 @@ public class NetworkElementInfo<E> implements Observer {
         this.elementInfoStrategy = elementInfoStrategy;
     }
 
-    public ElementInfoStrategy getElementInfoStrategy() {
-        return elementInfoStrategy;
-    }
-
     // Change the current selected element
-    public void setElement(E element, NetworkManager manager) {
+    public void setElement(Object element, NetworkManager manager) {
         this.element = element;
         update(manager);
     }

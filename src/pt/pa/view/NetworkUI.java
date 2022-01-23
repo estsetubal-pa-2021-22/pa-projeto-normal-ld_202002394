@@ -1,17 +1,15 @@
 package pt.pa.view;
 
 import javafx.scene.layout.BorderPane;
-import pt.pa.graph.Edge;
 import pt.pa.model.NetworkController;
 
 public class NetworkUI extends BorderPane {
 
-    private NetworkController controller;
-    private NetworkEventHandler eventHandler;
+    private final NetworkController controller;
+    private final NetworkEventHandler eventHandler;
 
-    private NetworkMenu menuBar;
-    private NetworkMetrics metrics;
-    private NetworkElementInfo elementInfoBar;
+    private final NetworkMenu menuBar;
+    private final NetworkElementInfo elementInfoBar;
 
     public NetworkUI (NetworkController controller) {
 
@@ -20,7 +18,7 @@ public class NetworkUI extends BorderPane {
         eventHandler = new NetworkEventHandler(this);
 
         menuBar = new NetworkMenu(this);
-        metrics = new NetworkMetrics(controller.getManager());
+        NetworkMetrics metrics = new NetworkMetrics(controller.getManager());
         elementInfoBar = new NetworkElementInfo(controller.getManager());
 
         this.setCenter(controller.getGraphView());
@@ -35,20 +33,12 @@ public class NetworkUI extends BorderPane {
         return this.controller;
     }
 
-    public void updateMetrics() {
-        metrics.update(controller.getManager());
-    }
-
     public NetworkEventHandler getEventHandler() {
         return this.eventHandler;
     }
 
     public NetworkMenu getMenuBar() {
         return this.menuBar;
-    }
-
-    public NetworkMetrics getMetrics() {
-        return this.metrics;
     }
 
     public NetworkElementInfo getElementInfoBar() {
