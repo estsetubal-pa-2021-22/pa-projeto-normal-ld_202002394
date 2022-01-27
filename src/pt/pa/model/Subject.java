@@ -1,5 +1,12 @@
 package pt.pa.model;
 
+/**
+ * Class related to the {@link Observable} on the Observer pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 

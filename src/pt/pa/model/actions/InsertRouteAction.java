@@ -3,7 +3,14 @@ package pt.pa.model.actions;
 import pt.pa.model.Hub;
 import pt.pa.model.NetworkController;
 import pt.pa.model.Route;
-
+/**
+ * Class related to the Factory Pattern, working as the "Concrete Product" entity for this pattern.
+ * <br>
+ * Contains information of a route removed during the program.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class InsertRouteAction implements Action {
 
     private final NetworkController controller;

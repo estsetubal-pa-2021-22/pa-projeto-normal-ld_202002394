@@ -1,7 +1,12 @@
 package pt.pa.model.actions;
 
 import pt.pa.model.Operation;
-
+/**
+ * Class related to the Factory Pattern, working as the "Concrete Factory" entity for this pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class ActionFactory {
 
     public Action create(Operation operation, Object... elements) {

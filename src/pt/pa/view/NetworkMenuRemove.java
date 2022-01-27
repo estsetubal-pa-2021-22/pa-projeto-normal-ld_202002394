@@ -3,6 +3,13 @@ package pt.pa.view;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
+/**
+ * Class responsible for generating the option to remove routes and hubs.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMenuRemove extends Menu {
 
     private final MenuItem removeHub;

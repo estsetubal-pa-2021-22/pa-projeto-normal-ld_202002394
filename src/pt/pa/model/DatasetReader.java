@@ -10,6 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Class responsible for importing the graph from a given
+ * file (in text) to the program.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class DatasetReader {
 
     private final String folder;

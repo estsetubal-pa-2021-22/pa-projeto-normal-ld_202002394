@@ -31,7 +31,10 @@ package pt.pa.graph;
  * 
  * @param <E> Type of value stored in the edge
  * @param <V> Type of value stored in the vertices that this edge connects.
- * 
+ *
+ * @author LD_202002394
+ * @version Final
+ *
  * @see Graph
  * @see Digraph
  */

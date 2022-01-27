@@ -6,6 +6,14 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Class responsible for creating a file under a given name with
+ * the information on the graph.
+ *
+ * @author LD_202002394
+ * @version Final
+ *
+ */
 public class FileWriter {
 
     List<String> file;

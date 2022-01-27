@@ -26,7 +26,10 @@ package pt.pa.graph;
 /**
  * Error when using an invalid edge in calls of methods in {@link Graph}
  * and {@link Digraph} implementations.
- * 
+ *
+ * @author LD_202002394
+ * @version Final
+ *
  * @see Graph
  * @see Digraph
  */

@@ -3,6 +3,14 @@ package pt.pa.view;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
+/**
+ * Class responsible for generating and assuring the functionality of the items found
+ * on the top of the application under the "Calculate" LOV.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMenuCalculate extends Menu {
 
     private final MenuItem shortestPath;

@@ -2,6 +2,14 @@ package pt.pa.model;
 
 import java.awt.*;
 
+/**
+ * Class responsible for saving the data from
+ * a city (hubs).
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class Hub {
 
     private final String name;

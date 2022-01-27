@@ -2,6 +2,19 @@ package pt.pa.graph;
 
 import java.util.*;
 
+/**
+ * ADT Graph implementation that stores a collection of edges (and vertices) and
+ * where each edge contains the references for the vertices it connects.
+ * <br>
+ * This is a replacement for the class GraphEdgeList responsible.
+ *
+* @param <V> Type of element stored at a vertex
+* @param <E> Type of element stored at an edge
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class GraphAdjacencyList<V,E> implements Graph<V, E> {
 
     private Map<V, Vertex<V>> vertices;

@@ -3,6 +3,15 @@ package pt.pa.view;
 import javafx.scene.layout.BorderPane;
 import pt.pa.model.NetworkController;
 
+/**
+ * Class contains the information/items of the panes of the application.
+ * <br>
+ * Class related to the MDC Pattern, working as the "View" for the pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkUI extends BorderPane {
 
     private final NetworkController controller;

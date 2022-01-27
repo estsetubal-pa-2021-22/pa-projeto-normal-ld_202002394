@@ -1,5 +1,13 @@
 package pt.pa.model;
 
+/**
+ * Class responsible for saving the data from
+ * a route (edge).
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class Route {
 
     private int distance;

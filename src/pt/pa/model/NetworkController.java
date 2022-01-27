@@ -6,6 +6,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pt.pa.view.NetworkUI;
 
+/**
+ * Class responsible for starting the application.
+ * <br>
+ * Includes an instance of {@link NetworkManager}.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class NetworkController {
 
     private final NetworkManager manager;

@@ -6,6 +6,14 @@ import javafx.scene.layout.HBox;
 import pt.pa.model.NetworkManager;
 import pt.pa.model.Observer;
 
+/**
+ * Class responsible for generating and assuring the functionality of the items found
+ * on the bottom of the application, containing the metrics of the program, like the number of "Hubs" or "Routes".
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMetrics implements Observer {
 
     private final HBox  hbox;

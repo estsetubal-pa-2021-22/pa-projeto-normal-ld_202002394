@@ -6,6 +6,13 @@ import pt.pa.model.actions.Action;
 
 import java.util.Stack;
 
+/**
+ * Class responsible for generating the misc options of the user, like the "Undo" and "Default Styling" features.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMenuUndo extends Menu {
 
     private final Stack<Action> actions;
