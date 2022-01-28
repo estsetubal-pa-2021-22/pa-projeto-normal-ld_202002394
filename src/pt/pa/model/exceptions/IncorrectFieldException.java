@@ -8,6 +8,10 @@ package pt.pa.model.exceptions;
  */
 public class IncorrectFieldException extends RuntimeException{
 
+    /**
+     * Constructor of the IncorrectFieldException class. Contains information of the exception.
+     *
+     */
     public IncorrectFieldException(String string) {
         super(string);
     }

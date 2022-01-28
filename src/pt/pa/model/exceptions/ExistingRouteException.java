@@ -8,6 +8,10 @@ package pt.pa.model.exceptions;
  */
 public class ExistingRouteException extends RuntimeException {
 
+    /**
+     * Constructor of the ExistingRouteException class. Contains information of the exception.
+     *
+     */
     public ExistingRouteException() {
         super("This route already exists!");
     }

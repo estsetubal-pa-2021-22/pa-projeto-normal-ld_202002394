@@ -8,6 +8,10 @@ package pt.pa.model.exceptions;
  */
 public class ExistingHubException extends RuntimeException {
 
+    /**
+     * Constructor of the ExistingHubException class. Contains information of the exception.
+     *
+     */
     public ExistingHubException() {
         super("This hub already exists!");
     }

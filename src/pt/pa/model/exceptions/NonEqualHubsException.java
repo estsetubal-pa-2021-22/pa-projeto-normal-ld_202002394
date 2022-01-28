@@ -8,6 +8,10 @@ package pt.pa.model.exceptions;
  */
 public class NonEqualHubsException extends RuntimeException {
 
+    /**
+     * Constructor of the NonEqualHubsException class. Contains information of the exception.
+     *
+     */
     public NonEqualHubsException() {
         super("Matrix doesn't match the current Hubs!");
     }

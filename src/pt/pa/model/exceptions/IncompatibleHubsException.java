@@ -8,6 +8,10 @@ package pt.pa.model.exceptions;
  */
 public class IncompatibleHubsException extends RuntimeException {
 
+    /**
+     * Constructor of the IncompatibleHubsException class. Contains information of the exception.
+     *
+     */
     public IncompatibleHubsException() {
         super("The hubs selected are not joint together, please select hubs in the same component.");
     }

@@ -17,11 +17,22 @@ public class RemoveRouteAction implements Action {
     private final NetworkController controller;
     private final Edge<Route, Hub> edge;
 
+    /**
+     * Method responsible for bringing back removed routes.
+     *
+     * @param controller       controller
+     * @param edge             edge
+     *
+     */
     public RemoveRouteAction(Object controller, Object edge) {
         this.controller = (NetworkController) controller;
         this.edge = (Edge<Route, Hub>) edge;
     }
 
+    /**
+     * Method responsible for the undo functionality, regarding removed routes.
+     *
+     */
     @Override
     public void undo() {
         controller.getManager().removeEdge(edge.element());

@@ -15,11 +15,22 @@ public class RemoveHubAction implements Action {
     private final NetworkController controller;
     private final Hub hub;
 
+    /**
+     * Method responsible for bringing back removed hubs.
+     *
+     * @param controller       controller
+     * @param hub              hub
+     *
+     */
     public RemoveHubAction(Object controller, Object hub) {
         this.controller = (NetworkController) controller;
         this.hub = (Hub) hub;
     }
 
+    /**
+     * Method responsible for the undo functionality, regarding removed hubs.
+     *
+     */
     @Override
     public void undo() {
         controller.getManager().removeVertex(hub);

@@ -9,6 +9,11 @@ package pt.pa.model;
 
 public interface Observer {
 
+    /**
+     * Method to preset the update method.
+     *
+     * @param obj Object
+     */
     void update(Object obj);
 
 }

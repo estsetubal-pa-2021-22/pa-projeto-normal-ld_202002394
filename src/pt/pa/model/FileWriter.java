@@ -18,11 +18,21 @@ public class FileWriter {
 
     List<String> file;
 
+    /**
+     * Constructor of the class FileWriter. Creates an empty arrayList.
+     *
+     */
     public FileWriter() {
         this.file = new ArrayList<>();
     }
 
-    // Returns a list of rows, based on a received squared Integer matrix
+    /**
+     * Returns a list of rows, based on a received squared Integer matrix.
+     *
+     * @param matrix int[][]
+     *
+     * @return Returns a list of rows, based on a received squared Integer matrix.
+     */
     public void matrixToList(int[][] matrix) {
         for (int[] ints : matrix) {
             StringBuilder row = new StringBuilder();
@@ -32,7 +42,13 @@ public class FileWriter {
         }
     }
 
-    // Saves a file in a given folder
+    /**
+     * Saves a file in a given folder.
+     *
+     * @param folderName    String
+     *
+     * @return Returns a string of the filename desired.
+     */
     public String saveFile(String folderName) {
         SimpleDateFormat sdf1 = new SimpleDateFormat("ddMMyyyy_HHmmss");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());

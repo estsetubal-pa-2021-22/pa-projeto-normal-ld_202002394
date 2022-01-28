@@ -9,6 +9,16 @@ import pt.pa.model.Operation;
  */
 public class ActionFactory {
 
+    /**
+     * Method responsible for processing the operation according to the input.
+     *
+     * @param operation   Operation
+     * @param elements    Object
+     *
+     * @throws RuntimeException Unsupported action operation!
+     *
+     * @return      Returns operation correspondent to the input.
+     */
     public Action create(Operation operation, Object... elements) {
         switch (operation) {
             case INSERT_HUB:
