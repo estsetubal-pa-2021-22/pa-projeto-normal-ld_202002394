@@ -25,6 +25,7 @@ import pt.pa.graph.Vertex;
 import pt.pa.model.exceptions.IncorrectFieldException;
 import pt.pa.model.actions.Action;
 import pt.pa.model.actions.ActionFactory;
+import pt.pa.model.exceptions.NonEqualHubsException;
 import pt.pa.view.strategy.ElementInfoHubStrategy;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
 import pt.pa.view.strategy.ElementInfoRouteStrategy;
@@ -48,6 +49,11 @@ public class NetworkEventHandler {
     private final ActionFactory factory;
     private final NetworkManager manager;
 
+    /**
+     * Constructor of the class NetworkEventHandler.
+     *
+     * @param ui NetworkUI
+     */
     public NetworkEventHandler(NetworkUI ui) {
         this.ui = ui;
         this.controller = this.ui.getController();
@@ -55,6 +61,10 @@ public class NetworkEventHandler {
         this.manager = controller.getManager();
     }
 
+    /**
+     * Method to create element info event.
+     *
+     */
     public void createElementsInfoEvent() {
         controller.getGraphView().setOnMousePressed(event ->  {
             ui.getElementInfoBar().setElementInfoStrategy(new ElementInfoNoneStrategy());
@@ -70,7 +80,18 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Criar Hub
+    /**
+     * Method to create hub
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException  city Name field is empty
+     *
+     * @throws IncorrectFieldException  Population field is empty
+     *
+     * @throws IncorrectFieldException  Population should be greater than 0
+     *
+     */
     public void createHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             ui.getMenuBar().setDisable(true);
@@ -161,7 +182,24 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Criar Route
+    /**
+     * Method to create route
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Origin Hub field is empty
+     *
+     * @throws IncorrectFieldException Origin Hub doesn't exist
+     *
+     * @throws IncorrectFieldException Destination Hub field is empty
+     *
+     * @throws IncorrectFieldException Destination Hub doesn't exist
+     *
+     * @throws IncorrectFieldException Distance should be greater than 0
+     *
+     * @throws IncorrectFieldException Origin Hub and Destination Hub can't be the same
+     *
+     */
     public void createRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -239,7 +277,16 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Remover Hub
+    /**
+     * Method to remove hub
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Hub field is empty
+     *
+     * @throws IncorrectFieldException Hub doesn't exist
+     *
+     */
     public void removeHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -297,7 +344,22 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Remover Route
+    /**
+     * Method to remove route
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Origin Hub field is empty
+     *
+     * @throws IncorrectFieldException Origin Hub doesn't exist
+     *
+     * @throws IncorrectFieldException Destination Hub field is empty
+     *
+     * @throws IncorrectFieldException Destination Hub doesn't exist
+     *
+     * @throws IncorrectFieldException This route doesn't exist
+     *
+     */
     public void removeRouteEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -361,7 +423,13 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Importar Routes
+    /**
+     * Method to import route
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Route's file is empty
+     */
     public void importRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -406,7 +474,11 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Exportar Routes
+    /**
+     * Method to export route
+     *
+     * @param menuItem MenuItem
+     */
     public void exportRoutesEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -440,7 +512,20 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Calcular Shortest Path
+    /**
+     * Method to calculate the shortest path
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Origin Hub field is empty
+     *
+     * @throws IncorrectFieldException Origin Hub doesn't exist
+     *
+     * @throws IncorrectFieldException Destination Hub field is empty
+     *
+     * @throws IncorrectFieldException Destination Hub doesn't exist
+     *
+     */
     public void calculateShortestPathEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -508,7 +593,16 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Hub mais distante de uma origem
+    /**
+     * Method to calculate hub more distant from the origin
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Origin Hub field is empty
+     *
+     * @throws IncorrectFieldException Origin Hub doesn't exist
+     *
+     */
     public void showFarthestHubEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -555,7 +649,11 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Hubs mais distantes do grafo
+    /**
+     * Method to calculate the hub more distant of the graph.
+     *
+     * @param menuItem MenuItem
+     */
     public void showFarthestHubsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -572,7 +670,11 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Mostrar centralidade (todos os hubs)
+    /**
+     * Method to show the hub centrality of all hubs.
+     *
+     * @param menuItem MenuItem
+     */
     public void showCentrality(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -599,7 +701,20 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Close Hubs
+    /**
+     * Method to close hub.
+     *
+     * @param menuItem MenuItem
+     *
+     * @throws IncorrectFieldException Origin Hub field is empty
+     *
+     * @throws IncorrectFieldException Origin Hub doesn't exist
+     *
+     * @throws IncorrectFieldException Threshold field is empty
+     *
+     * @throws IncorrectFieldException Threshold should be greater than 0
+     *
+     */
     public void showCloseHubsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -655,7 +770,12 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Mostrar top 5 hubs com mais vizinhos
+    /**
+     * Method to show the top 5 with most neighbors
+     *
+     * @param menuItem MenuItem
+     *
+     */
     public void showHubsWithMostNeighborsEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -685,7 +805,13 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Fazer undo da última ação
+    /**
+     * Method to do undo of the last action
+     *
+     * @param menuItem MenuItem
+     *
+     @throws RuntimeException There is no action to undo
+     */
     public void undoEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
             defaultStyling();
@@ -701,7 +827,11 @@ public class NetworkEventHandler {
         });
     }
 
-    // Evento - Reset do estilo do grafo
+    /**
+     * Method to reset default styling of the graph.
+     *
+     * @param menuItem MenuItem
+     */
     public void defaultStylingEvent(MenuItem menuItem) {
         menuItem.setOnAction(actionEvent1 -> {
            try {
@@ -713,7 +843,10 @@ public class NetworkEventHandler {
         });
     }
 
-    // Alterar estilo do grafo para o default
+    /**
+     * Method to change the style of the graph to the default.
+     *
+     */
     private void defaultStyling() {
         for (Vertex<Hub> vertex : manager.getGraph().vertices())
             controller.getGraphView().getStylableVertex(vertex).setStyleClass("vertex");
@@ -721,7 +854,11 @@ public class NetworkEventHandler {
             controller.getGraphView().getStylableEdge(edge).setStyleClass("edge");
     }
 
-    // Alterar estilo do caminho dado como argumento
+    /**
+     * Method to change the style of the given path
+     *
+     * @param path List<Hub>
+     */
     private void pathStyling(List<Hub> path) {
         vertexStyling(path);
         for (int i = 0; i < path.size(); i++)
@@ -732,12 +869,21 @@ public class NetworkEventHandler {
             }
     }
 
-    // Alterar estilo dos hubs dados como argumento
+    /**
+     * Method to change the style of the given path
+     *
+     * @param hubs List<Hub>
+     */
     private void vertexStyling(List<Hub> hubs) {
         for (Hub hub : hubs)
             controller.getGraphView().getStylableVertex(manager.getVertex(hub)).setStyleClass("vertex-path");
     }
 
+    /**
+     * Method to change the text to text default
+     *
+     * @param textField TextField
+     */
     public void defaultTextField(TextField... textField){
         for(TextField e : textField) {
             if(e.getStyleClass().size() > 2)
@@ -745,6 +891,11 @@ public class NetworkEventHandler {
         }
     }
 
+    /**
+     * Method to create a stage
+     *
+     * @param title String
+     */
     private Stage createStage(String title) {
         final Stage dialog = new Stage();
         dialog.setResizable(false);
@@ -754,6 +905,14 @@ public class NetworkEventHandler {
         return dialog;
     }
 
+    /**
+     * Method to create a field.
+     *
+     * @param vbox VBox
+     * @param field String
+     *
+     * @return Returns the text field.
+     */
     private TextField createField(VBox vbox, String field) {
         HBox hbox = new HBox();
         Label label = new Label(field);
@@ -764,6 +923,11 @@ public class NetworkEventHandler {
         return textField;
     }
 
+    /**
+     * Method to create a error message.
+     *
+     * @return Returns the error message.
+     */
     private Label createErrorMessage(){
         Label errorMsg = new Label();
         errorMsg.setStyle("-fx-text-fill: red;");
@@ -771,6 +935,11 @@ public class NetworkEventHandler {
         return  errorMsg;
     }
 
+    /**
+     * Method to create a message.
+     *
+     * @return Returns the message.
+     */
     private Label createMessage(){
         Label message = new Label();
         message.setStyle("-fx-text-fill: green;");
@@ -778,6 +947,15 @@ public class NetworkEventHandler {
         return message;
     }
 
+    /**
+     * Method to create a vbox scene.
+     *
+     * @param vbox VBox
+     * @param p int
+     * @param p1 int
+
+     * @return Returns the dialog Scene.
+     */
     private Scene createVboxScene(VBox vbox, int p, int p1){
         Scene dialogScene = new Scene(vbox, p, p1);
 

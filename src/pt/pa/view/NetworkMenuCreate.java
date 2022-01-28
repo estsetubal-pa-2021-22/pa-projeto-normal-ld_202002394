@@ -15,6 +15,10 @@ public class NetworkMenuCreate extends Menu {
     private final MenuItem createHub;
     private final MenuItem createRoute;
 
+    /**
+     * Constructor of the class NetworkMenuCreate.
+     *
+     */
     public NetworkMenuCreate() {
         this.setText("Create");
         this.createHub = new MenuItem("Hub");
@@ -22,10 +26,20 @@ public class NetworkMenuCreate extends Menu {
         this.getItems().addAll(createHub,createRoute);
     }
 
+    /**
+     * Method to get the Create Hub Item.
+     *
+     * @return Returns the Create Hub Item.
+     */
     public MenuItem getCreateHubItem() {
         return this.createHub;
     }
 
+    /**
+     * Method to get the Create Route Item.
+     *
+     * @return Returns the Create Route Item.
+     */
     public MenuItem getCreateRouteItem() {
         return this.createRoute;
     }

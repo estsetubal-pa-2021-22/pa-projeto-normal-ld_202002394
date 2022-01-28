@@ -21,6 +21,11 @@ public class NetworkMenu extends MenuBar {
     private final NetworkMenuShow menuShow;
     private final NetworkMenuUndo menuUndo;
 
+    /**
+     * Constructor of the class NetworkMenu.
+     *
+     * @param networkUI NetworkUI
+     */
     public NetworkMenu(NetworkUI networkUI) {
 
         this.networkUI = networkUI;
@@ -35,14 +40,28 @@ public class NetworkMenu extends MenuBar {
         createHandlers();
     }
 
+    /**
+     * Method to a save action.
+     *
+     * @param action Action
+     */
     public void saveAction(Action action) {
         menuUndo.saveAction(action);
     }
 
+    /**
+     * Method to undo action.
+     *
+     * @return Returns the undo action
+     */
     public Action undoAction() {
         return menuUndo.undoAction();
     }
 
+    /**
+     * Method to create handlers.
+     *
+     */
     private void createHandlers() {
         networkUI.getEventHandler().createHubEvent(menuCreate.getCreateHubItem());
         networkUI.getEventHandler().createRouteEvent(menuCreate.getCreateRouteItem());

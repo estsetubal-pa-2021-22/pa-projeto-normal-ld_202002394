@@ -20,6 +20,11 @@ public class NetworkUI extends BorderPane {
     private final NetworkMenu menuBar;
     private final NetworkElementInfo elementInfoBar;
 
+    /**
+     * Constructor of the class NetworkMenuCreate.
+     *
+     * @param controller NetworkController
+     */
     public NetworkUI (NetworkController controller) {
 
         this.controller = controller;
@@ -38,18 +43,38 @@ public class NetworkUI extends BorderPane {
         controller.getManager().addObservable(metrics,elementInfoBar);
     }
 
+    /**
+     * Method to get controller
+     *
+     * @return Returns the controller.
+     */
     public NetworkController getController() {
         return this.controller;
     }
 
+    /**
+     * Method to get Event handler.
+     *
+     * @return Returns the Event handler.
+     */
     public NetworkEventHandler getEventHandler() {
         return this.eventHandler;
     }
 
+    /**
+     * Method to get the menu bar.
+     *
+     * @return Returns the menu bar.
+     */
     public NetworkMenu getMenuBar() {
         return this.menuBar;
     }
 
+    /**
+     * Method to get Element info bar
+     *
+     * @return Returns the element info bar.
+     */
     public NetworkElementInfo getElementInfoBar() {
         return this.elementInfoBar;
     }

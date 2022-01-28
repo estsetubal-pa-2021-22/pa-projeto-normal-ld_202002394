@@ -20,6 +20,10 @@ public class NetworkMenuUndo extends Menu {
     private final MenuItem undoAction;
     private final MenuItem defaultStyling;
 
+    /**
+     * Constructor of the class NetworkMenuUndo.
+     *
+     */
     public NetworkMenuUndo() {
         actions = new Stack<>();
         this.setText("More");
@@ -28,16 +32,36 @@ public class NetworkMenuUndo extends Menu {
         this.getItems().addAll(defaultStyling,undoAction);
     }
 
+    /**
+     * Method to get the Undo Action Item.
+     *
+     * @return Returns the Undo Action Item.
+     */
     public MenuItem getUndoActionItem() {
         return this.undoAction;
     }
 
+    /**
+     * Method to get the Default Styling Item.
+     *
+     * @return Returns the Default Styling Item.
+     */
     public MenuItem getDefaultStylingItem() { return this.defaultStyling; }
 
+    /**
+     * Method to save action.
+     *
+     * @return Returns the saved actions.
+     */
     public void saveAction(Action action) {
         actions.add(action);
     }
 
+    /**
+     * Method to show the undo action.
+     *
+     * @return Returns the undo action.
+     */
     public Action undoAction() {
         if (actions.isEmpty())
             return null;

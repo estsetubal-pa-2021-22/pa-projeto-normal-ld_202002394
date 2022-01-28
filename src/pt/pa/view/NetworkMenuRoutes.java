@@ -15,6 +15,10 @@ public class NetworkMenuRoutes extends Menu {
     private final MenuItem importRoutes;
     private final MenuItem exportRoutes;
 
+    /**
+     * Constructor of the class NetworkMenuRoutes.
+     *
+     */
     public NetworkMenuRoutes() {
         this.setText("Routes");
         this.importRoutes = new MenuItem("Import");
@@ -22,10 +26,20 @@ public class NetworkMenuRoutes extends Menu {
         this.getItems().addAll(importRoutes,exportRoutes);
     }
 
+    /**
+     * Method to get the Import Routes Item.
+     *
+     * @return Returns the Import Routes Item.
+     */
     public MenuItem getImportRoutesItem() {
         return this.importRoutes;
     }
 
+    /**
+     * Method to get the Export Routes Item.
+     *
+     * @return Returns the Export Routes Item.
+     */
     public MenuItem getExportRoutesItem() {
         return this.exportRoutes;
     }

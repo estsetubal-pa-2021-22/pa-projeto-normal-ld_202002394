@@ -22,6 +22,11 @@ public class NetworkMetrics implements Observer {
     private final Label nComponents;
     private final Label nRoutes;
 
+    /**
+     * Constructor of the class NetworkMetrics.
+     *
+     * @param manager NetworkManager
+     */
     public NetworkMetrics(NetworkManager manager) {
         this.hbox = new HBox();
         isolatedHubs = new Label();
@@ -36,10 +41,19 @@ public class NetworkMetrics implements Observer {
         update(manager);
     }
 
+    /**
+     * Method to get hbox.
+     *
+     * @return Returns the hbox.
+     */
     public HBox getHBox() {
         return hbox;
     }
 
+    /**
+     * Method to update the hbox.
+     *
+     */
     @Override
     public void update(Object obj) {
         NetworkManager manager = (NetworkManager)obj;

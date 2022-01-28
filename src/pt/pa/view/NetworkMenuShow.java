@@ -16,6 +16,10 @@ public class NetworkMenuShow extends Menu {
     private final MenuItem centrality;
     private final MenuItem hubsWithMostNeighbors;
 
+    /**
+     * Constructor of the class NetworkMenuShow.
+     *
+     */
     public NetworkMenuShow() {
         this.setText("Show");
         this.centrality = new MenuItem("Hub Centrality");
@@ -23,10 +27,21 @@ public class NetworkMenuShow extends Menu {
         this.getItems().addAll(centrality,hubsWithMostNeighbors);
     }
 
+
+    /**
+     * Method to get the Centrality Item.
+     *
+     * @return Returns the Centrality Item.
+     */
     public MenuItem getCentralityItem() {
         return this.centrality;
     }
 
+    /**
+     * Method to get the Hubs with most neighbors Item.
+     *
+     * @return Returns the Hubs with most neighbors Item.
+     */
     public MenuItem getHubsWithMostNeighborsItem() {
         return this.hubsWithMostNeighbors;
     }

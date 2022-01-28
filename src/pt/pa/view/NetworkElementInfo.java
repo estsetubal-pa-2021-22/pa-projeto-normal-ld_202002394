@@ -24,6 +24,11 @@ public class NetworkElementInfo implements Observer {
     // Selected element (could be a hub, a route or nothing)
     Object element;
 
+    /**
+     * Constructor of the class NetworkElementInfo.
+     *
+     * @param manager NetworkManager
+     */
     public NetworkElementInfo(NetworkManager manager) {
         vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
@@ -36,21 +41,40 @@ public class NetworkElementInfo implements Observer {
         setElement(element,manager);
     }
 
-    // Set actual strategy for the details' creation
+    /**
+     * Method to set actual strategy for the details' creation
+     *
+     * @param elementInfoStrategy ElementInfoStrategy
+     */
     public void setElementInfoStrategy(ElementInfoStrategy elementInfoStrategy) {
         this.elementInfoStrategy = elementInfoStrategy;
     }
 
-    // Change the current selected element
+    /**
+     * Method to change the current selected element
+     *
+     * @param element Object
+     * @param manager NetworkManager
+     */
     public void setElement(Object element, NetworkManager manager) {
         this.element = element;
         update(manager);
     }
 
+    /**
+     * Method to change the current selected element
+     *
+     * @return Returns a vbox.
+     */
     public VBox getVBox() {
         return vbox;
     }
 
+    /**
+     * Method to update.
+     *
+     * @param obj Object
+     */
     @Override
     public void update(Object obj) {
         NetworkManager manager = (NetworkManager)obj;
