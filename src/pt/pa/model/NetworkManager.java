@@ -22,20 +22,32 @@ public class NetworkManager extends Subject {
     private final Graph<Hub,Route> graph;
     private List<Hub> hubs;
 
+    /**
+     * Constructor of the class NetworkManager. Initializes the variables from the class.
+     *
+     * @param folder        String
+     * @param routesFile    String
+     */
     public NetworkManager(String folder, String routesFile) {
         graph = new GraphAdjacencyList<>();
         hubs = new ArrayList<>();
         createGraphElements(new DatasetReader(folder, routesFile));
     }
 
-    // ALEX
-    // Returns the Graph
+    /**
+     * Getter method for the variable graph.
+     *
+     * @return returns the variable graph.
+     */
     public Graph<Hub,Route> getGraph() {
         return this.graph;
     }
 
-    // ALEX
-    // Creates all the vertices and edges of the graph, given a dataset
+    /**
+     * Method to create all the vertices and edges of the graph given a dataset.
+     *
+     * @param datasetReader     DatasetReader
+     */
     public void createGraphElements(DatasetReader datasetReader) {
         List<Hub> newHubs = new ArrayList<>(datasetReader.getHubs());
         for (Vertex<Hub> vertex : graph.vertices())
@@ -50,21 +62,30 @@ public class NetworkManager extends Subject {
         }
     }
 
-    // ALEX
-    // Sets the vertices position
+    /**
+     * Method to set the vertices position.
+     *
+     * @param graphView     SmartGraphPanel<Hub, Route>
+     */
     public void setCoordinates(SmartGraphPanel<Hub, Route> graphView) {
         for (Vertex<Hub> vertex : graph.vertices())
             graphView.setVertexPosition(vertex, vertex.element().getCoordinates().getX(), vertex.element().getCoordinates().getY() - 25);
     }
 
-    // RAFA
-    // Gets all the Hubs from the Graph
+    /**
+     * Getter method for the hub variable.
+     *
+     * @return Returns variable hubs.
+     */
     public List<Hub> getHubs(){
         return hubs;
     }
 
-    // RAFA
-    // Gets all the Routes from the Graph
+    /**
+     * Getter method to get all routes from the variable graph.
+     *
+     * @return Returns all routes.
+     */
     public List<Route> getRoutes(){
         List<Route> routes = new ArrayList<>();
         for(Edge<Route,Hub> edges : graph.edges())
@@ -72,16 +93,31 @@ public class NetworkManager extends Subject {
         return routes;
     }
 
+    /**
+     * Method to count all the hubs.
+     *
+     * @return Returns the number of total routes.
+     */
     public int countHubs() {
         return getHubs().size();
     }
 
+    /**
+     * Method to count all the routes.
+     *
+     * @return Returns the number of total routes.
+     */
     public int countRoutes() {
         return getRoutes().size();
     }
 
-    // ALEX
-    // Given a Hub, adds a new Vertex to the graph
+    /**
+     * Method that given a Hub, adds new Vertex to the graph.
+     *
+     * @param hub   Hub
+     * @return Returns a vertex.
+     * @throws InvalidVertexException Throws if the vertex is not valid
+     */
     public Vertex<Hub> createVertex(Hub hub) throws InvalidVertexException {
         Vertex<Hub> vertex = graph.insertVertex(hub);
         hubs.add(hub);
@@ -89,6 +125,14 @@ public class NetworkManager extends Subject {
         return vertex;
     }
 
+    /**
+     * Method that given a Hub and a List of Hubs, adds new Vertex to the Graph
+     *
+     * @param hub   Hub
+     * @param hubs  List<Hub> hubs
+     * @return Returns a vertex.
+     * @throws InvalidVertexException Throws if the vertex is not valid
+     */
     public Vertex<Hub> createVertex(Hub hub, List<Hub> hubs) throws InvalidVertexException {
         Vertex<Hub> vertex = graph.insertVertex(hub);
         this.hubs = hubs;
@@ -96,16 +140,28 @@ public class NetworkManager extends Subject {
         return vertex;
     }
 
-    // ALEX
-    // Given a Route, adds a new Edge to the graph
+    /**
+     * Method that given a route adds a new Edge to the graph
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @param route         Route
+     * @return Returns an edge.
+     * @throws InvalidEdgeException Throws if the edge is not valid
+     */
     public Edge<Route,Hub> createEdge(Hub origin, Hub destination, Route route) throws InvalidEdgeException {
         Edge<Route,Hub> edge = graph.insertEdge(getVertex(origin), getVertex(destination), route);
         notifyObservers(this);
         return edge;
     }
 
-    // ALEX
-    // Given a Hub, removes the corresponding Vertex from the graph and returns it
+    /**
+     * Method that given a Hub, removes the corresponding Vertex from the graph.
+     *
+     * @param hub   Hub
+     * @return  Returns the corresponding vertex.
+     * @throws InvalidVertexException Throws if the vertex is not valid
+     */
     public Vertex<Hub> removeVertex(Hub hub) throws InvalidVertexException {
         Vertex<Hub> vertex = getVertex(hub);
         graph.removeVertex(vertex);
@@ -114,8 +170,13 @@ public class NetworkManager extends Subject {
         return vertex;
     }
 
-    // ALEX
-    // Given a Route, removes the corresponding Edge from the graph and returns it
+    /**
+     * Method that given a Route, removes the corresponding Edge from the graph.
+     *
+     * @param route   Route
+     * @return  Returns the corresponding edge.
+     * @throws InvalidVertexException Throws if the vertex is not valid
+     */
     public Edge<Route,Hub> removeEdge(Route route) throws InvalidEdgeException {
         Edge<Route,Hub> edge = getEdge(route);
         if (edge == null)
@@ -125,8 +186,12 @@ public class NetworkManager extends Subject {
         return edge;
     }
 
-    // ALEX
-    // Returns a boolean value, if Hub doesn't have neighbors
+    /**
+     * Method to check if Hub does not have neighbors.
+     *
+     * @param hub Hub
+     * @return Returns Boolean value
+     */
     public boolean isIsolated(Hub hub) {
         Vertex<Hub> vertex = getVertex(hub);
         for (Edge<Route, Hub> edge : this.graph.edges())
@@ -135,8 +200,11 @@ public class NetworkManager extends Subject {
         return true;
     }
 
-    // ALEX
-    // Returns a list of all the isolated Hubs
+    /**
+     * Getter method for the list of all the isolated Hubs.
+     *
+     * @return Returns a list.
+     */
     public List<Hub> getIsolatedHubs() {
         List<Hub> list = new ArrayList<>();
         for (Vertex<Hub> vertex : this.graph.vertices())
@@ -145,14 +213,21 @@ public class NetworkManager extends Subject {
         return list;
     }
 
-    // ALEX
-    // Returns the number of isolated Hubs
+    /**
+     * Method to count all the isolated hubs.
+     *
+     * @return Returns the size() of getIsolatedHubs().
+     */
     public int countIsolatedHubs() {
         return getIsolatedHubs().size();
     }
 
-    // RAFA
-    // Given a name, returns the corresponding Hub. Null if it doesn't find
+    /**
+     * Getter method for the corresponding name of the Hub.
+     *
+     * @param name  String
+     * @return Returns vertex.element() or null.
+     */
     public Hub getHub(String name) {
         for (Vertex<Hub> vertex : graph.vertices())
             if (vertex.element().toString().equalsIgnoreCase(name))
@@ -160,8 +235,12 @@ public class NetworkManager extends Subject {
         return null;
     }
 
-    // RAFA
-    // Given a Hub, returns the corresponding Vertex. Null if it doesn't find
+    /**
+     * Getter method for the corresponding vertex of the Hub.
+     *
+     * @param hub   String
+     * @return Returns vertex or null.
+     */
     public Vertex<Hub> getVertex(Hub hub) {
         for (Vertex<Hub> vertex : graph.vertices())
             if (vertex.element().equals(hub))
@@ -169,14 +248,23 @@ public class NetworkManager extends Subject {
         return null;
     }
 
-    //RAFA
-    //Given a city name, returns the corresponding Vertex. Null if it doesn't find
+    /**
+     * Getter method for the corresponding Vertex of a city.
+     *
+     * @param name  String
+     * @return Returns getVertex() function.
+     */
     public Vertex<Hub> getVertex(String name) {
         return getVertex(getHub(name));
     }
 
-    // DANIEL
-    // Given 2 Hubs, returns the corresponding Route. Null if it doesn't find
+    /**
+     * Getter method to get the corresponding Route of 2 Hubs.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns edge.element() or null.
+     */
     public Route getRoute(Hub origin, Hub destination) {
         Vertex<Hub> originVertex = getVertex(origin);
         Vertex<Hub> destinationVertex = getVertex(destination);
@@ -187,14 +275,23 @@ public class NetworkManager extends Subject {
         return null;
     }
 
-    // DANIEL
-    // Given 2 hub names, returns the corresponding Route. Null if it doesn't find
+    /**
+     * Getter method to get the corresponding Route of 2 Hub names.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns getRoute() function.
+     */
     public Route getRoute(String origin, String destination) {
         return getRoute(getHub(origin),getHub(destination));
     }
 
-    // DANIEL
-    // Given a Route, returns the corresponding Edge. Null if it doesn't find
+    /**
+     * Getter method to get the corresponding Edge of a Route.
+     *
+     * @param route     Route
+     * @return Returns edge or null.
+     */
     public Edge<Route,Hub> getEdge(Route route) {
         for(Edge<Route, Hub> edge:graph.edges())
             if(edge.element().equals(route))
@@ -202,8 +299,12 @@ public class NetworkManager extends Subject {
         return null;
     }
 
-    // DANIEL
-    // Given a Hub, returns a list of all the neighboring Hubs (utilizar método graph.incidentEdges())
+    /**
+     * Getter method to list all the neighboring Hubs of a Hub
+     *
+     * @param hub   Hub
+     * @return Returns the variable hubs
+     */
     public List<Hub> getNeighbors(Hub hub) {
         List<Hub> hubs = new ArrayList<>();
         for (Edge<Route,Hub> edge: graph.incidentEdges(getVertex(hub)))
@@ -211,20 +312,32 @@ public class NetworkManager extends Subject {
         return hubs;
     }
 
-    // DANIEL
-    // Given a Hub, returns the number of neighbors
+    /**
+     * Method to count all the neighbors of a Hub.
+     *
+     * @param hub   Hub
+     * @return Returns the total neighbors of a Hub.
+     */
     public int countNeighbors(Hub hub) {
         return getNeighbors(hub).size();
     }
 
-    // DANIEL
-    // Given a Hub name, returns the number of neighbors
+
+    /**
+     * Method to count all the neighbors of a Hub name.
+     *
+     * @param name   String
+     * @return Returns the number of neighbors.
+     */
     public int countNeighbors(String name) {
         return getNeighbors(getHub(name)).size();
     }
 
-    // RAFA
-    // Returns a map of all the Hubs (Key) and the number of neighbors (Value)
+    /**
+     * Getter method to get the map of all the Hubs and the number of neighbors
+     *
+     * @return Returns the variable map.
+     */
     public Map<Hub,Integer> getCentrality() {
         Map<Hub, Integer> map = new HashMap<>();
         for (Vertex<Hub> vertex : graph.vertices())
@@ -232,8 +345,11 @@ public class NetworkManager extends Subject {
         return map;
     }
 
-    // RAFA
-    // Returns the top Hubs (max 5) with most neighbors (from method getCentrality()), on descending order
+    /**
+     * Method to get the top 5 Hubs with most neighbors on descending order.
+     *
+     * @return Returns the variable hubs
+     */
     public List<Hub> topCentrality() {
         List<Hub> hubs = new ArrayList<>();
         List<Map.Entry<Hub, Integer>> list = new ArrayList<>(getCentrality().entrySet());
@@ -247,14 +363,25 @@ public class NetworkManager extends Subject {
         return hubs;
     }
 
-    // RAFA
-    // Returns a boolean value, if 2 given Hubs are neighbors
+    /**
+     * Method to check if 2 given Hubs are neighbors.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns a Boolean value.
+     */
     public boolean areNeighbors(Hub origin, Hub destination) {
         return getRoute(origin,destination) != null;
     }
 
-    // HENRIQUE
-    // Returns the shortest path between 2 Hubs
+    /**
+     * Method that gets the shortest path between 2 Hubs.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns the correctPath variable.
+     * @throws IncompatibleHubsException Throws if Hubs is incompatible
+     */
     public List<Hub> shortestPath(Hub origin, Hub destination) throws IncompatibleHubsException {
         if(hubsNotInSameComponent(origin, destination)) throw new IncompatibleHubsException();
         List<Vertex<Hub>> path = new ArrayList<>();
@@ -265,8 +392,12 @@ public class NetworkManager extends Subject {
         return correctPath;
     }
 
-    // HENRIQUE
-    // Returns a collection of all the visited Hubs, by breadth first order, starting at a root Hub
+    /**
+     * Method that gets a collection of all the visited Hubs, by breadth first order starting at a root Hub
+     *
+     * @param root      Hub
+     * @return Returns the list of visited Hubs.
+     */
     public List<Hub> breadthFirstSearch(Hub root) {
         Set<Hub> visited = new HashSet<>();
         Queue<Hub> queue = new LinkedList<>();
@@ -285,8 +416,12 @@ public class NetworkManager extends Subject {
         return list;
     }
 
-    // HENRIQUE
-    // Returns a collection of all the visited Hubs, by depth first order, starting at a root Hub
+    /**
+     * Method that gets a collection of all the visited Hubs, by depth first order starting at a root Hub
+     *
+     * @param root      Hub
+     * @return Returns the list of visited Hubs.
+     */
     public List<Hub> depthFirstSearch(Hub root) {
         Set<Hub> visited = new HashSet<>();
         Stack<Hub> stack = new Stack<>();
@@ -305,8 +440,11 @@ public class NetworkManager extends Subject {
         return list;
     }
 
-    // ALEX
-    // Returns the number of the graph components
+    /**
+     * Method that counts the number of graph components.
+     *
+     * @return Returns the variable components.
+     */
     public int countComponents() {
         int components = 0;
         List<Hub> visitedHubs = new ArrayList<>();
@@ -318,8 +456,13 @@ public class NetworkManager extends Subject {
         return components;
     }
 
-    //HENRIQUE
-    //Verifies if the given Hubs are in the same component
+    /**
+     * Method that checks if the given Hubs are in the same component.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns a Boolean value.
+     */
     private boolean hubsNotInSameComponent(Hub origin, Hub destination){
         List<Hub> componentList = depthFirstSearch(origin);
         for(Hub elem : componentList)
@@ -328,8 +471,13 @@ public class NetworkManager extends Subject {
         return true;
     }
 
-    // HENRIQUE
-    // Returns the Vertex with minimum path cost
+    /**
+     * Method that finds the Vertex with minimum path cost.
+     *
+     * @param unvisited     Set<Vertex<Hub>>
+     * @param costs         Map<Vertex<Hub>,Double>
+     * @return Returns the vertex with minimum path cost.
+     */
     private Vertex<Hub> findMinVertex(Set<Vertex<Hub>> unvisited, Map<Vertex<Hub>,Double> costs) {
         Vertex<Hub> vMin = null;
         double minCost = Double.MAX_VALUE;
@@ -341,8 +489,14 @@ public class NetworkManager extends Subject {
         return vMin;
     }
 
-    // HENRIQUE
-    // Returns the minimum cost of a path, given Hubs of origin and destination
+    /**
+     * Method that finds the minimum cost of a path, given Hubs of origin and destination.
+     *
+     * @param origin        Vertex<Hub>
+     * @param destination   Vertex<Hub>
+     * @param localsPath    List<Vertex<Hub>>
+     * @return Returns the minimum cost of a path.
+     */
     public double minimumCostPath(Vertex<Hub> origin, Vertex<Hub> destination, List<Vertex<Hub>> localsPath) {
         Map<Vertex<Hub>, Double> costs = new HashMap<>();
         Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
@@ -356,8 +510,13 @@ public class NetworkManager extends Subject {
         return costs.get(destination);
     }
 
-    // HENRIQUE
-    // Fill dijsktra table (maps costs and predecessors)
+    /**
+     * Method that calculates using the Dijsktra algorithm, the cost between the origin Hub and its predecessors.
+     *
+     * @param orig              Vertex<Hub>
+     * @param costs             Map<Vertex<Hub>,Double>
+     * @param predecessors      Map<Vertex<Hub>, Vertex<Hub>>
+     */
     private void dijkstra(Vertex<Hub> orig, Map<Vertex<Hub>, Double> costs, Map<Vertex<Hub>, Vertex<Hub>> predecessors) {
         List<Hub> hubs = depthFirstSearch(orig.element());
         Set<Vertex<Hub>> unvisited = new HashSet<>();
@@ -383,8 +542,14 @@ public class NetworkManager extends Subject {
         }
     }
 
-    // HENRIQUE
-    // Returns the total distance of the shortest path between any 2 Hubs
+    /**
+     * Method that gets the total distance of the shortest path between 2 Hubs.
+     *
+     * @param origin        Hub
+     * @param destination   Hub
+     * @return Returns the total distance number.
+     * @throws IncompatibleHubsException Throws if Hubs are incompatible
+     */
     public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException{
         if(hubsNotInSameComponent(origin, destination))
             throw new IncompatibleHubsException();
@@ -400,7 +565,13 @@ public class NetworkManager extends Subject {
         return sum;
     }
 
-    //
+    /**
+     * Getter method that finds the path using the Dijkstra algorithm, given the predecessor and its destination.
+     *
+     * @param predecessors      Map<Vertex<Hub>, Vertex<Hub>>
+     * @param destination       Vertex<Hub>
+     * @return Returns the List path of the hubs
+     */
     private List<Hub> getDijkstraPath(Map<Vertex<Hub>, Vertex<Hub>> predecessors, Vertex<Hub> destination) {
         List<Hub> path = new ArrayList<>();
         while (destination != null) {
@@ -411,7 +582,10 @@ public class NetworkManager extends Subject {
         return path;
     }
 
-    // Returns the path of the 2 farthest away hubs in the entire graph
+    /**
+     * Method to calculate the shortest path to get to the 2 farthest away hubs in the entire graph.
+     * @return Returns the shortest path.
+     */
     public List<Hub> farthestHubs(){
         List<Hub> shortestPath = new ArrayList<>();
         double maxDistance = 0;
@@ -426,7 +600,12 @@ public class NetworkManager extends Subject {
         return shortestPath;
     }
 
-    // Returns the cost of a given path (list of hubs)
+    /**
+     * Getter method to calculate the cost of a given path (list of hubs).
+     *
+     * @param path  List<Hub>
+     * @return Returns the cost.
+     */
     private int getPathCost(List<Hub> path) {
         int cost = 0;
         for (int i = 0; i < path.size(); i++)
@@ -435,22 +614,34 @@ public class NetworkManager extends Subject {
         return cost;
     }
 
-    // Returns the shortest path (list of hubs) of the farthest hub from a given origin
+    /**
+     * Method to calculate the shortest path of the farthest hub from a given origin
+     *
+     * @param origin    Hub
+     * @return Returns the shortest path.
+     */
     public List<Hub> farthestHub(Hub origin) {
         List<Hub> shortestPath = new ArrayList<>();
         double maxDistance = 0;
         Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
         Map<Vertex<Hub>, Double> costs = new HashMap<>();
         dijkstra(getVertex(origin), costs, predecessors);
-        for(Vertex<Hub> v : costs.keySet())
-            if(maxDistance < costs.get(v)){
+        for (Vertex<Hub> v : costs.keySet())
+            if (maxDistance < costs.get(v)) {
                 maxDistance = costs.get(v);
-                shortestPath = getDijkstraPath(predecessors,v);
+                shortestPath = getDijkstraPath(predecessors, v);
             }
         return shortestPath;
     }
 
-    // Returns a list of Hubs which their path goes through less or equal to a threshold value of routes from a certain Hub
+    /**
+     * Method to get a list of hubs which their path goes through less or equal to a threshold value of routes
+     * from a certain Hub
+     *
+     * @param origin        Hub
+     * @param threshold     int
+     * @return Returns a list of hubs.
+     */
     public List<Hub> closeHubs(Hub origin, int threshold) {
         List<Hub> hubs = new ArrayList();
         Map<Vertex<Hub>, Vertex<Hub>> predecessors = new HashMap<>();
@@ -464,7 +655,12 @@ public class NetworkManager extends Subject {
         return hubs;
     }
 
-    // Returns a matrix with all current available routes
+    /**
+     * Getter method to get a metrix with all current available routes.
+     *
+     * @param vertices List<Vertex<Hub>>
+     * @return Returns a matrix.
+     */
     private int[][] getRoutesMatrix(List<Vertex<Hub>> vertices) {
         int size = vertices.size();
         int[][] matrix = new int[size][size];
@@ -477,7 +673,12 @@ public class NetworkManager extends Subject {
         return matrix;
     }
 
-    // Saves a file in a specified folder with all the current routes, returns the generated file name
+    /**
+     * Method to save the file in a specified folder with all the current routes.
+     *
+     * @param folderName    String
+     * @return Returns the generated file name
+     */
     public String saveRoutes(String folderName) {
         List<Vertex<Hub>> vertices = new ArrayList<>();
         for (Hub hub : hubs)
