@@ -21,7 +21,7 @@ public class Hub {
      *
      * @param name          String
      * @param population    int
-     * @param population    Point
+     * @param coordinates    Point
      *
      */
     public Hub(String name, int population, Point coordinates) {

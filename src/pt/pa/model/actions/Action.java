@@ -9,6 +9,10 @@ package pt.pa.model.actions;
  */
 public interface Action {
 
-    public void undo();
+    /**
+     * Method responsible for the undo functionality.
+     *
+     */
+    void undo();
 
 }

@@ -65,7 +65,7 @@ public class NetworkManager extends Subject {
     /**
      * Method to set the vertices position.
      *
-     * @param graphView     SmartGraphPanel<Hub, Route>
+     * @param graphView     SmartGraphPanel
      */
     public void setCoordinates(SmartGraphPanel<Hub, Route> graphView) {
         for (Vertex<Hub> vertex : graph.vertices())
@@ -129,7 +129,7 @@ public class NetworkManager extends Subject {
      * Method that given a Hub and a List of Hubs, adds new Vertex to the Graph
      *
      * @param hub   Hub
-     * @param hubs  List<Hub> hubs
+     * @param hubs  List hubs
      * @return Returns a vertex.
      * @throws InvalidVertexException Throws if the vertex is not valid
      */
@@ -146,13 +146,11 @@ public class NetworkManager extends Subject {
      * @param origin        Hub
      * @param destination   Hub
      * @param route         Route
-     * @return Returns an edge.
      * @throws InvalidEdgeException Throws if the edge is not valid
      */
-    public Edge<Route,Hub> createEdge(Hub origin, Hub destination, Route route) throws InvalidEdgeException {
-        Edge<Route,Hub> edge = graph.insertEdge(getVertex(origin), getVertex(destination), route);
+    public void createEdge(Hub origin, Hub destination, Route route) throws InvalidEdgeException {
+        graph.insertEdge(getVertex(origin), getVertex(destination), route);
         notifyObservers(this);
-        return edge;
     }
 
     /**
@@ -492,9 +490,9 @@ public class NetworkManager extends Subject {
     /**
      * Method that finds the minimum cost of a path, given Hubs of origin and destination.
      *
-     * @param origin        Vertex<Hub>
-     * @param destination   Vertex<Hub>
-     * @param localsPath    List<Vertex<Hub>>
+     * @param origin        Vertex
+     * @param destination   Vertex
+     * @param localsPath    List
      * @return Returns the minimum cost of a path.
      */
     public double minimumCostPath(Vertex<Hub> origin, Vertex<Hub> destination, List<Vertex<Hub>> localsPath) {
@@ -550,13 +548,19 @@ public class NetworkManager extends Subject {
      * @return Returns the total distance number.
      * @throws IncompatibleHubsException Throws if Hubs are incompatible
      */
-    public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException{
+    public int shortestPathTotalDistance(Hub origin, Hub destination) throws IncompatibleHubsException {
         if(hubsNotInSameComponent(origin, destination))
             throw new IncompatibleHubsException();
         return (int) minimumCostPath(getVertex(origin),getVertex(destination),new ArrayList<>());
     }
 
-    // Returns the total distance of the shortest path between any 2 Hubs
+    /**
+     * Method that returns the total distance of the shortest path between any 2 Hubs
+     *
+     * @param path        List
+     * @return Returns the total path distance.
+     * @throws IncompatibleHubsException Throws if Hubs are incompatible
+     */
     public int pathDistance(List<Hub> path) throws IncompatibleHubsException {
         int sum = 0;
         for (int i = 0; i < path.size(); i++)
@@ -656,7 +660,7 @@ public class NetworkManager extends Subject {
     }
 
     /**
-     * Getter method to get a metrix with all current available routes.
+     * Getter method to get a matrix with all current available routes.
      *
      * @param vertices List<Vertex<Hub>>
      * @return Returns a matrix.

@@ -110,7 +110,6 @@ public class DatasetReader {
      *
      * @param hubs List of hubs
      *
-     * @return Returns new modified list of Hubs.
      */
     private void readName(List<Hub> hubs) {
         for (String line : readFile("/name.txt"))
@@ -122,7 +121,6 @@ public class DatasetReader {
      *
      * @param hubs List of hubs
      *
-     * @return Returns new modified list of Hubs.
      */
     private void readWeight(List<Hub> hubs) {
         int i = 0;
@@ -137,7 +135,6 @@ public class DatasetReader {
      *
      * @param hubs List of hubs
      *
-     * @return Returns new modified list of Hubs.
      */
     private void readXY(List<Hub> hubs) {
         int i = 0;

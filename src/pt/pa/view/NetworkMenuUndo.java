@@ -51,7 +51,8 @@ public class NetworkMenuUndo extends Menu {
     /**
      * Method to save action.
      *
-     * @return Returns the saved actions.
+     * @param action Action
+     *
      */
     public void saveAction(Action action) {
         actions.add(action);

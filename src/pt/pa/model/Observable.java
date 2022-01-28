@@ -14,7 +14,7 @@ public interface Observable {
      *
      * @param observers Observer
      */
-    public void addObservable(Observer... observers);
+    void addObservable(Observer... observers);
 
     /**
      * Method to preset the removeObserver method.
@@ -22,13 +22,13 @@ public interface Observable {
      * @param observer Observer
      * @deprecated No being used, created to comlete the Observer pattern
      */
-    public void removeObserver(Observer observer);
+    void removeObserver(Observer observer);
 
     /**
      * Method to preset the notifyObservers method.
      *
      * @param object Object
      */
-    public void notifyObservers(Object object);
+    void notifyObservers(Object object);
 
 }

@@ -31,7 +31,6 @@ public class FileWriter {
      *
      * @param matrix int[][]
      *
-     * @return Returns a list of rows, based on a received squared Integer matrix.
      */
     public void matrixToList(int[][] matrix) {
         for (int[] ints : matrix) {

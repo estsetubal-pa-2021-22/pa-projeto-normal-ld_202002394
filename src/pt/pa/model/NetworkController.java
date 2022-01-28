@@ -58,7 +58,7 @@ public class NetworkController {
     /**
      * Setter method for the graphView variable.
      *
-     * @param graphView     SmartGraphPanel<Hub, Route>
+     * @param graphView     SmartGraphPanel
      */
     public void setGraphView(SmartGraphPanel<Hub, Route> graphView) {
         this.graphView = graphView;
@@ -67,6 +67,7 @@ public class NetworkController {
     /**
      * Getter method for the manager variable.
      *
+     * @return Returns NetworkManager
      */
     public NetworkManager getManager() {
         return this.manager;
@@ -75,6 +76,7 @@ public class NetworkController {
     /**
      * Getter method for the graphView variable.
      *
+     * @return Returns SmartGraphPanel.
      */
     public SmartGraphPanel<Hub, Route> getGraphView() {
         return this.graphView;
@@ -83,6 +85,7 @@ public class NetworkController {
     /**
      * Getter method for the stage variable.
      *
+     *  @return Returns Stage
      */
     public Stage getStage() {
         return this.stage;
@@ -91,6 +94,7 @@ public class NetworkController {
     /**
      * Getter method for the scene variable.
      *
+     * @return Returns Scene
      */
     public Scene getScene() {
         return this.scene;

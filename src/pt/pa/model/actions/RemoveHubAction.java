@@ -3,7 +3,7 @@ package pt.pa.model.actions;
 import pt.pa.model.Hub;
 import pt.pa.model.NetworkController;
 /**
- * Class related to the Factory Pattern, working as the "Concrete Product" entity for this pattern.
+ * Class rela+ted to the Factory Pattern, working as the "Concrete Product" entity for this pattern.
  * <br>
  * Contains information of a hub added during the program.
  *
