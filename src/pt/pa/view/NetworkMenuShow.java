@@ -3,6 +3,14 @@ package pt.pa.view;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
+/**
+ * Class responsible for generating the option to select the "HUB Centrality" button
+ * and the "Hubs with most neighbors" button.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMenuShow extends Menu {
 
     private final MenuItem centrality;

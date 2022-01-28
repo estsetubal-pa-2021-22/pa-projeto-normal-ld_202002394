@@ -3,6 +3,13 @@ package pt.pa.view;
 import javafx.scene.control.MenuBar;
 import pt.pa.model.actions.Action;
 
+/**
+ * Class that initializes the events available in the application.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkMenu extends MenuBar {
 
     private final NetworkUI networkUI;

@@ -3,7 +3,16 @@ package pt.pa.view.strategy;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import pt.pa.model.NetworkManager;
-
+/**
+ * Class responsible for the Strategy Pattern, works as the "Concrete Strategy" entity for this pattern.
+ * <br>
+ * It shows no information, when the user doesn't select a route or a hub.
+ * <br>
+ * It's "Pattern" entity is the {@link ElementInfoStrategy} interface.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class ElementInfoNoneStrategy implements ElementInfoStrategy {
 
     @Override

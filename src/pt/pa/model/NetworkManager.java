@@ -6,6 +6,17 @@ import pt.pa.model.exceptions.IncompatibleHubsException;
 
 import java.util.*;
 
+/**
+ * Class responsible for starting the application.
+ * <br>
+ * It consists of the "model" in the MVC Programming pattern.
+ * <br>
+ * It consists of the "subject" on the Observer pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkManager extends Subject {
 
     private final Graph<Hub,Route> graph;

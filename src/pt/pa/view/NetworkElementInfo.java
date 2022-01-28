@@ -7,6 +7,14 @@ import pt.pa.model.Observer;
 import pt.pa.view.strategy.ElementInfoNoneStrategy;
 import pt.pa.view.strategy.ElementInfoStrategy;
 
+/**
+ * Class responsible for generating the interface found of the right of the application,
+ * containing the information of the element selected (hub, route, none).
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkElementInfo implements Observer {
 
     // Strategy for the element details' creation (none, hub or route)

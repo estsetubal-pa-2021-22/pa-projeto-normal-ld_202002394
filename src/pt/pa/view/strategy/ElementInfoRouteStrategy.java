@@ -7,7 +7,16 @@ import javafx.scene.shape.Line;
 import pt.pa.model.Hub;
 import pt.pa.model.NetworkManager;
 import pt.pa.model.Route;
-
+/**
+ * Class responsible for the Strategy Pattern, works as the "Concrete Strategy" entity for this pattern.
+ * <br>
+ * It shows the information of the route.
+ * <br>
+ * It's "Pattern" entity is the {@link ElementInfoStrategy} interface.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class ElementInfoRouteStrategy implements ElementInfoStrategy {
 
     @Override

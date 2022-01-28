@@ -1,9 +1,24 @@
 package pt.pa.model.actions;
 
 import pt.pa.model.Operation;
-
+/**
+ * Class related to the Factory Pattern, working as the "Concrete Factory" entity for this pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 public class ActionFactory {
 
+    /**
+     * Method responsible for processing the operation according to the input.
+     *
+     * @param operation   Operation
+     * @param elements    Object
+     *
+     * @throws RuntimeException Unsupported action operation!
+     *
+     * @return      Returns operation correspondent to the input.
+     */
     public Action create(Operation operation, Object... elements) {
         switch (operation) {
             case INSERT_HUB:

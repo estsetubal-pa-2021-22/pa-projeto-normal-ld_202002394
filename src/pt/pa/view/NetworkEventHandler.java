@@ -34,6 +34,13 @@ import java.util.*;
 import java.util.List;
 import javafx.geometry.Insets;
 
+/**
+ * Class contains all the information of every event available in the application.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+
 public class NetworkEventHandler {
 
     private final NetworkController controller;
