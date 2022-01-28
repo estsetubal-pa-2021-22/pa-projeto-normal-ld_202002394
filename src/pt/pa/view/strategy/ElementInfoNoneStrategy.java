@@ -14,7 +14,13 @@ import pt.pa.model.NetworkManager;
  * @version Final
  */
 public class ElementInfoNoneStrategy implements ElementInfoStrategy {
-
+    /**
+     * Method part of the Strategy Pattern, overriding the update method when nothing is selected.
+     *
+     * @param manager NetworkManager
+     * @param vbox    VBox
+     * @param element Object
+     */
     @Override
     public void update(NetworkManager manager, VBox vbox, Object element) {
         vbox.getChildren().clear();

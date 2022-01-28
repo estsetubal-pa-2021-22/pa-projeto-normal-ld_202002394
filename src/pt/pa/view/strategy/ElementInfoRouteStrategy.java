@@ -19,6 +19,13 @@ import pt.pa.model.Route;
  */
 public class ElementInfoRouteStrategy implements ElementInfoStrategy {
 
+    /**
+     * Method part of the Strategy Pattern, overriding the update method when a route is selected.
+     *
+     * @param manager NetworkManager
+     * @param vbox    VBox
+     * @param element Object
+     */
     @Override
     public void update(NetworkManager manager, VBox vbox, Object element) {
         Route route = (Route)element;

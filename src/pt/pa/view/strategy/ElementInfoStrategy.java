@@ -10,6 +10,13 @@ import pt.pa.model.NetworkManager;
  */
 public interface ElementInfoStrategy {
 
+    /**
+     * Method used to define the update method.
+     *
+     * @param manager NetworkManager
+     * @param vbox    VBox
+     * @param element Object
+     */
     void update(NetworkManager manager, VBox vbox, Object element);
 
 }

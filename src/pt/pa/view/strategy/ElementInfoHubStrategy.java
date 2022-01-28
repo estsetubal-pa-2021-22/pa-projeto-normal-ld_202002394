@@ -17,7 +17,13 @@ import pt.pa.model.NetworkManager;
  * @version Final
  */
 public class ElementInfoHubStrategy implements ElementInfoStrategy {
-
+    /**
+     * Method part of the Strategy Pattern, overriding the update method when a hub is selected.
+     *
+     * @param manager NetworkManager
+     * @param vbox    VBox
+     * @param element Object
+     */
     @Override
     public void update(NetworkManager manager, VBox vbox, Object element) {
         Hub hub = (Hub)element;
