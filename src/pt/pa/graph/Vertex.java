@@ -28,7 +28,10 @@ package pt.pa.graph;
  * graphs and digraphs.
  * 
  * @param <V> Type of value stored in the vertex.
- * 
+ *
+ * @author LD_202002394
+ * @version Final
+ *
  * @see Graph
  * @see Digraph
  */

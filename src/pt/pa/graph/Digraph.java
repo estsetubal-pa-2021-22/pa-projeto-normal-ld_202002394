@@ -36,6 +36,9 @@ import java.util.Collection;
  * 
  * @param <V> Type of element stored at a vertex
  * @param <E> Type of element stored at an edge
+ *
+ * @author brunomnsilva
+ * @version Final
  * 
  * @see Graph
  * @see Edge

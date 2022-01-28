@@ -39,6 +39,7 @@ import java.util.Map;
  * @param <E> Type of element stored at an edge
  * 
  * @author brunomnsilva
+ * @version Final
  */
 public class GraphEdgeList<V, E> implements Graph<V, E> {
 

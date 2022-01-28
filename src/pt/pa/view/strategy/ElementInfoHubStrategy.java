@@ -6,11 +6,26 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import pt.pa.model.Hub;
 import pt.pa.model.NetworkManager;
-
-public class ElementInfoHubStrategy<E> implements ElementInfoStrategy<E> {
-
+/**
+ * Class responsible for the Strategy Pattern, works as the "Concrete Strategy" entity for this pattern.
+ * <br>
+ * It shows the information of the hub.
+ * <br>
+ * It's "Pattern" entity is the {@link ElementInfoStrategy} interface.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
+public class ElementInfoHubStrategy implements ElementInfoStrategy {
+    /**
+     * Method part of the Strategy Pattern, overriding the update method when a hub is selected.
+     *
+     * @param manager NetworkManager
+     * @param vbox    VBox
+     * @param element Object
+     */
     @Override
-    public void update(NetworkManager manager, VBox vbox, E element) {
+    public void update(NetworkManager manager, VBox vbox, Object element) {
         Hub hub = (Hub)element;
 
         vbox.getChildren().clear();

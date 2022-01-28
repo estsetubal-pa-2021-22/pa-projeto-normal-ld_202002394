@@ -1,18 +1,30 @@
 package pt.pa.view;
 
 import javafx.scene.layout.BorderPane;
-import pt.pa.graph.Edge;
 import pt.pa.model.NetworkController;
+
+/**
+ * Class contains the information/items of the panes of the application.
+ * <br>
+ * Class related to the MDC Pattern, working as the "View" for the pattern.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 
 public class NetworkUI extends BorderPane {
 
-    private NetworkController controller;
-    private NetworkEventHandler eventHandler;
+    private final NetworkController controller;
+    private final NetworkEventHandler eventHandler;
 
-    private NetworkMenu menuBar;
-    private NetworkMetrics metrics;
-    private NetworkElementInfo elementInfoBar;
+    private final NetworkMenu menuBar;
+    private final NetworkElementInfo elementInfoBar;
 
+    /**
+     * Constructor of the class NetworkMenuCreate.
+     *
+     * @param controller NetworkController
+     */
     public NetworkUI (NetworkController controller) {
 
         this.controller = controller;
@@ -20,7 +32,7 @@ public class NetworkUI extends BorderPane {
         eventHandler = new NetworkEventHandler(this);
 
         menuBar = new NetworkMenu(this);
-        metrics = new NetworkMetrics(controller.getManager());
+        NetworkMetrics metrics = new NetworkMetrics(controller.getManager());
         elementInfoBar = new NetworkElementInfo(controller.getManager());
 
         this.setCenter(controller.getGraphView());
@@ -31,26 +43,38 @@ public class NetworkUI extends BorderPane {
         controller.getManager().addObservable(metrics,elementInfoBar);
     }
 
+    /**
+     * Method to get controller
+     *
+     * @return Returns the controller.
+     */
     public NetworkController getController() {
         return this.controller;
     }
 
-    public void updateMetrics() {
-        metrics.update(controller.getManager());
-    }
-
+    /**
+     * Method to get Event handler.
+     *
+     * @return Returns the Event handler.
+     */
     public NetworkEventHandler getEventHandler() {
         return this.eventHandler;
     }
 
+    /**
+     * Method to get the menu bar.
+     *
+     * @return Returns the menu bar.
+     */
     public NetworkMenu getMenuBar() {
         return this.menuBar;
     }
 
-    public NetworkMetrics getMetrics() {
-        return this.metrics;
-    }
-
+    /**
+     * Method to get Element info bar
+     *
+     * @return Returns the element info bar.
+     */
     public NetworkElementInfo getElementInfoBar() {
         return this.elementInfoBar;
     }

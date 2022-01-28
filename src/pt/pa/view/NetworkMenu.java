@@ -1,19 +1,31 @@
 package pt.pa.view;
 
 import javafx.scene.control.MenuBar;
-import pt.pa.model.Action;
+import pt.pa.model.actions.Action;
+
+/**
+ * Class that initializes the events available in the application.
+ *
+ * @author LD_202002394
+ * @version Final
+ */
 
 public class NetworkMenu extends MenuBar {
 
-    private NetworkUI networkUI;
+    private final NetworkUI networkUI;
 
-    private NetworkMenuCreate menuCreate;
-    private NetworkMenuRemove menuRemove;
-    private NetworkMenuRoutes menuRoutes;
-    private NetworkMenuCalculate menuCalculate;
-    private NetworkMenuShow menuShow;
-    private NetworkMenuUndo menuUndo;
+    private final NetworkMenuCreate menuCreate;
+    private final NetworkMenuRemove menuRemove;
+    private final NetworkMenuRoutes menuRoutes;
+    private final NetworkMenuCalculate menuCalculate;
+    private final NetworkMenuShow menuShow;
+    private final NetworkMenuUndo menuUndo;
 
+    /**
+     * Constructor of the class NetworkMenu.
+     *
+     * @param networkUI NetworkUI
+     */
     public NetworkMenu(NetworkUI networkUI) {
 
         this.networkUI = networkUI;
@@ -28,18 +40,28 @@ public class NetworkMenu extends MenuBar {
         createHandlers();
     }
 
-    public NetworkUI getPaneBuilder() {
-        return this.networkUI;
-    }
-
+    /**
+     * Method to a save action.
+     *
+     * @param action Action
+     */
     public void saveAction(Action action) {
         menuUndo.saveAction(action);
     }
 
+    /**
+     * Method to undo action.
+     *
+     * @return Returns the undo action
+     */
     public Action undoAction() {
         return menuUndo.undoAction();
     }
 
+    /**
+     * Method to create handlers.
+     *
+     */
     private void createHandlers() {
         networkUI.getEventHandler().createHubEvent(menuCreate.getCreateHubItem());
         networkUI.getEventHandler().createRouteEvent(menuCreate.getCreateRouteItem());
@@ -51,29 +73,10 @@ public class NetworkMenu extends MenuBar {
         networkUI.getEventHandler().showFarthestHubEvent(menuCalculate.getFarthestHubItem());
         networkUI.getEventHandler().showFarthestHubsEvent(menuCalculate.getFarthestHubsItem());
         networkUI.getEventHandler().showCloseHubsEvent(menuCalculate.getCloseHubsItem());
-        //networkUI.getEventHandler().calculateDistancePathEvent(menuCalculate.getDistancePathItem());
         networkUI.getEventHandler().showCentrality(menuShow.getCentralityItem());
         networkUI.getEventHandler().showHubsWithMostNeighborsEvent(menuShow.getHubsWithMostNeighborsItem());
         networkUI.getEventHandler().undoEvent(menuUndo.getUndoActionItem());
         networkUI.getEventHandler().defaultStylingEvent(menuUndo.getDefaultStylingItem());
-    }
-
-    private void removeHandlers() {
-        networkUI.getEventHandler().removeHandler(menuCreate.getCreateHubItem());
-        networkUI.getEventHandler().removeHandler(menuCreate.getCreateRouteItem());
-        networkUI.getEventHandler().removeHandler(menuRemove.getRemoveHubItem());
-        networkUI.getEventHandler().removeHandler(menuRemove.getRemoveRouteItem());
-        networkUI.getEventHandler().removeHandler(menuRoutes.getImportRoutesItem());
-        networkUI.getEventHandler().removeHandler(menuRoutes.getExportRoutesItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getShortestPathItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getFarthestHubsItem());
-        networkUI.getEventHandler().removeHandler(menuCalculate.getCloseHubsItem());
-        //networkUI.getEventHandler().removeHandler(menuCalculate.getDistancePathItem());
-        networkUI.getEventHandler().removeHandler(menuShow.getCentralityItem());
-        networkUI.getEventHandler().removeHandler(menuShow.getHubsWithMostNeighborsItem());
-        networkUI.getEventHandler().removeHandler(menuUndo.getUndoActionItem());
-        networkUI.getEventHandler().removeHandler(menuUndo.getDefaultStylingItem());
     }
 
 }
