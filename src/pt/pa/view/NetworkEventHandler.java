@@ -99,11 +99,9 @@ public class NetworkEventHandler {
                 buttonsHBox.setPadding(new Insets(0, 0, 0, 162));
                 buttonsHBox.getChildren().addAll(createHubButton);
                 dialogVBox.getChildren().add(buttonsHBox);
-                Label errorMsg = new Label();
-                errorMsg.setStyle("-fx-text-fill: red;");
+                Label errorMsg = createErrorMessage();
                 dialogVBox.getChildren().add(errorMsg);
-                Scene dialogScene = new Scene(dialogVBox,270,140);
-                dialogScene.getStylesheets().add("events.css");
+                Scene dialogScene = createVboxScene(dialogVBox, 270, 140);
                 dialog.setScene(dialogScene);
                 dialog.show();
 
@@ -171,11 +169,9 @@ public class NetworkEventHandler {
             Button createRouteButton = new Button("Create Route");
             buttonsHBox.getChildren().addAll(createRouteButton);
             dialogVBox.getChildren().add(buttonsHBox);
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox,300,220);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 300, 220);
             dialog.setScene(dialogScene);
             dialog.show();
 
@@ -250,11 +246,9 @@ public class NetworkEventHandler {
             buttonsHBox.setPadding(new Insets(0, 0, 0, 86));
             buttonsHBox.getChildren().addAll(removeHubButton);
             dialogVBox.getChildren().add(buttonsHBox);
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 203, 123);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 203, 123);
             dialog.setScene(dialogScene);
             dialog.show();
             removeHubButton.setOnAction(actionEvent2 -> {
@@ -310,11 +304,9 @@ public class NetworkEventHandler {
             buttonsHBox.setPadding(new Insets(0, 0, 0, 170));
             buttonsHBox.getChildren().addAll(removeRouteButton);
             dialogVBox.getChildren().add(buttonsHBox);
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 300, 170);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 300, 170);
             dialog.setScene(dialogScene);
             dialog.show();
             removeRouteButton.setOnAction(actionEvent2 -> {
@@ -368,18 +360,16 @@ public class NetworkEventHandler {
             defaultStyling();
             final Stage dialog = createStage("Import Routes");
             VBox dialogVBox = new VBox(20);
-            TextField importRoutesField = createField(dialogVBox, "Routes file path:");
             HBox buttonsHBox = new HBox(30);
             dialogVBox.setPadding(new Insets(10, 10, 10, 10));
             Button importRoutesButton = new Button("Import Routes");
+            TextField importRoutesField = createField(dialogVBox, "Routes file path:");
             buttonsHBox.setPadding(new Insets(0, 0, 0, 153));
             buttonsHBox.getChildren().addAll(importRoutesButton);
             dialogVBox.getChildren().add(buttonsHBox);
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 275, 127);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 275, 127);
             dialog.setScene(dialogScene);
             dialog.show();
             importRoutesButton.setOnAction(actionEvent2 -> {
@@ -424,12 +414,11 @@ public class NetworkEventHandler {
             buttonsHBox.setPadding(new Insets(0, 0, 0, 80));
             buttonsHBox.getChildren().addAll(importRoutesButton);
             dialogVBox.getChildren().add(buttonsHBox);
-            Label message = new Label();
-            message.setStyle("-fx-text-fill: green;");
+            Label message = createMessage();
             dialogVBox.getChildren().add(message);
             dialogVBox.getChildren().add(txLink);
             txLink.setEditable(false);
-            Scene dialogScene = new Scene(dialogVBox, 280, 140);
+            Scene dialogScene = createVboxScene(dialogVBox, 280, 140);
             dialog.setScene(dialogScene);
             dialog.show();
             importRoutesButton.setOnAction(actionEvent2 -> {
@@ -437,7 +426,6 @@ public class NetworkEventHandler {
                     message.setText("Route Saved successfully in the path below");
                     txLink.setText(manager.saveRoutes("saved_routes"));
                 } catch (RuntimeException exception) {
-                    message.setStyle("-fx-text-fill: green;");
                     message.setText(exception.getMessage());
                     System.out.println(exception.getMessage());
                 }
@@ -459,11 +447,9 @@ public class NetworkEventHandler {
             buttonsHBox.getChildren().addAll(calculateButton);
             buttonsHBox.setPadding(new Insets(0, 0, 0, 200));
             dialogVBox.getChildren().add(buttonsHBox);
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 300, 170);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 300, 170);
             dialog.setScene(dialogScene);
             dialog.show();
             calculateButton.setOnAction(actionEvent2 -> {
@@ -528,11 +514,9 @@ public class NetworkEventHandler {
             buttonsHBox.getChildren().addAll(calculateButton);
             dialogVBox.getChildren().add(buttonsHBox);
             buttonsHBox.setPadding(new Insets(0, 0, 0, 155));
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 250, 105);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 250, 105);
             dialog.setScene(dialogScene);
             dialog.show();
             calculateButton.setOnAction(actionEvent2 -> {
@@ -598,7 +582,7 @@ public class NetworkEventHandler {
                 for (int i = list.size() - 1; i >= 0; i--)
                     centralityList.getItems().add(list.get(i).getKey().toString() + " (" + list.get(i).getValue() + ")");
                 dialogVBox.getChildren().add(centralityList);
-                Scene dialogScene = new Scene(dialogVBox, 300, 200);
+                Scene dialogScene = createVboxScene(dialogVBox, 300, 200);
                 dialog.setScene(dialogScene);
                 dialog.show();
                 System.out.println("Hubs Centrality calculated!");
@@ -622,11 +606,9 @@ public class NetworkEventHandler {
             buttonsHBox.getChildren().addAll(calculateButton);
             dialogVBox.getChildren().add(buttonsHBox);
             buttonsHBox.setPadding(new Insets(0, 0, 0, 173));
-            Label errorMsg = new Label();
-            errorMsg.setStyle("-fx-text-fill: red;");
+            Label errorMsg = createErrorMessage();
             dialogVBox.getChildren().add(errorMsg);
-            Scene dialogScene = new Scene(dialogVBox, 260, 160);
-            dialogScene.getStylesheets().add("events.css");
+            Scene dialogScene = createVboxScene(dialogVBox, 200, 100);
             dialog.setScene(dialogScene);
             dialog.show();
             calculateButton.setOnAction(actionEvent2 -> {
@@ -773,5 +755,27 @@ public class NetworkEventHandler {
         hbox.setSpacing(10);
         vbox.getChildren().add(hbox);
         return textField;
+    }
+
+    private Label createErrorMessage(){
+        Label errorMsg = new Label();
+        errorMsg.setStyle("-fx-text-fill: red;");
+
+        return  errorMsg;
+    }
+
+    private Label createMessage(){
+        Label message = new Label();
+        message.setStyle("-fx-text-fill: green;");
+
+        return message;
+    }
+
+    private Scene createVboxScene(VBox vbox, int p, int p1){
+        Scene dialogScene = new Scene(vbox, p, p1);
+
+        dialogScene.getStylesheets().add("events.css");
+
+        return dialogScene;
     }
 }
